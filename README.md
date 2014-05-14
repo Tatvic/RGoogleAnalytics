@@ -1,4 +1,3 @@
-#RGoogleAnalytics
 
 This repo is the new home for the RGoogleAnalytics library migrated from Google Code SVN(https://code.google.com/p/r-google-analytics/)
 
