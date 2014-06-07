@@ -15,7 +15,5 @@ Depends:
 Suggests:
     testthat
 License: Apache License 2.0
-Packaged: 
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 
