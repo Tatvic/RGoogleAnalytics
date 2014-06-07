@@ -7,10 +7,10 @@ QueryBuilder()
 }
 \arguments{
 \item{start.date}{Start Date for fetching Analytics Data.
-Start Date must be of the format %Y-%m-%d}
+Start Date must be of the format "\%Y-\%m-\%d"}
 
 \item{end.date}{End Date for fetching Analytics Data.
-End Date must be of the format %Y-%m-%d}
+End Date must be of the format "\%Y-\%m-\%d"}
 
 \item{dimensions}{A list of comma separated dimensions for Analytics Data}
 

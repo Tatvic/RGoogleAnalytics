@@ -9,10 +9,10 @@
 #'
 #' @export
 #' @param start.date Start Date for fetching Analytics Data.
-#' Start Date must be of the format %Y-%m-%d
+#' Start Date must be of the format "\%Y-\%m-\%d"
 #' 
 #' @param end.date End Date for fetching Analytics Data.
-#' End Date must be of the format %Y-%m-%d
+#' End Date must be of the format "\%Y-\%m-\%d"
 #' 
 #' @param dimensions A list of comma separated dimensions for Analytics Data
 #' 
@@ -32,11 +32,8 @@
 #' for which the query will retrieve the data
 #' 
 #' @return builder The builder method function to process the parameters.
-#'   
 #'
-#'
-QueryBuilder <-
-function() {
+QueryBuilder <- function() {
   
   # Constants.
   kMaxDimensions <- 7
@@ -756,54 +753,7 @@ function() {
     return(invisible())
   }
   
-  #' A function setting initial values of a GA URI query.
-  #'
-  #' @param start.date See QueryBuilder()
-  #' @param end.date See QueryBuilder()
-  #' @param dimensions See QueryBuilder()  
-  #' @param metrics See QueryBuilder() 
-  #' @param segment See QueryBuilder()  
-  #' @param sort See QueryBuilder() 
-  #' @param filters See QueryBuilder()
-  #' @param max.results See QueryBuilder()
-  #' @param start.index: See QueryBuilder()  
-  #' @param table.id: See QueryBuilder() 
-  #' @param access_token: See AccessToken() 
-  #'  
-  #'
-  #' @return None Sets the initial query parameters.
-  #'
   
-  Init <- function(start.date  = NULL,
-                   end.date    = NULL,
-                   dimensions  = NULL,
-                   metrics     = NULL,
-                   segment     = NULL,
-                   sort        = NULL,
-                   filters     = NULL,
-                   max.results = NULL,
-                   start.index = NULL,
-                   table.id    = NULL) {   
-    
-    #Load Access Token from Memory
-    access_token <- LoadAccessToken()
-    
-    StartDate(start.date)
-    EndDate(end.date)
-    Dimensions(dimensions)
-    Metrics(metrics)
-    Segment(segment)
-    Sort(sort)
-    Filters(filters)
-    MaxResults(max.results)
-    StartIndex(start.index)
-    TableID(table.id)
-    AccessToken(access_token)
-    
-    #Perform Validation
-    #Validate()
-    return(invisible())
-  }
   
   #' @keywords internal 
   #' This function will authorize the user account with the Oauth 2.0 API. 
@@ -902,8 +852,7 @@ function() {
               "to.uri"       =   ToUri,   
               "clear.data"   =   ClearData,
               "validate"     =   Validate,
-              "access_token" =   AccessToken,        
-              "Init"         =   Init,
+              "access_token" =   AccessToken,
               "authorize"    =   Authorize,
               "SetAccessToken" = SetAccessToken,
               "GetAccessToken" = GetAccessToken,
