@@ -1,20 +1,19 @@
-RGoogleAnalytics <- function() {
-  #' Creates a skeleton shell for accessing the Google Analytics API.
-  #' @export
-  #' @return
-  #'   Returns a list of methods, for accessing the Google Analytics Core 
-  #'   Reporting API
-  #'       GetProfileData()       
-  #'       GetReportData()       
-  #'       GetAppCredentials()
-  #'       RemoveToken()
-  #'       RemoveAppCredentials()
-  #'       ValidateToken()
-  #'       GenerateAccessToken()
-  #'       RefreshToAccessToken()
-  #' @examples
-  #' ga <- RGoogleAnalytics()     
-  
+#' Creates a skeleton shell for accessing the Google Analytics API.
+#' @export
+#' @return Returns a list of methods, for accessing the Google Analytics Core Reporting API 
+#'       GetProfileData()       
+#'       GetReportData()       
+#'       GetAppCredentials()
+#'       RemoveToken()
+#'       RemoveAppCredentials()
+#'       ValidateToken()
+#'       GenerateAccessToken()
+#'       RefreshToAccessToken()
+#' 
+#' @author Michael Pearmain
+
+RGoogleAnalytics <-
+function() {
   
   # Constant 
   kMaxDefaultRows <- 10000 
@@ -32,23 +31,23 @@ RGoogleAnalytics <- function() {
                               ssl.verifypeer = FALSE))
   
   
+  #' Save App Credentials (Client ID and Client Secret) locally to system
+  #' 
+  #' 
+  #' This function gets the Client ID and Client Secret of the Application from
+  #' the user and saves it locally to a file for OAuth 2.0 Authorization flow. 
+  #'  
+  #' @export  
+  #' @param client.id Client ID of the Application 
+  #' @param client.secret Client Secret of the Application
+  #' 
+  #' 
+  #' @return Saves the App Credentials to a file on the user's system
+  #' @author Kushan Shah
+  
   GetAppCredentials <- function(client.id,
                                 client.secret) {
-    #' Save App Credentials (Client ID and Client Secret) locally to system
-    #' 
-    #' 
-    #' This function gets the Client ID and Client Secret of the Application from
-    #' the user and saves it locally to a file for OAuth 2.0 Authorization flow. 
-    #'  
-    #' @export  
-    #' @param client.id Client ID of the Application 
-    #' @param client.secret Client Secret of the Application
-    #' 
-    #' @examples
-    #' ga <- RGoogleAnalytics()
-    #' ga$GetAppCredentials('xxxxxxxxxxxx.apps.googleusercontent.com','9xxxxxx-Hxxxxxxxxxxxxxv')
-    #' Returns:
-    #'  Saves the App Credentials to a file on the user's system 
+     
     
     
     if(file.exists(file.path(system.file(package = "RGoogleAnalytics"),
@@ -77,26 +76,28 @@ RGoogleAnalytics <- function() {
     cat("Your App Credentials have been saved to", file.path, "\n")
     }
   
+  #' Gets an OAuth 2.0 Access Token by authorizing the user account to the Google 
+  #' Analytics API 
+  #' 
+  #' @details
+  #' When evaluated for the first time this function asks for User Consent
+  #' for the Google Analytics Account and retrieves the Access and Refresh Tokens
+  #' for Authorization. These tokens are saved locally to a file on the user's system.
+  #' If the user had authorized an account earlier and refresh token is already found
+  #' on the user's system, then this function retrives a new Access Token and updates
+  #' the Access Token File in user's memory.
+  #'
+  #' @export  
+  #' @param None
+  #' 
+  #' @return None In each case, the Tokens are saved to a file on the user's system 
+  #'  
+  #' @author Kushan Shah
+  #' 
+  #' @importFrom rjson fromJSON
+  #' @importFrom Rcurl postForm
   GenerateAccessToken <- function() {
-    #' Gets an OAuth 2.0 Access Token by authorizing the user account to the Google 
-    #' Analytics API 
-    #' 
-    #' When evaluated for the first time this function asks for User Consent
-    #' for the Google Analytics Account and retrieves the Access and Refresh Tokens
-    #' for Authorization. These tokens are saved locally to a file on the user's system.
-    #' If the user had authorized an account earlier and refresh token is already found
-    #' on the user's system, then this function retrives a new Access Token and updates
-    #' the Access Token File in user's memory.
-    #'
-    #' @export  
-    #' @param None
-    #' @examples
-    #' 
-    #' ga$GenerateAccessToken()
-    #' 
-    #' Returns : 
-    #'  None
-    #'  In each case, the Tokens are saved to a file on the user's system 
+      
     
     # Check if the Access Token File already exists
     if(!file.exists(file.path(path.package("RGoogleAnalytics"), "accesstoken.rda"))) {
@@ -199,17 +200,18 @@ RGoogleAnalytics <- function() {
     }
   }
   
+  #' This function takes the Refresh Token as an argument and retrives a new 
+  #' Access Token based on it
+  #' Reference : https://developers.google.com/accounts/docs/OAuth2#installed
+  #' @param
+  #'   refresh.token  Refresh Token that was saved to the local file
+  #'   client.id      Client ID of the Application. This is a OAuth2.0 Credential
+  #'   client.secret  Client Secret of the Application. Again this too is an
+  #'                   OAuth2.0 Credential
+  #' @return
+  #'   Access Token   New Access Token
+  #' @author Vignesh Prajapati 
   RefreshToAccessToken <- function(refresh.token, client.id, client.secret){
-    #' This function takes the Refresh Token as an argument and retrives a new 
-    #' Access Token based on it
-    #' Reference : https://developers.google.com/accounts/docs/OAuth2#installed
-    #' Args :
-    #'   refresh.token : Refresh Token that was saved to the local file
-    #'   client.id     : Client ID of the Application. This is a OAuth2.0 Credential
-    #'   client.secret : Client Secret of the Application. Again this too is an
-    #'                   OAuth2.0 Credential
-    #' Returns :
-    #'   Access Token  : New Access Token 
     
     refresh.token.list = fromJSON(postForm('https://accounts.google.com/o/oauth2/token',
                                            refresh_token = refresh.token,
@@ -221,21 +223,22 @@ RGoogleAnalytics <- function() {
     return(refresh.token.list$access_token)
   }
   
+  #' Deletes the stored Access and Refresh Tokens from the local file 
+  #'
+  #' In case if the user wants to query a new profile, then the Authorization flow 
+  #' has to repeated. This requires deleting the stored Access and Refresh Tokens
+  #' from the system file
+  #' 
+  #' @export
+  #' @param None
+  #' @examples
+  #' ga$RemoveToken()
+  #' 
+  #' @return None Deletes the Access Token file from the system
+  #' @author Vignesh Prajapati 
+  #'
   RemoveToken <- function() {
-    #' Deletes the stored Access and Refresh Tokens from the local file 
-    #'
-    #' In case if the user wants to query a new profile, then the Authorization flow 
-    #' has to repeated. This requires deleting the stored Access and Refresh Tokens
-    #' from the system file
-    #' 
-    #' @export
-    #' @param None
-    #' @examples
-    #' ga$RemoveToken()
-    #' 
-    #' Returns : 
-    #'    Deletes the Access Token file from the system
-    
+        
     if(file.exists(file.path(path.package("RGoogleAnalytics"), "accesstoken.rda"))) {
       unlink(file.path(path.package("RGoogleAnalytics"),
                        "accesstoken.rda"),
@@ -247,19 +250,20 @@ RGoogleAnalytics <- function() {
     
   }
   
+  #' Deletes App Credentials(Client ID and Client Secret) from the system
+  #'
+  #' In case if the user creates a new project in the Google API Developer Console, then
+  #' a fresh set of OAuth2.0 credentials (Client ID and Client Secret) are provided
+  #' This requires deletion of old stored credentials
+  #' 
+  #' @export
+  #' @param None
+  #' @examples
+  #' ga$RemoveAppCredentials()  
+  #' @return None Deletes the app_credentials.rda file from the user's system
+  #' @author Kushan Shah
+  
   RemoveAppCredentials <- function() {
-    #' Deletes App Credentials(Client ID and Client Secret) from the system
-    #'
-    #' In case if the user creates a new project in the Google API Developer Console, then
-    #' a fresh set of OAuth2.0 credentials (Client ID and Client Secret) are provided
-    #' This requires deletion of old stored credentials
-    #' 
-    #' @export
-    #' @param None
-    #' @examples
-    #' ga$RemoveAppCredentials()  
-    #' Returns : 
-    #'   Deletes the app_credentials.rda file from the user's system
     
     if(file.exists(file.path(path.package("RGoogleAnalytics"), "app_credentials.rda"))) {
       unlink(file.path(path.package("RGoogleAnalytics"),
@@ -272,18 +276,16 @@ RGoogleAnalytics <- function() {
     
   }
   
+  #' This function checks whether the Access Token stored in the local file is 
+  #' expired. If yes, it generates a new Access Token and updates the local file.
+  #' If no, then it returns the stored Access Token
+  #'  
+  #' @param None 
+  #'     
+  #' @return None The old token is checked for expiry. If it is expired, a new access token is generated and updated in the local file     
   
   ValidateToken <- function() {
-    #' This function checks whether the Access Token stored in the local file is 
-    #' expired. If yes, it generates a new Access Token and updates the local file.
-    #' If no, then it returns the stored Access Token
-    #' @keywords internal 
-    #' Args: 
-    #'    None 
-    #'  Returns: 
-    #'    None
-    #'    The old token is checked for expiry. If it is expired, a new access token is 
-    #'    generated and updated in the local file
+    
     
     load(file.path(path.package("RGoogleAnalytics"),
                    "accesstoken.rda"))
@@ -303,20 +305,15 @@ RGoogleAnalytics <- function() {
     }    
   }
   
+  #' To prepare the dataframe by applying the column names and column datatypes 
+  #' to the provided data frame.
+  #' @keywords internal  
+  #' @param GA.list.param.columnHeaders list includes GA response data, column name, column datatype.
+  #' @param dataframe.param The reponse data(dimensions and metrics data rows) packed in dataframe without the column names and column types.
+  #' @return dataframe.param The dataframe attached with the column  names and column datatype as per type the Dimensions and metrics
+  #'
   SetDataFrame <- function(GA.list.param.columnHeaders, dataframe.param) {
-    #' To prepare the dataframe by applying the column names and column datatypes 
-    #' to the provided data frame.
-    #' @keywords internal  
-    #' Args:
-    #'    GA.list.param.columnHeaders: list includes GA response 
-    #'                                 data column name, column datatype.
-    #'    dataframe.param: The reponse data(dimensions and metrics data rows)
-    #'                    packed in dataframe without the column names and 
-    #'                     column types.
-    #' 
-    #'  Returns:
-    #'    dataframe.param : The dataframe attached with the column  names and 
-    #'    column datatype as per type the Dimensions and metrics
+            
     
     column.param <- t(sapply(GA.list.param.columnHeaders, 
                              '[',
@@ -332,19 +329,16 @@ RGoogleAnalytics <- function() {
     return(dataframe.param)
   }
   
+  #' This will set the appropriate data type to the each column of the 
+  #' provided dataframe.
+  #' @keywords internal 
+  #' @param col.datatype The vector of the datatype of all the dimensions and metrics from the parsed list data.
+  #' @param col.name The vector of the name of the all dimensions and metrics of the retrived data and it will be attached to the dataframe.param.               
+  #'              
+  #' @return dataframe.param The dataframe will be set with its column names with the appropriate class type.
+  #'
   SetColDataType <- function(col.datatype, col.name, dataframe.param) {
-    #' This will set the appropriate data type to the each column of the 
-    #' provided dataframe.
-    #' @keywords internal 
-    #' Args: 
-    #'   col.datatype: The vector of the datatype of all the dimensions and 
-    #'                 metrics from the parsed list data.
-    #'   col.name:  The vector of the name of the all dimensions and metrics 
-    #'              of the retrived data and it will be attached to the 
-    #'              dataframe.param.
-    #' Returns:
-    #'   dataframe.param: The dataframe will be set with its column names with
-    #'   the appropriate class type.
+          
     for(i in 1:length(col.datatype)) {
       if (col.datatype[i] == "STRING") {
         dataframe.param[, i] <- as.character(dataframe.param[, i]) 
@@ -355,19 +349,15 @@ RGoogleAnalytics <- function() {
     return(dataframe.param)
   }
   
+  #' This function will do the parsing operation on the JSON reponse 
+  #' returned from the Google Management API and return the
+  #' dataframe stored with the profile id and prfile name
+  #' @keywords internal 
+  #' @param api.reponse.json The JSON response from GetProfileData function which will request to the Google Management API.                      
+  #' @return Profileres.list The list stored with totalResults as value of the total available data rows and profiles as the R dataframe object with two columns as column id and column name.
+  #'   
   GetProfilesFromJSON <- function(api.response.json) {
-    #' This function will do the parsing operation on the JSON reponse 
-    #' returned from the Google Management API and return the
-    #' dataframe stored with the profile id and prfile name
-    #' @keywords internal 
-    #' Args:
-    #'   api.reponse.json: The JSON response from GetProfileData function 
-    #'                     which will request to the Google Management API.
-    #' Returns:
-    #'   Profileres.list: The list stored with totalResults as value of the 
-    #'                    total available data rows and profiles as the R 
-    #'                    dataframe object with two columns as column id and 
-    #'                    column name.        
+                                
     GA.profiles <- ParseApiErrorMessage(api.response.json)
     TotalProfiles <- GA.profiles$totalResults
     if (!is.null(GA.profiles$code)) {
@@ -394,32 +384,29 @@ RGoogleAnalytics <- function() {
     }
   }
   
+  #' This function will make a request to the Google Management API with
+  #' the query prepared by the QueryBuilder() for retriving the GA Account
+  #' data.
+  #' @keywords internal 
+  #' @param query.uri The data feed query string generated by the Query builder Class.              
+  #' @return GA.Data The response as account data feed in the JSON format.
   GetAcctDataFeedJSON <- function(query.uri) {
-    #' This function will make a request to the Google Management API with
-    #' the query prepared by the QueryBuilder() for retriving the GA Account
-    #' data.
-    #' @keywords internal 
-    #' Args :
-    #'   query.uri: The data feed query string generated by the Query builder 
-    #'              Class.
-    #' Returns :
-    #'   GA.Data: The response as account data feed in the JSON format.
     
     GA.Data <- getURL(query.uri)
     return(GA.Data)
   }
   
+  #' Retrieves the list of Profiles for the Google Analytics Account
+  #' 
+  #' This function will retrive the available profiles from your 
+  #' Google analytics account by the Google Management API with the help of 
+  #' the access token. 
+  #' @param None 
+  #'   
+  #' @return profiles R dataframe with profile id and profile name.
+  
   GetProfileData <- function() {
-    #' Retrieves the list of Profiles for the Google Analytics Account
-    #' 
-    #' This function will retrive the available profiles from your 
-    #' Google analytics account by the Google Management API with the help of 
-    #' the access token. 
-    #' @param None 
-    #' @examples 
-    #' ga$GetProfileData()  
-    #' @return
-    #'   profiles: R dataframe with profile id and profile name.
+    
     
     ValidateToken()
     
@@ -441,17 +428,17 @@ RGoogleAnalytics <- function() {
     return(profiles.param$profiles)
   }
   
+  #' This function will parse the json response and checks if the reponse 
+  #' is contains an error, if found it will promt user with the related 
+  #' error message.
+  #' 
+  #' @keywords internal 
+  #' 
+  #' @param GA.Data The json reponse returned by the Google analytics Data feed API.             
+  #' 
+  #' @return GA.list.param GA.list.param list object obtained from this json argument GA.Data.
   ParseDataFeedJSON <- function(GA.Data) {
-    #' This function will parse the json response and checks if the reponse 
-    #' is contains an error, if found it will promt user with the related 
-    #' error message.
-    #' @keywords internal 
-    #' Args:
-    #'   GA.Data: The json reponse returned by the Google analytics Data 
-    #'            feed API. 
-    #' Returns:
-    #'    GA.list.param: GA.list.param list object obtained from this json 
-    #'                   argument GA.Data.
+    
     GA.list.param <- ParseApiErrorMessage(GA.Data)
     if (!is.null(GA.list.param$code)) {
       stop(paste("code :",
@@ -462,15 +449,16 @@ RGoogleAnalytics <- function() {
     return(GA.list.param)
   }
   
+  #' This will request with the prepared Query to the Google Analytics 
+  #' Data feed API and returns the data in dataframe R object.
+  #' 
+  #' @keywords internal 
+  #' 
+  #' @param query.uri The URI prepared by the QueryBuilder class.   
+  #' 
+  #' @return GA.list The Google Analytics API JSON response converted to a list object
   GetDataFeed <- function(query.uri) {
-    #' This will request with the prepared Query to the Google Analytics 
-    #' Data feed API and returns the data in dataframe R object.
-    #' @keywords internal 
-    #' Args: 
-    #'   query.uri: The URI prepared by the QueryBuilder class.
-    #' Returns:
-    #'   GA.list: The Google Analytics API JSON response converted to a list object
-
+    
     GA.Data <- getURL(query.uri)  
     GA.list <- ParseDataFeedJSON(GA.Data)
     if (is.null(GA.list$rows)) {
@@ -481,32 +469,33 @@ RGoogleAnalytics <- function() {
     }
   }
   
+  #' Queries the Google Analytics API for the specified dimensions,metrics and other query parameters
+  #' 
+  #' This function will retrieve the data by firing the query to the Core Reporting API. It also displays 
+  #' status messages after the completion of the query. The user also has the option split the query into 
+  #' daywise partitions and paginate the query responses in order to decrease the effect the sampling
+  #' @export
+  #' 
+  #' @param query.builder  Name of the object corresponding to the QueryBuilder class 
+  #' 
+  #' @param paginate_query  Pages through chunks of results by requesting maximum 
+  #' number of allowed rows at a time. Default Value of this argument is FALSE
+  #' 
+  #' @param split_daywise  Splits the query by date range into sub queries of 
+  #' single days. Default value of this argument is FALSE. Note that setting this 
+  #' argument to true automatically paginates through each daywise query 
+  #' 
+  #' @example
+  #' ga_df <- ga$GetReportData(query)
+  #' ga_df <- ga$GetReportData(query,split_daywise=True)
+  #' ga_df <- ga$GetReportData(query,paginate_query=True)
+  #' 
+  #' @return api.response The respose is in the dataframe format as the output data returned from the Google Analytics Data feed API.
+  
   GetReportData <- function(query.builder, 
                             split_daywise=FALSE,
                             paginate_query=FALSE) { 
-    #' Queries the Google Analytics API for the specified dimensions,metrics and other query parameters
-    #' 
-    #' This function will retrieve the data by firing the query to the Core Reporting API. It also displays 
-    #' status messages after the completion of the query. The user also has the option split the query into 
-    #' daywise partitions and paginate the query responses in order to decrease the effect the sampling
-    #' @export
-    #' 
-    #' @param query.builder  Name of the object corresponding to the QueryBuilder class 
-    #' 
-    #' @param paginate_query  Pages through chunks of results by requesting maximum 
-    #' number of allowed rows at a time. Default Value of this argument is FALSE
-    #' 
-    #' @param split_daywise  Splits the query by date range into sub queries of 
-    #' single days. Default value of this argument is FALSE. Note that setting this 
-    #' argument to true automatically paginates through each daywise query 
-    #' 
-    #' @example
-    #' ga_df <- ga$GetReportData(query)
-    #' ga_df <- ga$GetReportData(query,split_daywise=True)
-    #' ga_df <- ga$GetReportData(query,paginate_query=True)
-    #' @return
-    #'   api.response: The respose is in the dataframe format as the output 
-    #'                   data returned from the Google Analytics Data feed API.
+                       
     
     query.builder$validate()
     
@@ -613,17 +602,25 @@ RGoogleAnalytics <- function() {
     return(final.df)
   }
   
+  #' This function breaks up the time range (as specified by Start Date and End Date) into single days
+  #' and hits a query for each day. The responses for each queries are collated into a single dataframe and
+  #' returned. This procedure helps decrease the effect of sampling.
+  #' 
+  #' @seealso https://developers.google.com/analytics/devguides/reporting/core/v2/gdataReferenceDataFeed#largeDataResults
+  #' 
+  #' @keywords internal 
+  #' 
+  #' @param query.builder Name of the object corresponding to the QueryBuilder class  
+  #' 
+  #' @return list containing the Column Headers and the Collated dataframe that represents the query response 
+  #' 
+  #' @importFrom lubridate ymd
+  #' @importFrom lubridate difftime
+  #' 
+  #' @author Kushan Shah
+  
   SplitQueryDaywise <- function(query.builder) {
-    #' This function breaks up the time range (as specified by Start Date and End Date) into single days
-    #' and hits a query for each day. The responses for each queries are collated into a single dataframe and
-    #' returned. This procedure helps decrease the effect of sampling.
-    #' Reference: https://developers.google.com/analytics/devguides/reporting/core/v2/gdataReferenceDataFeed#largeDataResults
-    #' @keywords internal 
-    #' Args :  
-    #'  query.builder : Name of the object corresponding to the QueryBuilder class
-    #' Returns : 
-    #'  list containing the Column Headers and the Collated dataframe that represents the query response 
-    #' Note : require(lubridate)   
+       
     
     # Validate the token and regenerate it if expired
     ValidateToken()
@@ -683,18 +680,24 @@ RGoogleAnalytics <- function() {
     return(list(header=first.query$columnHeaders, data=master.df))
   }
   
+  #' In case if a single query returns more than 10k rows,the Core Reporting API returns a subset of
+  #' the rows at a time. This function loops across all such subsets (pages) in order to retrieve data corresponding
+  #' to the entire query. The maximum number of rows corresponding to a single query that can be retrieved via Pagination
+  #' is 1 M. 
+  #' 
+  #' @seealso https://developers.google.com/analytics/devguides/reporting/core/v2/gdataReferenceDataFeed#largeDataResults
+  #' 
+  #' @keywords internal 
+  #' 
+  #' @param query.builder Name of the object corresponding to the query builder class
+  #' 
+  #' @param pages Integer representing the number of pages across which the query has to be paginated
+  #' 
+  #' @return list containing Column Headers and the data collated across all the pages of the query
+  #' 
+  #' @author Kushan Shah
   PaginateQuery <- function(query.builder, pages) {
-    #' In case if a single query returns more than 10k rows,the Core Reporting API returns a subset of
-    #' the rows at a time. This function loops across all such subsets (pages) in order to retrieve data corresponding
-    #' to the entire query. The maximum number of rows corresponding to a single query that can be retrieved via Pagination
-    #' is 1 M. 
-    #' Reference: https://developers.google.com/analytics/devguides/reporting/core/v2/gdataReferenceDataFeed#largeDataResults
-    #' @keywords internal 
-    #' Args:
-    #'  query.builder : Name of the object corresponding to the query builder class
-    #'  pages : Integer representing the number of pages across which the query has to be paginated
-    #' Returns: 
-    #'  list containing Column Headers and the data collated across all the pages of the query
+    
     
     # Validate the token and regenerate it if expired
     ValidateToken()
@@ -725,16 +728,16 @@ RGoogleAnalytics <- function() {
   }
   
   
+  #' To check whether the returned JSON response is error or not. 
+  #' If it is error then it will  
+  #' @keywords internal 
+  #' 
+  #' @param  api.response.json The json data as reposnse returned by the Google Data feed API or Google Management API   
+  #' 
+  #' @return None If there is error in JSON response then this function will return the related error code and message for that error. 
+  #'
   ParseApiErrorMessage <- function(api.response.json) {
-    #' To check whether the returned JSON response is error or not. 
-    #' If it is error then it will  
-    #' @keywords internal 
-    #' Args :  
-    #'   api.response.json: The json data as reposnse returned by the 
-    #'   Google Data feed API or Google Management API
-    #' Returns :
-    #'   If there is error in JSON response then this function will return the 
-    #'   related error code and message for that error.
+        
     api.response.list <- fromJSON(api.response.json, method = 'C')  
     check.param <- regexpr("error", api.response.list)
     if (check.param[1] != -1) {

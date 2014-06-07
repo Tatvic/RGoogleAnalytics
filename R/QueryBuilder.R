@@ -1,48 +1,42 @@
-QueryBuilder <- function() {
-  #' Builds a query with the specified dimensions,metrics and other query parameter
-  #'
-  #' The main builder class for constructing URI requests.
-  #' This function lists all the elements and parameters that make up a data
-  #' feed request. In general, you provide the profile ID corresponding to the
-  #' profile you want to retrieve data from, choose the combination of
-  #' dimensions and metrics, and provide a date range along with other
-  #' parameters in a query string.
-  #'
-  #' @export
-  #' @param start.date Start Date for fetching Analytics Data.
-  #' Start Date must be of the format %Y-%m-%d
-  #' @param end.date End Date for fetching Analytics Data.
-  #' End Date must be of the format %Y-%m-%d
-  #' @param dimensions A list of comma separated dimensions for Analytics Data
-  #' @param metrics A list of comma separated metrics for Analytics Data
-  #' @param sort A list of comma separated metrics and dimensions for sorting the Analytics
-  #' data and the sorting direction for these dimensions/metrics
-  #' @param filters Dimensions and metrics filters that restrict the data for a request
-  #' @param segment Segments the data for your request
-  #' @param max.results Maximum Number of rows to include in the query response. Default value is 
-  #' 10000
-  #' @param table.id Profile ID of the form ga:XXXXX where XXXXX is the Analytics View (Profile) ID of 
-  #' for which the query will retrieve the data
-  #' @return:
-  #'   builder: The builder method function to process the parameters.
-  #'
-  #' @example:
-  #' 
-  #'
-  #' Set the relevant variable information, if the variable is optional, you
-  #' do not need to specify it in the construction or simply place it as NULL.
-  #'
-  #' query <- QueryBuilder()
-  #'  
-  #' query$Init(start.date = "2012-06-18",
-  #'   end.date = "2012-12-18",
-  #'   dimensions = "ga:date, ga:pagePath",
-  #'   metrics = "ga:sessions, ga:pageviews, ga:timeOnPage",
-  #'   sort = "ga:sessions",
-  #'   max.results = 10000,
-  #'   table.id = 'ga:12345',
-  #'   )
-  
+#' Builds a query with the specified dimensions,metrics and other query parameter
+#'
+#' The main builder class for constructing URI requests.
+#' This function lists all the elements and parameters that make up a data
+#' feed request. In general, you provide the profile ID corresponding to the
+#' profile you want to retrieve data from, choose the combination of
+#' dimensions and metrics, and provide a date range along with other
+#' parameters in a query string.
+#'
+#' @export
+#' @param start.date Start Date for fetching Analytics Data.
+#' Start Date must be of the format %Y-%m-%d
+#' 
+#' @param end.date End Date for fetching Analytics Data.
+#' End Date must be of the format %Y-%m-%d
+#' 
+#' @param dimensions A list of comma separated dimensions for Analytics Data
+#' 
+#' @param metrics A list of comma separated metrics for Analytics Data
+#' 
+#' @param sort A list of comma separated metrics and dimensions for sorting the Analytics
+#' data and the sorting direction for these dimensions/metrics
+#' 
+#' @param filters Dimensions and metrics filters that restrict the data for a request
+#' 
+#' @param segment Segments the data for your request
+#' 
+#' @param max.results Maximum Number of rows to include in the query response. Default value is 
+#' 10000
+#' 
+#' @param table.id Profile ID of the form ga:XXXXX where XXXXX is the Analytics View (Profile) ID of 
+#' for which the query will retrieve the data
+#' 
+#' @return builder The builder method function to process the parameters.
+#'   
+#'
+#'
+QueryBuilder <-
+function() {
   
   # Constants.
   kMaxDimensions <- 7
@@ -62,28 +56,30 @@ QueryBuilder <- function() {
   profile.id   <- NULL
   access_token <- NULL
   
+  
+  #' Sets the start date.
+  #' Optional.
+  #' All Analytics feed requests must specify a beginning and ending date
+  #' range. If you do not indicate start- and end-date values for the
+  #' request, the server returns a request error.
+  #' Date values are in the form YYYY-MM-DD.
+  #' The earliest valid start-date is 2005-01-01. There is no upper limit
+  #' restriction for a start-date. However, setting a start-date that is
+  #' too  far in the future will most likely return empty results.
+  #'
+  #' @keywords internal   
+  #' @param
+  #'    start.date.param Optional. A start date of the form "YYYY-MM-DD"
+  #'                      as a string. If NULL is used, the start.date
+  #'                      parameter will be unset. If no parameter is
+  #'                      specified, the current start.date value is
+  #'                      returned.
+  #'
+  #'  @return None The start.date value if start.date.param is not set.
+  #'  Un-set the parameter if the value NULL is used.
+  
   StartDate <- function(start.date.param = NA) {
-    #' Sets the start date.
-    #' Optional.
-    #' All Analytics feed requests must specify a beginning and ending date
-    #' range. If you do not indicate start- and end-date values for the
-    #' request, the server returns a request error.
-    #' Date values are in the form YYYY-MM-DD.
-    #' The earliest valid start-date is 2005-01-01. There is no upper limit
-    #' restriction for a start-date. However, setting a start-date that is
-    #' too  far in the future will most likely return empty results.
-    #'
-    #' @keywords internal   
-    #'  Args:
-    #'    start.date.param: Optional. A start date of the form "YYYY-MM-DD"
-    #'                      as a string. If NULL is used, the start.date
-    #'                      parameter will be unset. If no parameter is
-    #'                      specified, the current start.date value is
-    #'                      returned.
-    #'
-    #'  Returns:
-    #'    The start.date value if start.date.param is not set.
-    #' Un-set the parameter if the value NULL is used.
+    
     if (is.null(start.date.param)) {
       start.date <<- NULL
       return(invisible())
@@ -103,27 +99,28 @@ QueryBuilder <- function() {
     start.date <<- start.date.param
     return(invisible())
   }
+  #' Sets the end date.
+  #' Optional.
+  #' All Analytics feed requests must specify a beginning and ending date
+  #' range. If you do not indicate start- and end-date values for the
+  #' request, the server returns a request error.
+  #' Date values are in the form YYYY-MM-DD.
+  #' The earliest valid start-date is 2005-01-01. There is no upper limit
+  #' restriction for a start-date. However, setting a start-date that is
+  #' too far in the future will most likely return empty results.
+  #'
+  #' @keywords internal 
+  #'  @param
+  #'    end.date.param An end date of the form 'YYYY-MM-DD'
+  #'                    as a string. If NULL is used, the end.date.param
+  #'                    parameter will be unset. If no parameter is specified,
+  #'                    the current end.date value is returned.
+  #'
+  #'  @return None The end.date value if end.date.param is not set.
+  #'
   
   EndDate <- function(end.date.param = NA) {
-    #' Sets the end date.
-    #' Optional.
-    #' All Analytics feed requests must specify a beginning and ending date
-    #' range. If you do not indicate start- and end-date values for the
-    #' request, the server returns a request error.
-    #' Date values are in the form YYYY-MM-DD.
-    #' The earliest valid start-date is 2005-01-01. There is no upper limit
-    #' restriction for a start-date. However, setting a start-date that is
-    #' too far in the future will most likely return empty results.
-    #'
-    #' @keywords internal 
-    #'  Args:
-    #'    end.date.param: An end date of the form 'YYYY-MM-DD'
-    #'                    as a string. If NULL is used, the end.date.param
-    #'                    parameter will be unset. If no parameter is specified,
-    #'                    the current end.date value is returned.
-    #'
-    #'  Returns:
-    #'    The end.date value if end.date.param is not set.
+    
     
     # Un-set the parameter if the value NULL is used.
     if (is.null(end.date.param)) {
@@ -146,44 +143,44 @@ QueryBuilder <- function() {
     return(invisible())
   }
   
+  #' Sets the dimensions.
+  #' @keywords internal 
+  #' Optional.
+  #' The dimensions parameter defines the primary data keys for your
+  #' Analytics report, such as ga:browser or ga:city. Use dimensions to
+  #' segment your web property metrics. For example, while you can ask for
+  #' the total number of pageviews to your site, it might be more
+  #' interesting to ask for the number of pageviews segmented by browser.
+  #' In this case, you'll see the number of pageviews from Firefox,
+  #' Internet Explorer, Chrome, and so forth.
+  #
+  #' When using dimensions in a feed request, be aware of the following
+  #' constraints:
+  #'   You can supply a maximum of 7 dimensions for any query.
+  #'   You can not send a query comprised only of dimensions:
+  #'     You must combine any requested dimension with at least one metric.
+  #'     Any given dimension can be used with other dimensions or metrics,
+  #'       but only where Valid Combinations apply for that dimension.
+  #'
+  #' @seealso
+  #' http://code.google.com/apis/analytics/docs/gdata/
+  #'        gdataReferenceDimensionsMetrics.html#validCombinations
+  #'
+  #' NOTE: This method does not check for invalid dimensions or combinations.
+  #'
+  #'  @param
+  #'    dimensions.param A vector of up to 7 dimensions, either as
+  #'                      a single string or a vector or strings, E.g.
+  #'                      "ga:source,ga:medium" or c("ga:source", "ga:medium")
+  #'                      If NULL is used, the dimensions parameter will be
+  #'                      unset. If no parameter is specified, the current
+  #'                      dimension value is returned.
+  #'
+  #'  @return None The dimensions value if dimensions.param is not set.
+  #'
   
   Dimensions <- function(dimensions.param = NA) {
-    #' Sets the dimensions.
-    #' @keywords internal 
-    #' Optional.
-    #' The dimensions parameter defines the primary data keys for your
-    #' Analytics report, such as ga:browser or ga:city. Use dimensions to
-    #' segment your web property metrics. For example, while you can ask for
-    #' the total number of pageviews to your site, it might be more
-    #' interesting to ask for the number of pageviews segmented by browser.
-    #' In this case, you'll see the number of pageviews from Firefox,
-    #' Internet Explorer, Chrome, and so forth.
-    #
-    #' When using dimensions in a feed request, be aware of the following
-    #' constraints:
-    #'   You can supply a maximum of 7 dimensions for any query.
-    #'   You can not send a query comprised only of dimensions:
-    #'     You must combine any requested dimension with at least one metric.
-    #'     Any given dimension can be used with other dimensions or metrics,
-    #'       but only where Valid Combinations apply for that dimension.
-    #'
-    #' More information on valid combinations can be found here:
-    #' http://code.google.com/apis/analytics/docs/gdata/
-    #'        gdataReferenceDimensionsMetrics.html#validCombinations
-    #'
-    #' NOTE: This method does not check for invalid dimensions or combinations.
-    #'
-    #'  Args:
-    #'    dimensions.param: A vector of up to 7 dimensions, either as
-    #'                      a single string or a vector or strings, E.g.
-    #'                      "ga:source,ga:medium" or c("ga:source", "ga:medium")
-    #'                      If NULL is used, the dimensions parameter will be
-    #'                      unset. If no parameter is specified, the current
-    #'                      dimension value is returned.
-    #'
-    #'  Returns:
-    #'    The dimensions value if dimensions.param is not set.
-    
+      
     # Un-set the parameter if the value NULL is used.
     if (is.null(dimensions.param)) {
       dimensions <<- NULL
@@ -221,43 +218,44 @@ QueryBuilder <- function() {
     return(invisible())
   }
   
+  #' Sets the metrics of interest (clicks, pageviews, etc)
+  #' Optional.
+  #' The aggregated statistics for user activity in a profile, such as
+  #' clicks or pageviews. When queried by alone, metrics provide aggregate
+  #' values for the requested date range, such as overall pageviews or
+  #' total bounces. However, when requested with dimensions, values are
+  #' segmented by the dimension. For example, ga:pageviews requested with
+  #' ga:country returns the total pageviews per country rather than the
+  #' total pageviews for the entire profile. When requesting metrics, keep
+  #' in mind:
+  #'
+  #' Any request must supply at least one metric because a request cannot
+  #' consist only of dimensions.
+  #' You can supply a maximum of 10 metrics for any query.
+  #' Most combinations of metrics from multiple categories can be used
+  #' together, provided no dimensions are specified.
+  #' The exception to the above is the ga:visitors metric, which can only
+  #' be used in combination with a subset of metrics.
+  #' Any given metric can be used in combination with other dimensions or
+  #' metrics, but only where Valid Combinations apply for that metric.
+  #' Metric values are always reported as an aggregate because the Data
+  #' Export API does not provide calculated metrics. For a list of common
+  #' calculations based on aggregate metrics.
+  #'
+  #' NOTE: We do check for valid metrics.
+  #'
+  #' @keywords internal 
+  #' @param
+  #'   metrics.param A vector of up to 10 dimensions, either as
+  #'                  a single string or a vector or strings. E.g.
+  #'                  "ga:sessions" or c("ga:sessions", "ga:bounces")
+  #'                  If NULL is used, the metrics parameter will be
+  #'                  unset. If no parameter is specified, the current
+  #'                  metrics value is returned.
+  #' @return
+  #'   The metrics value if metrics.param is not set.
+  
   Metrics <- function(metrics.param = NA) {
-    #' Sets the metrics of interest (clicks, pageviews, etc)
-    #' Optional.
-    #' The aggregated statistics for user activity in a profile, such as
-    #' clicks or pageviews. When queried by alone, metrics provide aggregate
-    #' values for the requested date range, such as overall pageviews or
-    #' total bounces. However, when requested with dimensions, values are
-    #' segmented by the dimension. For example, ga:pageviews requested with
-    #' ga:country returns the total pageviews per country rather than the
-    #' total pageviews for the entire profile. When requesting metrics, keep
-    #' in mind:
-    #'
-    #' Any request must supply at least one metric because a request cannot
-    #' consist only of dimensions.
-    #' You can supply a maximum of 10 metrics for any query.
-    #' Most combinations of metrics from multiple categories can be used
-    #' together, provided no dimensions are specified.
-    #' The exception to the above is the ga:visitors metric, which can only
-    #' be used in combination with a subset of metrics.
-    #' Any given metric can be used in combination with other dimensions or
-    #' metrics, but only where Valid Combinations apply for that metric.
-    #' Metric values are always reported as an aggregate because the Data
-    #' Export API does not provide calculated metrics. For a list of common
-    #' calculations based on aggregate metrics.
-    #'
-    #' NOTE: We do check for valid metrics.
-    #'
-    #' @keywords internal 
-    #' @param
-    #'   metrics.param: A vector of up to 10 dimensions, either as
-    #'                  a single string or a vector or strings. E.g.
-    #'                  "ga:sessions" or c("ga:sessions", "ga:bounces")
-    #'                  If NULL is used, the metrics parameter will be
-    #'                  unset. If no parameter is specified, the current
-    #'                  metrics value is returned.
-    #' Returns:
-    #'   The metrics value if metrics.param is not set.
     
     # Un-set the parameter if the value NULL is used.
     if (is.null(metrics.param)) {
@@ -297,50 +295,51 @@ QueryBuilder <- function() {
     return(invisible())
   }
   
+  #' Sets the segments, see dxp:segment in the Account Feed Response section
+  #' in the GA literature online.
+  #' http://code.google.com/apis/analytics/docs/gdata/gdataDeveloperGuide.html
+  #' @keywords internal 
+  #' Optional.
+  #' For general information on advanced segments, see Advanced
+  #' Segmentation in the Help Center. You can request an advanced segment
+  #' in the data feed in two ways:
+  #'
+  #' (1) The numeric ID of a default or custom advanced segment.
+  #'     The account feed returns all default advanced segments and their
+  #'     IDs, as well as any custom segments defined for the account.
+  #'     For more information on segment and their IDs, see dxp:segment in
+  #'     the Account Feed Response section.
+  #' (2) The dynamic parameter in the query.
+  #'     Use this method to segment your data request by one or more
+  #'     dimensions and/or metrics. You can also use regular expressions
+  #'     for segments just as you would for the filters parameter.
+  #'     Dynamic segments use the same Expressions and Operators used for
+  #'     the filters parameter. When using OR boolean logic or AND boolean
+  #'     logic, dynamic segment expressions follow the same rules as for
+  #'     the filters parameter, except that you may use OR boolean logic
+  #'     with both dimensions or metrics.
+  #' Dimensions/metrics combinations in the advanced segment expression
+  #' have fewer restrictions. Except where noted in the table, you can use
+  #' any dimension or metric in combination with another in your filter.
+  #'
+  #' The segment parameter is once again difficult to write checks for,
+  #' as this is a handler we rely on the GA API to report errors with the
+  #' request.
+  #'
+  #' Example:
+  #' gaid::10
+  #' dynamic::ga:medium==referral
+  #' @param
+  #'   segment An advanced segment definition to slice and dice your
+  #'            Analytics data. If NULL is used, the segment parameter will be
+  #'            unset. If no parameter is specified, the current segment value
+  #'            is returned.
+  #'
+  #' @return None The segment value if segment.param is not set.
+  #'
+  
   Segment <- function(segment.param = NA) {
-    #' Sets the segments, see dxp:segment in the Account Feed Response section
-    #' in the GA literature online.
-    #' http://code.google.com/apis/analytics/docs/gdata/gdataDeveloperGuide.html
-    #' @keywords internal 
-    #' Optional.
-    #' For general information on advanced segments, see Advanced
-    #' Segmentation in the Help Center. You can request an advanced segment
-    #' in the data feed in two ways:
-    #'
-    #' (1) The numeric ID of a default or custom advanced segment.
-    #'     The account feed returns all default advanced segments and their
-    #'     IDs, as well as any custom segments defined for the account.
-    #'     For more information on segment and their IDs, see dxp:segment in
-    #'     the Account Feed Response section.
-    #' (2) The dynamic parameter in the query.
-    #'     Use this method to segment your data request by one or more
-    #'     dimensions and/or metrics. You can also use regular expressions
-    #'     for segments just as you would for the filters parameter.
-    #'     Dynamic segments use the same Expressions and Operators used for
-    #'     the filters parameter. When using OR boolean logic or AND boolean
-    #'     logic, dynamic segment expressions follow the same rules as for
-    #'     the filters parameter, except that you may use OR boolean logic
-    #'     with both dimensions or metrics.
-    #' Dimensions/metrics combinations in the advanced segment expression
-    #' have fewer restrictions. Except where noted in the table, you can use
-    #' any dimension or metric in combination with another in your filter.
-    #'
-    #' The segment parameter is once again difficult to write checks for,
-    #' as this is a handler we rely on the GA API to report errors with the
-    #' request.
-    #'
-    #' Example:
-    #' gaid::10
-    #' dynamic::ga:medium==referral
-    #' Args:
-    #'   segment: An advanced segment definition to slice and dice your
-    #'            Analytics data. If NULL is used, the segment parameter will be
-    #'            unset. If no parameter is specified, the current segment value
-    #'            is returned.
-    #'
-    #' Returns:
-    #'   The segment value if segment.param is not set.
-    
+  
     # Un-set the parameter if the value NULL is used.
     if (is.null(segment.param)) {
       segment <<- NULL
@@ -356,42 +355,42 @@ QueryBuilder <- function() {
     return(invisible())
   }
   
-  Sort <- function(sort.param = NA) {
-    #' Sets the sorting criteria.
-    #' @keywords internal 
-    #' Optional.
-    #' Indicates the sorting order and direction for the returned data.
-    #' For example, the following parameter would first sort by ga:browser
-    #' and then by ga:pageviews in ascending order.
-    #'
-    #' If you do not indicate a sorting order in your query, the data is
-    #' sorted by dimension from left to right in the order listed.
-    #' When using the sort parameter, keep in mind the following:
-    #' Sort only by dimensions or metrics value that you have used in the
-    #' dimensions or metrics parameter. If your request sorts on a field that
-    #' is not indicated in either the dimensions or metrics parameter, you
-    #' will receive a request error.
-    #'
-    #' Google Analytics treats dimensions as strings, so all dimensions are
-    #' sorted in ascending alphabetical order in an en-US locale.
-    #' Google Analytics treats all metrics as numbers, so all metrics are
-    #' sorted in ascending numeric order.
-    #'
-    #' The sort direction can be changed from ascending to descending by
-    #' using a minus sign (-) prefix on the requested field.
-    #'
-    #' Note: We do not check that the sort parameters are also defined in
-    #' the dimensions or metrics parameters.
-    #'
-    #' Args:
-    #'   sort: The sorting order for the data to be returned.
-    #'         e.g. "ga:sessions" or c("ga:sessions", "-ga:browser")
-    #'         If NULL is used, the sort parameter will be
-    #'         unset. If no parameter is specified, the current sort value
-    #'         is returned.
-    #'
-    #' Returns:
-    #'  The sort value if sort.param is not set.
+  #' Sets the sorting criteria.
+  #' @keywords internal 
+  #' Optional.
+  #' Indicates the sorting order and direction for the returned data.
+  #' For example, the following parameter would first sort by ga:browser
+  #' and then by ga:pageviews in ascending order.
+  #'
+  #' If you do not indicate a sorting order in your query, the data is
+  #' sorted by dimension from left to right in the order listed.
+  #' When using the sort parameter, keep in mind the following:
+  #' Sort only by dimensions or metrics value that you have used in the
+  #' dimensions or metrics parameter. If your request sorts on a field that
+  #' is not indicated in either the dimensions or metrics parameter, you
+  #' will receive a request error.
+  #'
+  #' Google Analytics treats dimensions as strings, so all dimensions are
+  #' sorted in ascending alphabetical order in an en-US locale.
+  #' Google Analytics treats all metrics as numbers, so all metrics are
+  #' sorted in ascending numeric order.
+  #'
+  #' The sort direction can be changed from ascending to descending by
+  #' using a minus sign (-) prefix on the requested field.
+  #'
+  #' Note: We do not check that the sort parameters are also defined in
+  #' the dimensions or metrics parameters.
+  #'
+  #' @param
+  #'   sort The sorting order for the data to be returned.
+  #'         e.g. "ga:sessions" or c("ga:sessions", "-ga:browser")
+  #'         If NULL is used, the sort parameter will be
+  #'         unset. If no parameter is specified, the current sort value
+  #'         is returned.
+  #'
+  #' @return None The sort value if sort.param is not set.
+  #'
+  Sort <- function(sort.param = NA) {  
     
     # Un-set the parameter if the value NULL is used.
     if (is.null(sort.param)) {
@@ -422,28 +421,27 @@ QueryBuilder <- function() {
     sort <<- paste(sort.param, collapse = ",")
     return(invisible())
   }
+  #' Sets the filters used.
+  #' Optional.
+  #' The filters query string parameter restricts the data returned from
+  #' your request to the Analytics servers. When you use the filters
+  #' parameter, you supply a dimension or metric you want to filter,
+  #' followed by the filter expression. For example, the following feed
+  #' query requests ga:pageviews and ga:browser from profile 12134, where
+  #' the ga:browser dimension starts with the string Firefox:
+  #'
+  #' @param
+  #'   filters The filter string for the GA request.
+  #'            e.g. "ga:medium==referral".
+  #'            If NULL is used, the filters parameter will be unset.
+  #'            If no parameter is specified, the current filters value
+  #'            is returned.
+  #'
+  #' @return None The filters value if filters.param is not set.
+  #
   
   Filters <- function(filters.param = NA) {
-    #' Sets the filters used.
-    #' Optional.
-    #' The filters query string parameter restricts the data returned from
-    #' your request to the Analytics servers. When you use the filters
-    #' parameter, you supply a dimension or metric you want to filter,
-    #' followed by the filter expression. For example, the following feed
-    #' query requests ga:pageviews and ga:browser from profile 12134, where
-    #' the ga:browser dimension starts with the string Firefox:
-    #'
-    #' Args:
-    #'   filters: The filter string for the GA request.
-    #'            e.g. "ga:medium==referral".
-    #'            If NULL is used, the filters parameter will be unset.
-    #'            If no parameter is specified, the current filters value
-    #'            is returned.
-    #'
-    
-    # Returns:
-    #   The filters value if filters.param is not set.
-    
+   
     # Un-set the parameter if the value NULL is used.
     if (is.null(filters.param)) {
       filters <<- NULL
@@ -459,31 +457,31 @@ QueryBuilder <- function() {
     return(invisible())
   }
   
+  #' Sets the maximum number of results to return.
+  #' Optional.
+  #' Maximum number of entries to include in this feed. You can use this in
+  #' combination with start-index to retrieve a subset of elements, or use
+  #' it alone to restrict the number of returned elements, starting with
+  #' the first.
+  #'
+  #' If you do not use the max-results parameter in your query, your feed
+  #' returns the default maximum of 1000 entries.
+  #'
+  #' The Analytics Data Export API returns a maximum of 10,000 entries per
+  #' request, no matter how many you ask for. It can also return fewer
+  #' entries than requested, if there aren't as many dimension segments as
+  #' you expect. For instance, there are fewer than 300 possible values for
+  #' ga:country, so when segmenting only by country, you can't get more
+  #' than 300 entries, even if you set max-results to a higher value.
+  #'
+  #' @param
+  #'   max.results Maximum number of entries to include in the data feed.
+  #'                If not specified we return the default of 1000.
+  #'
+  #' @return None The max.results value if max.results.param is not set.
+  #'
   MaxResults <- function(max.results.param = NA) {
-    #' Sets the maximum number of results to return.
-    #' Optional.
-    #' Maximum number of entries to include in this feed. You can use this in
-    #' combination with start-index to retrieve a subset of elements, or use
-    #' it alone to restrict the number of returned elements, starting with
-    #' the first.
-    #'
-    #' If you do not use the max-results parameter in your query, your feed
-    #' returns the default maximum of 1000 entries.
-    #'
-    #' The Analytics Data Export API returns a maximum of 10,000 entries per
-    #' request, no matter how many you ask for. It can also return fewer
-    #' entries than requested, if there aren't as many dimension segments as
-    #' you expect. For instance, there are fewer than 300 possible values for
-    #' ga:country, so when segmenting only by country, you can't get more
-    #' than 300 entries, even if you set max-results to a higher value.
-    #'
-    #' Args:
-    #'   max.results: Maximum number of entries to include in the data feed.
-    #'                If not specified we return the default of 1000.
-    #'
-    #' Returns:
-    #'   The max.results value if max.results.param is not set.
-    
+       
     # Un-set the parameter if the value NULL is used.
     if (is.null(max.results.param)) {
       max.results <<- NULL
@@ -511,22 +509,22 @@ QueryBuilder <- function() {
     return(invisible())
   }
   
-  StartIndex <- function(start.index.param = NA) {
-    #' Sets the table id for a user.
-    #' Optional.
-    #' 
-    #' @keywords internal 
-    #' NOTE: This function does not test the table.id is valid from the account
-    #'      profile.
-    #'
-    #' Args:
-    #'   start.index.param: The starting point of pagination for results to be
-    #'                      returned. If NULL is used, the start.index parameter
-    #'                      will be unset. If no parameter is specified, the
-    #'                     current start.index value is returned.
-    #'
-    #' Returns:
-    #'   The start.index value if start.index.param is not set.
+  #' Sets the table id for a user.
+  #' Optional.
+  #' 
+  #' @keywords internal 
+  #' NOTE: This function does not test the table.id is valid from the account
+  #'      profile.
+  #'
+  #' @param
+  #'   start.index.param The starting point of pagination for results to be
+  #'                      returned. If NULL is used, the start.index parameter
+  #'                      will be unset. If no parameter is specified, the
+  #'                     current start.index value is returned.
+  #'
+  #' @return None The start.index value if start.index.param is not set.
+  #'
+  StartIndex <- function(start.index.param = NA) {   
     
     # Un-set the parameter if the value NULL is used.
     if (is.null(start.index.param)) {
@@ -554,26 +552,27 @@ QueryBuilder <- function() {
     start.index <<- start.index.param
     return(invisible())
   }
+  #' Sets the table id for a user based on the profile ID entered by the user
+  #' Optional.
+  #' The unique table ID used to retrieve the Analytics Report data. 
+  #' We run a series of checks that the form of the data is
+  #' being correctly entered.
+  #'
+  #' NOTE: This function does not test the table.id is valid from the account
+  #'       profile.
+  #' @keywords internal 
+  #' @param
+  #'   table.id.param This value is the table ID of the profile,
+  #'                   e.g "ga:1234".
+  #'                   If NULL is used, the table.id parameter will
+  #'                   be unset. If no parameter is specified, the
+  #'                   current table.id value is returned.
+  #'
+  #' @return None The table.id value if table.id.param is not set.
+  #'
   
   TableID <- function(table.id.param = NA) {
-    #' Sets the table id for a user based on the profile ID entered by the user
-    #' Optional.
-    #' The unique table ID used to retrieve the Analytics Report data. 
-    #' We run a series of checks that the form of the data is
-    #' being correctly entered.
-    #'
-    #' NOTE: This function does not test the table.id is valid from the account
-    #'       profile.
-    #' @keywords internal 
-    #' Args:
-    #'   table.id.param: This value is the table ID of the profile,
-    #'                   e.g "ga:1234".
-    #'                   If NULL is used, the table.id parameter will
-    #'                   be unset. If no parameter is specified, the
-    #'                   current table.id value is returned.
-    #'
-    #' Returns:
-    #'   The table.id value if table.id.param is not set.
+       
     
     #table.id.param <- paste0("ga:",as.numeric(table.id.param))
     
@@ -609,13 +608,13 @@ QueryBuilder <- function() {
     return(invisible())
   }
   
+  #' Returns whether the Query has all the required parameters set. These are
+  #' the start.date, end.date, metrics, and table.id parameters.
+  #'
+  #' @return
+  #'   TRUE if the query has all the required parameters. Otherwise stops the
+  #'   program execution.
   Validate <- function() {
-    #' Returns whether the Query has all the required parameters set. These are
-    #' the start.date, end.date, metrics, and table.id parameters.
-    #'
-    #' Returns:
-    #'   TRUE if the query has all the required parameters. Otherwise stops the
-    #'   program execution.
     
     missing.params <- c()
     
@@ -649,15 +648,15 @@ QueryBuilder <- function() {
     
   }
   
+  #' Returns the URI constructed from the parameter settings. This also
+  #' URI-encodes all the values in each query parameter.
+  #'
+  #' @return
+  #'   A full URI that can be used with the Google Analytics API. Users
+  #'   typically don't need to use this method as the
+  #'   RGoogleAnalytics$GetReportData() function accepts an entire
+  #'   QueryBuilder object.
   ToUri <- function() {
-    #' Returns the URI constructed from the parameter settings. This also
-    #' URI-encodes all the values in each query parameter.
-    #'
-    #' Returns:
-    #'   A full URI that can be used with the Google Analytics API. Users
-    #'   typically don't need to use this method as the
-    #'   RGoogleAnalytics$GetReportData() function accepts an entire
-    #'   QueryBuilder object.
     
     query <- c("start.date"  = start.date,
                "end.date"    = end.date,
@@ -703,14 +702,15 @@ QueryBuilder <- function() {
     return(uri)
   }
   
+  #' A function to reset all the data values to NULL, for a new query.f
+  #' The ClearData() function allows a user to reset the query parameters,
+  #' (start.date, metrics, etc) back to NULL.
+  #'@keywords internal 
+  #' 
+  #' @return
+  #'  Resets all the query parameters to NULL.
   ClearData <- function() {
-    #' A function to reset all the data values to NULL, for a new query.f
-    #' The ClearData() function allows a user to reset the query parameters,
-    #' (start.date, metrics, etc) back to NULL.
-    #'@keywords internal 
-    #' 
-    #' Returns:
-    #'  Resets all the query parameters to NULL.
+    
     start.date  <<- NULL
     end.date    <<- NULL
     dimensions  <<- NULL
@@ -724,11 +724,12 @@ QueryBuilder <- function() {
     return(invisible())
   }
   
+  #' Checks whether a valid authorization token exists.
+  #' @keywords internal 
+  #' @return None A stop call if the access_token is not valid or not present.
+  #'
   AccessToken <- function(access_token.param = NULL) {
-    #' Checks whether a valid authorization token exists.
-    #' @keywords internal 
-    #' Returns:
-    #'   A stop call if the access_token is not valid or not present.
+       
     if (is.null(access_token.param)) {
       access_token <<- NULL
       return(invisible())
@@ -755,6 +756,24 @@ QueryBuilder <- function() {
     return(invisible())
   }
   
+  #' A function setting initial values of a GA URI query.
+  #'
+  #' @param start.date See QueryBuilder()
+  #' @param end.date See QueryBuilder()
+  #' @param dimensions See QueryBuilder()  
+  #' @param metrics See QueryBuilder() 
+  #' @param segment See QueryBuilder()  
+  #' @param sort See QueryBuilder() 
+  #' @param filters See QueryBuilder()
+  #' @param max.results See QueryBuilder()
+  #' @param start.index: See QueryBuilder()  
+  #' @param table.id: See QueryBuilder() 
+  #' @param access_token: See AccessToken() 
+  #'  
+  #'
+  #' @return None Sets the initial query parameters.
+  #'
+  
   Init <- function(start.date  = NULL,
                    end.date    = NULL,
                    dimensions  = NULL,
@@ -764,25 +783,7 @@ QueryBuilder <- function() {
                    filters     = NULL,
                    max.results = NULL,
                    start.index = NULL,
-                   table.id    = NULL) {
-    
-    #' A function setting initial values of a GA URI query.
-    #'
-    #' Args:
-    #'  start.date: See QueryBuilder()
-    #'  end.date: See QueryBuilder()  
-    #'  dimensions: See QueryBuilder()
-    #'  metrics: See QueryBuilder()
-    #'  segment: See QueryBuilder()
-    #'  sort: See QueryBuilder()
-    #'  filters: See QueryBuilder()
-    #'  max.results: See QueryBuilder()
-    #'  start.index: See QueryBuilder()
-    #'  table.id: See QueryBuilder()
-    #'  access_token: See AccessToken()
-    #'
-    #' Returns:
-    #'   Sets the initial query parameters.
+                   table.id    = NULL) {   
     
     #Load Access Token from Memory
     access_token <- LoadAccessToken()
@@ -804,14 +805,15 @@ QueryBuilder <- function() {
     return(invisible())
   }
   
+  #' @keywords internal 
+  #' This function will authorize the user account with the Oauth 2.0 API. 
+  #' This function redirect a user to a browser with Oauth 2.0 login prompt, 
+  #' A user needs to allow the access to use this service by Exchanging an
+  #' authorization code for a token.
+  #' One must then paste the generated access token from Oauth 2.0 console 
+  #' to the R console.
+  
   Authorize <- function() {
-    #' @keywords internal 
-    #' This function will authorize the user account with the Oauth 2.0 API. 
-    #' This function redirect a user to a browser with Oauth 2.0 login prompt, 
-    #' A user needs to allow the access to use this service by Exchanging an
-    #' authorization code for a token.
-    #' One must then paste the generated access token from Oauth 2.0 console 
-    #' to the R console.
     
     browseURL(paste("https://accounts.google.com/o/oauth2/auth?scope=",
                     "https://www.googleapis.com/auth/analytics.readonly&",
@@ -835,12 +837,12 @@ QueryBuilder <- function() {
     return(access_token)
   }
   
+  #' This function updates the access token in the query builder object 
+  #' @keywords internal 
+  #' @param Access Token  
+  #' 
+  #' @return None Sets the Access Token
   SetAccessToken <- function(access.token) {
-    #' This function updates the access token in the query builder object 
-    #' @keywords internal 
-    #' Args : 
-    #' Access Token
-    #' Returns : 
     AccessToken(access.token)
   }
   
@@ -848,12 +850,12 @@ QueryBuilder <- function() {
     return(access_token)
   }
   
+  #' This function updates the start date in the query builder object 
+  #' @keywords internal 
+  #' @param Start Date 
+  #' 
+  #' @return None Sets the Start Date 
   SetStartDate <- function(start.date) {
-    #' This function updates the start date in the query builder object 
-    #' @keywords internal 
-    #' Args : 
-    #' Start Date
-    #' Returns : 
     StartDate(start.date)
   }  
   
@@ -861,11 +863,11 @@ QueryBuilder <- function() {
     return(start.date)
   }
   
+  #' This function updates the end date in the query builder object 
+  #' @param End Date 
+  #' 
+  #' @return None Sets the End Date 
   SetEndDate <- function(end.date) {
-    #' This function updates the end date in the query builder object 
-    #' Args : 
-    #' End Date
-    #' Returns : 
     EndDate(end.date)
   } 
   
@@ -873,11 +875,11 @@ QueryBuilder <- function() {
     return(end.date)
   }  
   
+  #' This function updates the start index in the query builder object 
+  #' @param End Date 
+  #' 
+  #' @return None Sets the Start Index in the Query Builder Object 
   SetStartIndex <- function(start.index) {
-    #' This function updates the start index in the query builder object 
-    #' Args : 
-    #' End Date
-    #' Returns : 
     StartIndex(start.index)
   }
   
