@@ -1,49 +1,57 @@
-#' A function setting initial values of a GA URI query.
+#' The main builder class for constructing URI requests.
+#' 
+#' This function lists all the elements and parameters that make up a data
+#' feed request. In general, you provide the profile ID corresponding to the
+#' profile you want to retrieve data from, choose the combination of
+#' dimensions and metrics, and provide a date range along with other
+#' parameters in a query string.
 #'
 #' @export
-#' @param start.date See QueryBuilder()
-#' @param end.date See QueryBuilder()
-#' @param dimensions See QueryBuilder()  
-#' @param metrics See QueryBuilder() 
-#' @param segment See QueryBuilder()  
-#' @param sort See QueryBuilder() 
-#' @param filters See QueryBuilder()
-#' @param max.results See QueryBuilder()
-#' @param start.index: See QueryBuilder()  
-#' @param table.id: See QueryBuilder() 
-#' @param access_token: See AccessToken() 
-#'  
-#'
-#' @return None Sets the initial query parameters.
-#'
+#' @param start.date Start Date for fetching Analytics Data.
+#' Start Date must be of the format "\%Y-\%m-\%d"
+#' 
+#' @param end.date End Date for fetching Analytics Data.
+#' End Date must be of the format "\%Y-\%m-\%d"
+#' 
+#' @param dimensions A list of comma separated dimensions for Analytics Data
+#' 
+#' @param metrics A list of comma separated metrics for Analytics Data
+#' 
+#' @param sort A list of comma separated metrics and dimensions for sorting the Analytics
+#' data and the sorting direction for these dimensions/metrics
+#' 
+#' @param filters Dimensions and metrics filters that restrict the data for a request
+#' 
+#' @param segment Segments the data for your request
+#' 
+#' @param max.results Maximum Number of rows to include in the query response. Default value is 
+#' 10000
+#' 
+#' @param table.id Profile ID of the form ga:XXXXX where XXXXX is the Analytics View (Profile) ID of 
+#' for which the query will retrieve the data
+#' 
+#' @return query.params.list List of all the Query Parameters initialized by the user
 
-Init <- function(start.date  = NULL,
-                 end.date    = NULL,
-                 dimensions  = NULL,
-                 metrics     = NULL,
-                 segment     = NULL,
-                 sort        = NULL,
-                 filters     = NULL,
-                 max.results = NULL,
-                 start.index = NULL,
-                 table.id    = NULL) {   
+Init <- function(
+  start.date = NULL,
+  end.date = NULL,
+  dimensions = NULL,
+  metrics = NULL,
+  filters = NULL,
+  segments = NULL,
+  max.results = NULL,
+  start.index = NULL,
+  table.id = NULL){
   
-  #Load Access Token from Memory
-  access_token <- LoadAccessToken()
+  query.params.list = list("start.date" = start.date,
+                 "end.date" = end.date,
+                 "dimensions" = dimensions,
+                 "metrics" = metrics,
+                 "filters" = filters,
+                 "segments" = segments,
+                 "max.results" = max.results,
+                 "start.index" = start.index,
+                 "table.id" = table.id)
   
-  StartDate(start.date)
-  EndDate(end.date)
-  Dimensions(dimensions)
-  Metrics(metrics)
-  Segment(segment)
-  Sort(sort)
-  Filters(filters)
-  MaxResults(max.results)
-  StartIndex(start.index)
-  TableID(table.id)
-  AccessToken(access_token)
-  
-  #Perform Validation
-  #Validate()
-  return(invisible())
+  return(query.params.list)
 }
