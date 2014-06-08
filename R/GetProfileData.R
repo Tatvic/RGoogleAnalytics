@@ -4,7 +4,7 @@
 #' Google analytics account by the Google Management API with the help of 
 #' the access token. 
 #'  
-#'   
+#' @export 
 #' @return profiles R dataframe with profile id and profile name.
 
 GetProfileData <- function() {
