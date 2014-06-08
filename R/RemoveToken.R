@@ -5,7 +5,7 @@
   #' from the system file
   #' 
   #' @export
-  #' @param None
+  #' 
   #' @examples
   #' \dontrun{RemoveToken()}
   #' 

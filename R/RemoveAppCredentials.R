@@ -8,8 +8,7 @@
 #' @param None
 #' @examples
 #' \dontrun{RemoveAppCredentials()}  
-#' @return None Deletes the app_credentials.rda file from the user's system
-#' @author Kushan Shah
+#' 
 
 RemoveAppCredentials <- function() {
   

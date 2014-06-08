@@ -22,7 +22,7 @@
 #' 
 #' @param filters Dimensions and metrics filters that restrict the data for a request
 #' 
-#' @param segment Segments the data for your request
+#' @param segments Segments the data for your request
 #' 
 #' @param max.results Maximum Number of rows to include in the query response. Default value is 
 #' 10000
@@ -38,6 +38,7 @@ Init <- function(
   dimensions = NULL,
   metrics = NULL,
   filters = NULL,
+  sort = NULL
   segments = NULL,
   max.results = NULL,
   start.index = NULL,
@@ -48,6 +49,7 @@ Init <- function(
                  "dimensions" = dimensions,
                  "metrics" = metrics,
                  "filters" = filters,
+                 "sort" = sort,
                  "segments" = segments,
                  "max.results" = max.results,
                  "start.index" = start.index,
