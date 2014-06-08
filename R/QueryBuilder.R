@@ -1,39 +1,13 @@
 #' Builds a query with the specified dimensions,metrics and other query parameter
 #'
-#' The main builder class for constructing URI requests.
-#' This function lists all the elements and parameters that make up a data
-#' feed request. In general, you provide the profile ID corresponding to the
-#' profile you want to retrieve data from, choose the combination of
-#' dimensions and metrics, and provide a date range along with other
-#' parameters in a query string.
-#'
 #' @export
-#' @param start.date Start Date for fetching Analytics Data.
-#' Start Date must be of the format "\%Y-\%m-\%d"
 #' 
-#' @param end.date End Date for fetching Analytics Data.
-#' End Date must be of the format "\%Y-\%m-\%d"
+#' @param query.params.list List of all the Query Parameters. See \code{Init} for the
+#' entire list
 #' 
-#' @param dimensions A list of comma separated dimensions for Analytics Data
-#' 
-#' @param metrics A list of comma separated metrics for Analytics Data
-#' 
-#' @param sort A list of comma separated metrics and dimensions for sorting the Analytics
-#' data and the sorting direction for these dimensions/metrics
-#' 
-#' @param filters Dimensions and metrics filters that restrict the data for a request
-#' 
-#' @param segment Segments the data for your request
-#' 
-#' @param max.results Maximum Number of rows to include in the query response. Default value is 
-#' 10000
-#' 
-#' @param table.id Profile ID of the form ga:XXXXX where XXXXX is the Analytics View (Profile) ID of 
-#' for which the query will retrieve the data
-#' 
-#' @return builder The builder method function to process the parameters.
+#' @return builder The builder method to process the query parameters.
 #'
-QueryBuilder <- function() {
+QueryBuilder <- function(query.params.list) {
   
   # Constants.
   kMaxDimensions <- 7
@@ -41,17 +15,46 @@ QueryBuilder <- function() {
   kMaxTableIds <- 1
   
   # Query parameters.
-  start.date   <- NULL
-  end.date     <- NULL
-  dimensions   <- NULL
-  metrics      <- NULL
-  segment      <- NULL
-  sort         <- NULL
-  filters      <- NULL
-  max.results  <- NULL
-  start.index  <- NULL
-  profile.id   <- NULL
+  start.date   <- query.params.list$start.date
+  end.date     <- query.params.list$end.date
+  dimensions   <- query.params.list$dimensions
+  metrics      <- query.params.list$metrics
+  segment      <- query.params.list$segment
+  sort         <- query.params.list$sort
+  filters      <- query.params.list$filters
+  max.results  <- query.params.list$max.results
+  start.index  <- query.params.list$start.index
+  table.id   <- query.params.list$table.id
+  
+  # Change this to access_token <- LoadAccessToken()
   access_token <- NULL
+  
+  #' Sets the Query Parameters for the Query Builder Object and performs validation
+  #' 
+  #' 
+  
+  SetQueryParams <- function() {   
+    
+    #Load Access Token from Memory
+    access_token <- LoadAccessToken()
+    
+    StartDate(start.date)
+    EndDate(end.date)
+    Dimensions(dimensions)
+    Metrics(metrics)
+    Segment(segment)
+    Sort(sort)
+    Filters(filters)
+    MaxResults(max.results)
+    StartIndex(start.index)
+    TableID(table.id)
+    AccessToken(access_token)
+    
+    #Perform Validation
+    Validate()
+    return(invisible())
+  }
+  
   
   
   #' Sets the start date.
@@ -753,6 +756,12 @@ QueryBuilder <- function() {
     return(invisible())
   }
   
+  #' Loads the access token from the system memory into R
+  
+  LoadAccessToken <- function() {
+    load(file.path(path.package("RGoogleAnalytics"),"accesstoken.rda"))
+    return(token.list$access_token)
+  }
   
   
   #' @keywords internal 
@@ -837,6 +846,28 @@ QueryBuilder <- function() {
     return(start.index)
   }
   
+  #' A function setting initial values of a GA URI query.
+  #'
+  #' @export
+  #' @param start.date See QueryBuilder()
+  #' @param end.date See QueryBuilder()
+  #' @param dimensions See QueryBuilder()  
+  #' @param metrics See QueryBuilder() 
+  #' @param segment See QueryBuilder()  
+  #' @param sort See QueryBuilder() 
+  #' @param filters See QueryBuilder()
+  #' @param max.results See QueryBuilder()
+  #' @param start.index: See QueryBuilder()  
+  #' @param table.id: See QueryBuilder() 
+  #' @param access_token: See AccessToken() 
+  #'  
+  #'
+  #' @return None Sets the initial query parameters.
+  #'
+  
+  
+  
+  
   return(list("dimensions"   =   Dimensions,
               "metrics"      =   Metrics,
               "sort"         =   Sort,
@@ -846,9 +877,8 @@ QueryBuilder <- function() {
               "table.id"     =   TableID,
               "to.uri"       =   ToUri,   
               "clear.data"   =   ClearData,
-              "validate"     =   Validate,
+              "Validate"     =   Validate,
               "access_token" =   AccessToken,
-              "authorize"    =   Authorize,
               "SetAccessToken" = SetAccessToken,
               "GetAccessToken" = GetAccessToken,
               "GetStartDate"  = GetStartDate,
@@ -857,5 +887,6 @@ QueryBuilder <- function() {
               "SetAccessToken" = SetAccessToken,
               "SetEndDate" = SetEndDate,
               "SetStartDate" = SetStartDate,
+              "SetQueryParams" = SetQueryParams,
               "SetStartIndex" = SetStartIndex))
 }

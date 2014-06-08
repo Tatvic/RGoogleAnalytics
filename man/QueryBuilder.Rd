@@ -3,41 +3,16 @@
 \alias{QueryBuilder}
 \title{Builds a query with the specified dimensions,metrics and other query parameter}
 \usage{
-QueryBuilder()
+QueryBuilder(query.params.list)
 }
 \arguments{
-\item{start.date}{Start Date for fetching Analytics Data.
-Start Date must be of the format "\%Y-\%m-\%d"}
-
-\item{end.date}{End Date for fetching Analytics Data.
-End Date must be of the format "\%Y-\%m-\%d"}
-
-\item{dimensions}{A list of comma separated dimensions for Analytics Data}
-
-\item{metrics}{A list of comma separated metrics for Analytics Data}
-
-\item{sort}{A list of comma separated metrics and dimensions for sorting the Analytics
-data and the sorting direction for these dimensions/metrics}
-
-\item{filters}{Dimensions and metrics filters that restrict the data for a request}
-
-\item{segment}{Segments the data for your request}
-
-\item{max.results}{Maximum Number of rows to include in the query response. Default value is
-10000}
-
-\item{table.id}{Profile ID of the form ga:XXXXX where XXXXX is the Analytics View (Profile) ID of
-for which the query will retrieve the data}
+\item{query.params.list}{List of all the Query Parameters. See \code{Init} for the
+entire list}
 }
 \value{
-builder The builder method function to process the parameters.
+builder The builder method to process the query parameters.
 }
 \description{
-The main builder class for constructing URI requests.
-This function lists all the elements and parameters that make up a data
-feed request. In general, you provide the profile ID corresponding to the
-profile you want to retrieve data from, choose the combination of
-dimensions and metrics, and provide a date range along with other
-parameters in a query string.
+Builds a query with the specified dimensions,metrics and other query parameter
 }
 
