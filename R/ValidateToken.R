@@ -2,6 +2,7 @@
 #' expired. If yes, it generates a new Access Token and updates the local file.
 #' If no, then it returns the stored Access Token
 #'  
+#' @export
 #'  
 
 ValidateToken <- function() {
