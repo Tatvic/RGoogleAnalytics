@@ -837,11 +837,6 @@ QueryBuilder <- function() {
     return(start.index)
   }
   
-  LoadAccessToken <- function() {
-    load(file.path(path.package("RGoogleAnalytics"),"accesstoken.rda"))
-    return(token.list$access_token)
-  }
-  
   return(list("dimensions"   =   Dimensions,
               "metrics"      =   Metrics,
               "sort"         =   Sort,
