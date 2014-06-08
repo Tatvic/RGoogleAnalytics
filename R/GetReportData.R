@@ -41,7 +41,10 @@ GetReportData <- function(query.builder,
                               ssl.verifypeer = FALSE))
   
   
-  query.builder$validate()
+  # Set all the Query Parameters
+  
+  query.builder$SetQueryParams()
+  query.builder$Validate()
   
   # Ensure the starting index is set per the user request
   # We can only return 10,000 rows in a single query
