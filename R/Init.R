@@ -1,5 +1,6 @@
 #' A function setting initial values of a GA URI query.
 #'
+#' @export
 #' @param start.date See QueryBuilder()
 #' @param end.date See QueryBuilder()
 #' @param dimensions See QueryBuilder()  
