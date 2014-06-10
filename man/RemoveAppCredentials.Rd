@@ -5,12 +5,6 @@
 \usage{
 RemoveAppCredentials()
 }
-\arguments{
-\item{None}{}
-}
-\value{
-None Deletes the app_credentials.rda file from the user's system
-}
 \description{
 In case if the user creates a new project in the Google API Developer Console, then
 a fresh set of OAuth2.0 credentials (Client ID and Client Secret) are provided
@@ -18,8 +12,5 @@ This requires deletion of old stored credentials
 }
 \examples{
 \dontrun{RemoveAppCredentials()}
-}
-\author{
-Kushan Shah
 }
 

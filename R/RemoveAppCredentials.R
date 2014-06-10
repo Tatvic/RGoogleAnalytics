@@ -5,7 +5,7 @@
 #' This requires deletion of old stored credentials
 #' 
 #' @export
-#' @param None
+#' 
 #' @examples
 #' \dontrun{RemoveAppCredentials()}  
 #' 

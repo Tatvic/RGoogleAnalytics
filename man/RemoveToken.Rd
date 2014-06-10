@@ -5,9 +5,6 @@
 \usage{
 RemoveToken()
 }
-\arguments{
-\item{None}{}
-}
 \description{
 In case if the user wants to query a new profile, then the Authorization flow
 has to repeated. This requires deleting the stored Access and Refresh Tokens

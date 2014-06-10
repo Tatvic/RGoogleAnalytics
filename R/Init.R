@@ -30,6 +30,8 @@
 #' @param table.id Profile ID of the form ga:XXXXX where XXXXX is the Analytics View (Profile) ID of 
 #' for which the query will retrieve the data
 #' 
+#' @param start.index The first row of data to retrieve. Default value is 1
+#' 
 #' @return query.params.list List of all the Query Parameters initialized by the user
 
 Init <- function(
@@ -38,7 +40,7 @@ Init <- function(
   dimensions = NULL,
   metrics = NULL,
   filters = NULL,
-  sort = NULL
+  sort = NULL,
   segments = NULL,
   max.results = NULL,
   start.index = NULL,

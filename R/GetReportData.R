@@ -26,7 +26,7 @@ GetReportData <- function(query.builder,
                           split_daywise=FALSE,
                           paginate_query=FALSE) { 
                      
-  kMaxDefaultRows <<- 10000 
+  kMaxDefaultRows <- 10000 
   kMaxPages <- 100
   
   # We have used oauth 2.0 API to authorize the user account 

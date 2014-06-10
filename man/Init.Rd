@@ -4,8 +4,8 @@
 \title{The main builder class for constructing URI requests.}
 \usage{
 Init(start.date = NULL, end.date = NULL, dimensions = NULL,
-  metrics = NULL, filters = NULL, segments = NULL, max.results = NULL,
-  start.index = NULL, table.id = NULL)
+  metrics = NULL, filters = NULL, sort = NULL, segments = NULL,
+  max.results = NULL, start.index = NULL, table.id = NULL)
 }
 \arguments{
 \item{start.date}{Start Date for fetching Analytics Data.
@@ -23,13 +23,15 @@ data and the sorting direction for these dimensions/metrics}
 
 \item{filters}{Dimensions and metrics filters that restrict the data for a request}
 
-\item{segment}{Segments the data for your request}
+\item{segments}{Segments the data for your request}
 
 \item{max.results}{Maximum Number of rows to include in the query response. Default value is
 10000}
 
 \item{table.id}{Profile ID of the form ga:XXXXX where XXXXX is the Analytics View (Profile) ID of
 for which the query will retrieve the data}
+
+\item{start.index}{The first row of data to retrieve. Default value is 1}
 }
 \value{
 query.params.list List of all the Query Parameters initialized by the user
