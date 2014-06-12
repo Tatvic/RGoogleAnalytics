@@ -3,9 +3,6 @@ ValidateToken()
 RemoveToken()
 RemoveAppCredentials()
 
-GetAppCredentials("150487456763-263oc9mh8q1427c788fl6piahlbcuqm3.apps.googleusercontent.com",
-                     "TUmTHIdHFyHoeDhFad_TknUI")
-
 GenerateAccessToken()
 
 query_list <- Init(start.date = "2013-11-28",

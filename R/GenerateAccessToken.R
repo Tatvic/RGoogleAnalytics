@@ -1,4 +1,3 @@
-
 #' Gets an OAuth 2.0 Access Token by authorizing the user account to the Google 
 #' Analytics API 
 #' 
@@ -12,29 +11,42 @@
 #'
 #' @export  
 #' 
+#' @param secrets.file.path Optional.
 #' 
 #' @importFrom rjson fromJSON
 #' @importFrom RCurl postForm
-GenerateAccessToken <- function() {
+GenerateAccessToken <- function(secrets.file.path = NULL) {
   
+  # Build file path if path is provided by user
+
+  if (is.null(secrets.file.path)) {
+    internal.file.path <<- file.path(path.package("RGoogleAnalytics"), "client_secrets.json")
+  } else {
+    internal.file.path <<- secrets.file.path
+  }
   
-  # Check if the Access Token File already exists
-  if(!file.exists(file.path(path.package("RGoogleAnalytics"), "accesstoken.rda"))) {
-    # File Does not exist
-    # Check if API_Creds exists
-    if(!file.exists(file.path(path.package("RGoogleAnalytics"), "app_credentials.rda"))) {
-      stop(cat("Application Credentials do not exist.Please use the GetAppCredentials 
-                 function to save the credentials to a local file"))
-    } else {
-      
-      # API Credentials file exists  
-      # Load the app_credentials file
-      load(file.path(path.package("RGoogleAnalytics"), "app_credentials.rda"))
-      
-      # Build the URL string
-      client.id <- as.character(client.id) 
-      client.secret <- as.character(client.secret)
-      redirect.uri <- "urn:ietf:wg:oauth:2.0:oob"
+
+  if(!file.exists(internal.file.path)) {
+    
+    stop(message("client_secrets.json file does not exist at",internal.file.path,".Please specify a valid path"))
+    
+  } else {
+    
+    # API Credentials file exists  
+    # Load the client_secrets file
+    # client.secrets.json.file <- 
+    client.secrets.list <- fromJSON(readLines(internal.file.path,warn = FALSE))
+    
+    # Build the URL string
+    client.id <- as.character(client.secrets.list$installed$client_id) 
+    client.secret <- as.character(client.secrets.list$installed$client_secret)
+    redirect.uri <- as.character(client.secrets.list$installed$redirect_uris[1])
+    
+    # Check whether Access Token File is already present
+    # If it isn't then redirect user to the Consent Screen and get new Access Token
+    # If it is get a new Access Token based on the Refresh Token
+    
+    if(!file.exists(file.path(path.package("RGoogleAnalytics"), "accesstoken.rda"))) {
       
       url <- paste0('https://accounts.google.com/o/oauth2/auth?',
                     'scope=https://www.googleapis.com/auth/analytics.readonly&',          
@@ -49,6 +61,8 @@ GenerateAccessToken <- function() {
       # Get Auth Code
       # Load the prepared URL into a WWW browser.
       browseURL(url) 
+
+      # Update this text
       cat("The Google Analytics data extraction process requires an authorization code.",
           "To accept the authorization code, you need to follow certain steps in your ",
           "browser. This code will help this R packge to generate the access",
@@ -76,10 +90,10 @@ GenerateAccessToken <- function() {
       # values - access_token, token_type, expires_in and refresh_token)
       # in file system where RGoogleAnalytics package located.
       
-      #token.list contains the response by the Google Analytics API
-      #Contents : access_token, token_type, refresh_token, expires_in
-      #Retained the same naming convention as that followed by the Google Analytics API for 
-      #these objects
+      # token.list contains the response by the Google Analytics API
+      # Contents : access_token, token_type, refresh_token, expires_in
+      # Retained the same naming convention as that followed by the Google Analytics API for 
+      # these objects
       access.token <- token.list$access_token 
       
       save(token.list, 
@@ -92,29 +106,26 @@ GenerateAccessToken <- function() {
       cat("Access token has been saved to",access.token.file.path,"\n")
       
       return(invisible())
+    } else {
+      
+      load(file.path(path.package("RGoogleAnalytics"),
+                     "accesstoken.rda"))
+      
+      
+      # Get new Access Token
+      access.token <- RefreshToAccessToken(token.list$refresh_token, client.id,client.secret)
+      
+      #In case if a New Access Token is generated update it in the file as well
+      token.list$access_token <- access.token
+      
+      #Save the updated credentials into the file
+      save(token.list, 
+           file = file.path(path.package("RGoogleAnalytics"),
+                            "accesstoken.rda"))
+      
+      cat("Access token has been regenerated\n")
+      
+      return(invisible())  
     }
-    
-  } else {
-    # Load the Access Token from the file saved to the system
-    
-    load(file.path(path.package("RGoogleAnalytics"),
-                   "accesstoken.rda"))
-    load(file.path(path.package("RGoogleAnalytics"),
-                   "app_credentials.rda"))
-    
-    # Get new Access Token
-    access.token <- RefreshToAccessToken(token.list$refresh_token, client.id,client.secret)
-    
-    #In case if a New Access Token is generated update it in the file as well
-    token.list$access_token <- access.token
-    
-    #Save the updated credentials into the file
-    save(token.list, 
-         file = file.path(path.package("RGoogleAnalytics"),
-                          "accesstoken.rda"))
-    
-    cat("Access token has been regenerated\n")
-    
-    return(invisible())
   }
 }

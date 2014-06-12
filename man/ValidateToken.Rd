@@ -2,14 +2,12 @@
 \name{ValidateToken}
 \alias{ValidateToken}
 \title{This function checks whether the Access Token stored in the local file is
-expired. If yes, it generates a new Access Token and updates the local file.
-If no, then it returns the stored Access Token}
+expired. If yes, it generates a new Access Token and updates the local file.}
 \usage{
 ValidateToken()
 }
 \description{
 This function checks whether the Access Token stored in the local file is
 expired. If yes, it generates a new Access Token and updates the local file.
-If no, then it returns the stored Access Token
 }
 

@@ -4,7 +4,7 @@
 \title{Gets an OAuth 2.0 Access Token by authorizing the user account to the Google
 Analytics API}
 \usage{
-GenerateAccessToken()
+GenerateAccessToken(secrets.file.path = NULL)
 }
 \description{
 Gets an OAuth 2.0 Access Token by authorizing the user account to the Google
