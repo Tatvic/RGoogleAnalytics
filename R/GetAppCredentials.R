@@ -4,7 +4,7 @@
   #' This function gets the Client ID and Client Secret of the Application from
   #' the user and saves it locally to a file for OAuth 2.0 Authorization flow. 
   #'  
-  #' @export  
+  #'   
   #' @param client.id Client ID of the Application 
   #' @param client.secret Client Secret of the Application
   #' 

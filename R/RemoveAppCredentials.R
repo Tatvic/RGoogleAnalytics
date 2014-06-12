@@ -4,7 +4,7 @@
 #' a fresh set of OAuth2.0 credentials (Client ID and Client Secret) are provided
 #' This requires deletion of old stored credentials
 #' 
-#' @export
+#' 
 #' 
 #' @examples
 #' \dontrun{RemoveAppCredentials()}  
