@@ -1,13 +1,14 @@
 #' Retrieves the list of Profiles for the Google Analytics Account
 #' 
-#' This function will retrive the available profiles from your 
-#' Google analytics account by the Google Management API with the help of 
-#' the access token. 
+#' This function retrives all the available profiles from the 
+#' Google analytics account which has been authenticated by the user 
 #'  
 #' @export 
+#' @example
+#' \dontrun {GetProfiles()}
 #' @return profiles R dataframe with profile id and profile name.
 
-GetProfileData <- function() {
+GetProfiles() <- function() {
   
   
   ValidateToken()
