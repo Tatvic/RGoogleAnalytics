@@ -1,4 +1,4 @@
-#' Builds a query with the specified dimensions,metrics and other query parameter
+#' Initializes a QueryBuilder object with the given parameters and performs validation
 #'
 #' @export
 #' 
@@ -246,7 +246,7 @@ QueryBuilder <- function(query.params.list) {
   #'
   #' @keywords internal 
   #' @param
-  #'   metrics.param A vector of up to 10 dimensions, either as
+  #'   metrics.param A vector of up to 10 metrics, either as
   #'                  a single string or a vector or strings. E.g.
   #'                  "ga:sessions" or c("ga:sessions", "ga:bounces")
   #'                  If NULL is used, the metrics parameter will be
