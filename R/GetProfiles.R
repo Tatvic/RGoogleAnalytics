@@ -4,12 +4,10 @@
 #' Google analytics account which has been authenticated by the user 
 #'  
 #' @export 
-#' @example
-#' \dontrun {GetProfiles()}
+#' @examples \dontrun{GetProfiles()}
 #' @return profiles R dataframe with profile id and profile name.
 
-GetProfiles() <- function() {
-  
+GetProfiles <- function() {
   
   ValidateToken()
   
