@@ -1,10 +1,8 @@
-#' The main builder class for constructing URI requests.
+#' Initialize the Google Analytics query parameters
 #' 
-#' This function lists all the elements and parameters that make up a data
-#' feed request. In general, you provide the profile ID corresponding to the
-#' profile you want to retrieve data from, choose the combination of
-#' dimensions and metrics, and provide a date range along with other
-#' parameters in a query string.
+#' This function takes all the query parameters and combines them into a single list that 
+#' is to be passed as an argument to \code{QueryBuilder()}. Note that parameter validation is 
+#' performed when the \code{QueryBuilder()} object is initialized 
 #'
 #' @export
 #' @param start.date Start Date for fetching Analytics Data.
@@ -13,16 +11,20 @@
 #' @param end.date End Date for fetching Analytics Data.
 #' End Date must be of the format "\%Y-\%m-\%d"
 #' 
-#' @param dimensions A list of comma separated dimensions for Analytics Data
+#' @param dimensions A vector of up to 7 dimensions, either as a single string or a vector or strings, E.g.
+#'                  "ga:source,ga:medium" or c("ga:source", "ga:medium"). If NULL is used, the dimensions parameter will be
+#'                  unset.     
+#'                      
+#' @param metrics A vector of up to 10 metrics, either as a single string or a vector or strings. E.g.
+#'                "ga:sessions" or c("ga:sessions", "ga:bounces"). If NULL is used, the metrics parameter will be
+#'                  unset. 
 #' 
-#' @param metrics A list of comma separated metrics for Analytics Data
+#' @param sort The sorting order for the data to be returned.e.g. "ga:sessions" or c("ga:sessions", "-ga:browser") 
 #' 
-#' @param sort A list of comma separated metrics and dimensions for sorting the Analytics
-#' data and the sorting direction for these dimensions/metrics
+#' @param filters The filter string for the GA request.e.g. "ga:medium==referral".
 #' 
-#' @param filters Dimensions and metrics filters that restrict the data for a request
-#' 
-#' @param segments Segments the data for your request
+#' @param segments An advanced segment definition to slice and dice your
+#'            Analytics data. 
 #' 
 #' @param max.results Maximum Number of rows to include in the query response. Default value is 
 #' 10000
@@ -31,6 +33,10 @@
 #' for which the query will retrieve the data
 #' 
 #' @param start.index The first row of data to retrieve. Default value is 1
+#' 
+#' @seealso
+#' http://code.google.com/apis/analytics/docs/gdata/
+#'        gdataReferenceDimensionsMetrics.html#validCombinations
 #' 
 #' @return query.params.list List of all the Query Parameters initialized by the user
 
