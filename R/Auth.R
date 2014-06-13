@@ -1,21 +1,32 @@
-#' Gets an OAuth 2.0 Access Token by authorizing the user account to the Google 
-#' Analytics API 
+#' Authorizes the RGoogleAnalytics library to the user's Google Analytics Account 
+#' 
+#' This function expects a client_secrets.json file. In order to obtain this file
+#' 
+#' - Go to https://console.developers.google.com
+#' - Create a New Project and enable the Google Analytics API
+#' - Select the Application Type "OAuth 2.0 for Installed Applications"
+#' - Download the JSON file and rename it to client_secrets.json
+#' - Copy it to RGoogleAnalytics directory in your R installation or any other custom directory
+#' - The RGoogleAnalytics installation directory can be found by running the command file.path(path.package("RGoogleAnalytics"))
+#' - In case of a custom directory specify the full path in the secrets.file.path argument
 #' 
 #' @details
 #' When evaluated for the first time this function asks for User Consent
 #' for the Google Analytics Account and retrieves the Access and Refresh Tokens
 #' for Authorization. These tokens are saved locally to a file on the user's system.
-#' If the user had authorized an account earlier and refresh token is already found
-#' on the user's system, then this function retrives a new Access Token and updates
-#' the Access Token File in user's memory.
+#' In subsequent executions, a browser redirect is not required. This function will automatically
+#' get a New Access Token each time when called. Note that an Access Token is valid for 60 minutes
 #'
 #' @export  
 #' 
-#' @param secrets.file.path Optional.
+#' @param secrets.file.path Optional. Expects a full file path to the client_secrets.json file. 
+#' For eg. /home/kushan/Desktop/client_secrets.json. In case if this argument is left blank, then the
+#' function searches for the client_secrets.json file in the RGoogleAnalytics installation directory
+#' 
 #' 
 #' @importFrom rjson fromJSON
 #' @importFrom RCurl postForm
-GenerateAccessToken <- function(secrets.file.path = NULL) {
+Auth <- function(secrets.file.path = NULL) {
   
   # Build file path if path is provided by user
 
@@ -65,7 +76,7 @@ GenerateAccessToken <- function(secrets.file.path = NULL) {
       # Update this text
       cat("The Google Analytics data extraction process requires an authorization code.",
           "To accept the authorization code, you need to follow certain steps in your ",
-          "browser. This code will help this R packge to generate the access",
+          "browser. This code will help this R package to generate the access",
           "token. Make sure you have already supplied credentials for installed app.",
           "\n\nSteps to be followed : \n1. Authorize your",
           "Google Analytics account by providing email and password. \n ",
