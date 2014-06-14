@@ -6,9 +6,9 @@
 #' - Create a New Project and enable the Google Analytics API
 #' - Select the Application Type "OAuth 2.0 for Installed Applications"
 #' - Download the JSON file and rename it to client_secrets.json
-#' - Copy it to RGoogleAnalytics directory in your R installation or any other custom directory
+#' - Copy it to RGoogleAnalytics directory in your RGoogleAnalytics installation directory
 #' - The RGoogleAnalytics installation directory can be found by running the command file.path(path.package("RGoogleAnalytics"))
-#' - In case of a custom directory specify the full path in the secrets.file.path argument
+#' 
 #' 
 #' @details
 #' When evaluated for the first time this function asks for User Consent
@@ -19,27 +19,18 @@
 #'
 #' @export  
 #' 
-#' @param secrets.file.path Optional. Expects a full file path to the client_secrets.json file. 
-#' For eg. /home/kushan/Desktop/client_secrets.json. In case if this argument is left blank, then the
-#' function searches for the client_secrets.json file in the RGoogleAnalytics installation directory
-#' 
 #' 
 #' @importFrom rjson fromJSON
 #' @importFrom RCurl postForm
-Auth <- function(secrets.file.path = NULL) {
+Auth <- function() {
   
-  # Build file path if path is provided by user
+  # Update this function in future so that user can specify a custom file path
 
-  if (is.null(secrets.file.path)) {
-    internal.file.path <<- file.path(path.package("RGoogleAnalytics"), "client_secrets.json")
-  } else {
-    internal.file.path <<- secrets.file.path
-  }
-  
+  internal.file.path <- file.path(path.package("RGoogleAnalytics"), "client_secrets.json")
 
   if(!file.exists(internal.file.path)) {
     
-    stop(message("client_secrets.json file does not exist at",internal.file.path,".Please specify a valid path"))
+    stop(message("client_secrets.json file does not exist at ",internal.file.path,".Please specify a valid path"))
     
   } else {
     
@@ -114,14 +105,16 @@ Auth <- function(secrets.file.path = NULL) {
       access.token.file.path <- as.character(file.path(path.package("RGoogleAnalytics"),
                                                        "accesstoken.rda"))                 
       
-      cat("Access token has been saved to",access.token.file.path,"\n")
+      cat("Tokens have been saved to",access.token.file.path,"\n")
       
       return(invisible())
     } else {
       
+      cat("Found Access Token on system\n")
+      cat("Updating Access Token\n")
+
       load(file.path(path.package("RGoogleAnalytics"),
                      "accesstoken.rda"))
-      
       
       # Get new Access Token
       access.token <- RefreshToAccessToken(token.list$refresh_token, client.id,client.secret)
@@ -134,7 +127,7 @@ Auth <- function(secrets.file.path = NULL) {
            file = file.path(path.package("RGoogleAnalytics"),
                             "accesstoken.rda"))
       
-      cat("Access token has been regenerated\n")
+      cat("Access token successfully updated\n")
       
       return(invisible())  
     }

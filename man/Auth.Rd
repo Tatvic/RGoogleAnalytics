@@ -3,12 +3,7 @@
 \alias{Auth}
 \title{Authorizes the RGoogleAnalytics library to the user's Google Analytics Account}
 \usage{
-Auth(secrets.file.path = NULL)
-}
-\arguments{
-\item{secrets.file.path}{Optional. Expects a full file path to the client_secrets.json file.
-For eg. /home/kushan/Desktop/client_secrets.json. In case if this argument is left blank, then the
-function searches for the client_secrets.json file in the RGoogleAnalytics installation directory}
+Auth()
 }
 \description{
 This function expects a client_secrets.json file. In order to obtain this file
@@ -18,9 +13,8 @@ This function expects a client_secrets.json file. In order to obtain this file
 - Create a New Project and enable the Google Analytics API
 - Select the Application Type "OAuth 2.0 for Installed Applications"
 - Download the JSON file and rename it to client_secrets.json
-- Copy it to RGoogleAnalytics directory in your R installation or any other custom directory
+- Copy it to RGoogleAnalytics directory in your RGoogleAnalytics installation directory
 - The RGoogleAnalytics installation directory can be found by running the command file.path(path.package("RGoogleAnalytics"))
-- In case of a custom directory specify the full path in the secrets.file.path argument
 
 When evaluated for the first time this function asks for User Consent
 for the Google Analytics Account and retrieves the Access and Refresh Tokens
