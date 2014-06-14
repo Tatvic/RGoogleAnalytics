@@ -30,8 +30,9 @@
 #' 10000
 #' 
 #' @param table.id Profile ID of the form ga:XXXXX where XXXXX is the Analytics View (Profile) ID of 
-#' for which the query will retrieve the data
-#' 
+#' for which the query will retrieve the data. The View ID can be found under View Settings by navigating 
+#' to the Admin Tab under your Google Analytics Profile
+#'  
 #' @param start.index The first row of data to retrieve. Default value is 1
 #' 
 #' @seealso

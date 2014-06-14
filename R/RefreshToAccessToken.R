@@ -8,7 +8,7 @@
 #' @param client.secret  Client Secret of the Application. Again this too is an
 #'                   OAuth2.0 Credential   
 #'   
-#' @return Access Token   New Access Token
+#' @return access token   New Access Token
 #'   
 #' 
 RefreshToAccessToken <- function(refresh.token, client.id, client.secret){
