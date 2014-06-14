@@ -33,7 +33,8 @@ End Date must be of the format "\%Y-\%m-\%d"}
 10000}
 
 \item{table.id}{Profile ID of the form ga:XXXXX where XXXXX is the Analytics View (Profile) ID of
-for which the query will retrieve the data}
+for which the query will retrieve the data. The View ID can be found under View Settings by navigating
+to the Admin Tab under your Google Analytics Profile}
 
 \item{start.index}{The first row of data to retrieve. Default value is 1}
 }

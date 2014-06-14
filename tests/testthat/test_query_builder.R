@@ -1,5 +1,5 @@
 
-#Recheck this test later on
+# Recheck this test later on
 # test_that("Query builder initializes a list", {
 # 	test.list <- list(start.date  = function(start.date = NULL){},
 #                     end.date    = function(end.date = NULL) {},
@@ -20,7 +20,17 @@
 # Tests for the StartDate() function within the QueryBuilder() class.
 context("Start Date")
 
-query <- QueryBuilder()
+query.list <- Init(start.date = "2013-11-28",
+                   end.date = "2013-12-05",
+                   dimensions = "ga:date,ga:pagePath,ga:hour",
+                   metrics = "ga:sessions,ga:pageviews",
+                   sort = "-ga:sessions",
+                   max.results = 1234,
+                   table.id = "ga:33093633")
+
+# Create the Query Builder object so that the query parameters are validated
+query <- QueryBuilder(query.list)
+
 
 test_that("Start Date is set properly", {
     query$SetStartDate("2014-11-01")
@@ -127,13 +137,13 @@ context("Segments")
 
 test_that("Segments are set properly", {
   segment.param <- "dynamic::ga:medium==referral"
-  query$segment(segment.param)
+  query$segments(segment.param)
 
   expect_that(segment.param,equals(query$segment()))  
 }) 
 
 test_that("Segments are unset if input is NULL",{
-  query$segment(NULL)
+  query$segments(NULL)
   expect_that(NULL,equals(query$segment()))  
 })
 
@@ -164,7 +174,7 @@ test_that("Non Character vector raises an error", {
     expect_that(query$sort(sort.numeric),throws_error())
 }) 
 
-#Recheck these
+# Recheck these
 context("Filters")
 
 test_that("Passing a valid string as a parameter works", {
@@ -202,7 +212,7 @@ context("Table ID")
 
 test_that("Passing a valid string as a parameter works", {
     query$table.id("ga:1174")
-    expect_that("ga:1174",equals(table.id))
+    expect_that("ga:1174",equals(query$table.id()))
 })
 
 test_that("Passing a NULL value unsets the parameter", {
@@ -226,9 +236,9 @@ test_that("Passing numeric values raises an error", {
 context("To URI")
 
 
-#This test requires the RCurl package to be loaded in the namespace
-#How to handle this
-#This test assumes that the parameters pass the parameters test
+# This test requires the RCurl package to be loaded in the namespace
+# How to handle this
+# This test assumes that the parameters pass the parameters test
 test_that("To URI function is working appropriately", {
   expected.uri <- paste("https://www.googleapis.com/analytics/v3/data/ga",
                         "?start-date=2010-05-01",
@@ -276,7 +286,7 @@ test_that("Setting all query parameters as NULL works", {
 
 context("Validate")
 
-builder <- QueryBuilder()
+builder <- QueryBuilder(query.list)
 
 test_that("Missing Start Date parameter results in an error", {
   

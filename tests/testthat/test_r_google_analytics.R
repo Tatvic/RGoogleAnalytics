@@ -2,7 +2,7 @@ AccountFeedJSONString <- function() {
   	return('{\"kind\":\"analytics#profiles\",\"username\":\"vignesh@tatvic.com\",\"totalResults\":1,\"startIndex\":1,\"itemsPerPage\":1000,\"items\":[{\"id\":\"10696290\",\"kind\":\"analytics#profile\",\"selfLink\":\"https://www.googleapis.com/analytics/v3/management/accounts/5306665/webproperties/UA-5306665-1/profiles/10696290\",\"accountId\":\"5306665\",\"webPropertyId\":\"UA-5306665-1\",\"internalWebPropertyId\":\"10240597\",\"name\":\"tatvic.com\",\"currency\":\"USD\",\"timezone\":\"Asia/Calcutta\",\"websiteUrl\":\"http://www.tatvic.com/\",\"excludeQueryParameters\":\"fb_xd_fragment,tim,m,token,n\",\"siteSearchQueryParameters\":\"s\",\"type\":\"WEB\",\"created\":\"2008-08-15T14:45:21.000Z\",\"updated\":\"2012-12-10T13:47:52.046Z\",\"eCommerceTracking\":false,\"parentLink\":{\"type\":\"analytics#webproperty\",\"href\":\"https://www.googleapis.com/analytics/v3/management/accounts/5306665/webproperties/UA-5306665-1\"},\"childLink\":{\"type\":\"analytics#goals\",\"href\":\"https://www.googleapis.com/analytics/v3/management/accounts/5306665/webproperties/UA-5306665-1/profiles/10696290/goals\"}}]}')
 }
 
-ga <- RGoogleAnalytics()
+
 
 #This test requires rjson loaded
 #How to handle?
@@ -11,7 +11,7 @@ test_that("Account Feed is parsed properly", {
 	ProfileName <- c("tatvic.com")
 	TableId <- c("10696290")
   	test.profile <- data.frame(ProfileName = ProfileName, TableId = TableId)
-  	data <- ga$GetProfilesFromJSON(AccountFeedJSONString())
+  	data <- GetProfilesFromJSON(AccountFeedJSONString())
   	profile.data <- data.frame(ProfileName = data$profiles$name,
                              TableId = data$profiles$id)
   	expect_that(test.profile,equals(profile.data))
@@ -23,7 +23,7 @@ SampleErrorJSONString <- function() {
 }
 
 test_that("Error response from GA API is parsed", {
-	error.message <- ga$ParseApiErrorMessage(SampleErrorJSONString())
+	error.message <- ParseApiErrorMessage(SampleErrorJSONString())
   	expect_that(400, equals(error.message$code))
   	expect_that('Sort key ga:foo is not a dimension or metric in this query.',
   		equals(error.message$message))

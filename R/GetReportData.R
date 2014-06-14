@@ -22,7 +22,7 @@
 #' @examples
 #' \dontrun{ga_df <- GetReportData(query)
 #' ga.df <- GetReportData(query,split_daywise=True)
-#' ga.sdf <- GetReportData(query,paginate_query=True)
+#' ga.df <- GetReportData(query,paginate_query=True)
 #' }
 #' @return api.response The respose is in the dataframe format as the output data returned from the Google Analytics Data feed API.
 #' 
