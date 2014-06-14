@@ -11,7 +11,7 @@ GetDataFeed <- function(query.uri) {
   GA.Data <- getURL(query.uri)  
   GA.list <- ParseDataFeedJSON(GA.Data)
   if (is.null(GA.list$rows)) {
-    cat("Your query matched 0 results. Please verify your query.")
+    cat("Your query matched 0 results. Please verify your query using the Query Feed Explorer and re-run it.")
     break
   } else {
     return (GA.list)

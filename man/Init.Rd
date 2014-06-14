@@ -14,29 +14,27 @@ Start Date must be of the format "\%Y-\%m-\%d"}
 \item{end.date}{End Date for fetching Analytics Data.
 End Date must be of the format "\%Y-\%m-\%d"}
 
-\item{dimensions}{A vector of up to 7 dimensions, either as a single string or a vector or strings, E.g.
-                 "ga:source,ga:medium" or c("ga:source", "ga:medium"). If NULL is used, the dimensions parameter will be
-                 unset.}
+\item{dimensions}{Optional. A vector of up to 7 dimensions, either as a single string or a vector or strings, E.g.
+                 "ga:source,ga:medium" or c("ga:source", "ga:medium").}
 
 \item{metrics}{A vector of up to 10 metrics, either as a single string or a vector or strings. E.g.
-               "ga:sessions" or c("ga:sessions", "ga:bounces"). If NULL is used, the metrics parameter will be
-                 unset.}
+               "ga:sessions" or c("ga:sessions", "ga:bounces").}
 
-\item{sort}{The sorting order for the data to be returned.e.g. "ga:sessions" or c("ga:sessions", "-ga:browser")}
+\item{sort}{Optional.The sorting order for the data to be returned.e.g. "ga:sessions" or c("ga:sessions", "-ga:browser")}
 
-\item{filters}{The filter string for the GA request.e.g. "ga:medium==referral".}
+\item{filters}{Optional.The filter string for the GA request.e.g. "ga:medium==referral".}
 
-\item{segments}{An advanced segment definition to slice and dice your
+\item{segments}{Optional.An advanced segment definition to slice and dice your
            Analytics data.}
 
-\item{max.results}{Maximum Number of rows to include in the query response. Default value is
+\item{max.results}{Optional.Maximum Number of rows to include in the query response. Default value is
 10000}
 
 \item{table.id}{Profile ID of the form ga:XXXXX where XXXXX is the Analytics View (Profile) ID of
 for which the query will retrieve the data. The View ID can be found under View Settings by navigating
 to the Admin Tab under your Google Analytics Profile}
 
-\item{start.index}{The first row of data to retrieve. Default value is 1}
+\item{start.index}{Optional.The first row of data to retrieve. Default value is 1}
 }
 \value{
 query.params.list List of all the Query Parameters initialized by the user
@@ -47,7 +45,6 @@ is to be passed as an argument to \code{QueryBuilder()}. Note that parameter val
 performed when the \code{QueryBuilder()} object is initialized
 }
 \seealso{
-http://code.google.com/apis/analytics/docs/gdata/
-       gdataReferenceDimensionsMetrics.html#validCombinations
+Valid Combinations of Dimensions and Metrics can be found at  \url{http://code.google.com/apis/analytics/docs/gdata/gdataReferenceDimensionsMetrics.html#validCombinations}
 }
 

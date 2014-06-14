@@ -1,4 +1,4 @@
-  #' Deletes the stored Access and Refresh Tokens from the local file 
+  #' Deletes the stored Access and Refresh Tokens from the system 
   #'
   #' The OAuth 2.0 credentials are account specific. If the user wants to query 
   #' a different Google Analytics Account than the one previously authenticated
@@ -8,8 +8,6 @@
   #' 
   #' @export
   #' 
-  #' @examples
-  #' \dontrun{RemoveToken()}
   #' 
   RemoveToken <- function() {
         

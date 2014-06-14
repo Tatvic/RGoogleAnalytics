@@ -21,7 +21,7 @@ if this parameter is set to True, queries will take more longer to complete and 
 more Quota}
 }
 \value{
-api.response The respose is in the dataframe format as the output data returned from the Google Analytics Data feed API.
+api.response dataframe containing the response of the Google Analytics API
 }
 \description{
 This function will retrieve the data by firing the query to the Core Reporting API. It also displays
@@ -29,9 +29,13 @@ status messages after the completion of the query. The user also has the option 
 daywise partitions and paginate the query responses in order to decrease the effect the sampling
 }
 \examples{
-\dontrun{ga_df <- GetReportData(query)
+\dontrun{
+ga.df <- GetReportData(query)
 ga.df <- GetReportData(query,split_daywise=True)
-ga.sdf <- GetReportData(query,paginate_query=True)
+ga.df <- GetReportData(query,paginate_query=True)
 }
+}
+\seealso{
+Queries can be tested in the Google Analytics Query Feed Explorer \url{http://ga-dev-tools.appspot.com/explorer/}
 }
 

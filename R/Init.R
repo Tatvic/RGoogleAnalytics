@@ -11,33 +11,31 @@
 #' @param end.date End Date for fetching Analytics Data.
 #' End Date must be of the format "\%Y-\%m-\%d"
 #' 
-#' @param dimensions A vector of up to 7 dimensions, either as a single string or a vector or strings, E.g.
-#'                  "ga:source,ga:medium" or c("ga:source", "ga:medium"). If NULL is used, the dimensions parameter will be
-#'                  unset.     
+#' @param dimensions Optional. A vector of up to 7 dimensions, either as a single string or a vector or strings, E.g.
+#'                  "ga:source,ga:medium" or c("ga:source", "ga:medium").      
 #'                      
 #' @param metrics A vector of up to 10 metrics, either as a single string or a vector or strings. E.g.
-#'                "ga:sessions" or c("ga:sessions", "ga:bounces"). If NULL is used, the metrics parameter will be
-#'                  unset. 
+#'                "ga:sessions" or c("ga:sessions", "ga:bounces").  
 #' 
-#' @param sort The sorting order for the data to be returned.e.g. "ga:sessions" or c("ga:sessions", "-ga:browser") 
+#' @param sort Optional.The sorting order for the data to be returned.e.g. "ga:sessions" or c("ga:sessions", "-ga:browser") 
 #' 
-#' @param filters The filter string for the GA request.e.g. "ga:medium==referral".
+#' @param filters Optional.The filter string for the GA request.e.g. "ga:medium==referral".
 #' 
-#' @param segments An advanced segment definition to slice and dice your
+#' @param segments Optional.An advanced segment definition to slice and dice your
 #'            Analytics data. 
 #' 
-#' @param max.results Maximum Number of rows to include in the query response. Default value is 
+#' @param max.results Optional.Maximum Number of rows to include in the query response. Default value is 
 #' 10000
 #' 
 #' @param table.id Profile ID of the form ga:XXXXX where XXXXX is the Analytics View (Profile) ID of 
 #' for which the query will retrieve the data. The View ID can be found under View Settings by navigating 
 #' to the Admin Tab under your Google Analytics Profile
 #'  
-#' @param start.index The first row of data to retrieve. Default value is 1
+#' @param start.index Optional.The first row of data to retrieve. Default value is 1
 #' 
 #' @seealso
-#' http://code.google.com/apis/analytics/docs/gdata/
-#'        gdataReferenceDimensionsMetrics.html#validCombinations
+#' Valid Combinations of Dimensions and Metrics can be found at  \url{http://code.google.com/apis/analytics/docs/gdata/gdataReferenceDimensionsMetrics.html#validCombinations}
+#' 
 #' 
 #' @return query.params.list List of all the Query Parameters initialized by the user
 

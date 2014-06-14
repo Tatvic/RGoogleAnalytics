@@ -12,7 +12,4 @@ profiles R dataframe with profile id and profile name.
 This function retrives all the available profiles from the
 Google analytics account which has been authenticated by the user
 }
-\examples{
-\dontrun{GetProfiles()}
-}
 
