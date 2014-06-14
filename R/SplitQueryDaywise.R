@@ -46,12 +46,13 @@ SplitQueryDaywise <- function(query.builder, kmaxdefaultrows) {
     query.builder$SetStartDate(date)
     query.builder$SetEndDate(date)
     
-    #Reset the start index to 1 since a new query will be fired for a different date-range
+    # Reset the start index to 1 since a new query will be fired for a different date-range
     query.builder$SetStartIndex(as.numeric(1))
     
     # Hit the first query corresponding the particular date
     first.query.df <- data.frame()
-    first.query <- GetDataFeed(query$to.uri())
+    inter.df <- data.frame()
+    first.query <- GetDataFeed(query.builder$to.uri())
     first.query.df <- rbind(first.query.df, do.call(rbind, as.list(first.query$rows)))
     
     # Check if pagination is required in the query
@@ -69,8 +70,6 @@ SplitQueryDaywise <- function(query.builder, kmaxdefaultrows) {
       master.df <- rbind(first.query.df, master.df)
     }
   }
-  
-  master.df <- rbind(first.query.df, master.df)
   
   return(list(header=first.query$columnHeaders, data=master.df))
 }

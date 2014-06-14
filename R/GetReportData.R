@@ -20,12 +20,14 @@
 #' more Quota 
 #' 
 #' @examples
-#' \dontrun{ga_df <- GetReportData(query)
+#' \dontrun{
+#' ga.df <- GetReportData(query)
 #' ga.df <- GetReportData(query,split_daywise=True)
 #' ga.df <- GetReportData(query,paginate_query=True)
 #' }
-#' @return api.response The respose is in the dataframe format as the output data returned from the Google Analytics Data feed API.
+#' @return api.response dataframe containing the response of the Google Analytics API 
 #' 
+#' @seealso Queries can be tested in the Google Analytics Query Feed Explorer \url{http://ga-dev-tools.appspot.com/explorer/}
 
 GetReportData <- function(query.builder, 
                           split_daywise=FALSE,
@@ -88,9 +90,6 @@ GetReportData <- function(query.builder,
       cat("Status of Query:\n")
       cat("The API returned", response.size, "results out of", total.results, "results\n")
       cat("In order to get all results, set paginate_query = T in the GetReportData function.\n")
-      if (max.rows < kMaxDefaultRows) {
-        cat("Set max.results = 10000 in the Init() for efficient query utilization while Paginating\n")
-      }
     } else {
       cat("Status of Query:\n")
       cat("The API returned", response.size, "results")
@@ -106,22 +105,27 @@ GetReportData <- function(query.builder,
       cat("Set split_daywise = T in the GetReportData function\n")
       cat("Note that split_daywise = T will automatically invoke Pagination in each sub-query\n")
     }
-  } else if (split_daywise == T) {
+  } else if ((split_daywise == T) || (split_daywise == T && paginate_query == T)) {
     
+    # Clamp Max Results to kMaxDefaultRows while Query Splitting
+    # Implement this via SetMaxResults() in future versions
+    if (query.builder$max.results() < kMaxDefaultRows) {
+      cat("Setting Max Results to 10000 for efficient Query Utilization\n")
+    }
+    query.builder$max.results(kMaxDefaultRows)
     GA.DF <- SplitQueryDaywise(query.builder, kMaxDefaultRows)
     final.df <- SetDataFrame(GA.DF$header,GA.DF$data)
     cat("The API returned", nrow(final.df), "results\n")
     
   } else if (paginate_query == T) {
     
-    # Validate the token and regenerate it if expired
-    #ValidateToken()
-    
-    #load(file.path(path.package("RGoogleAnalytics"),
-    #"accesstoken.rda"))
-    
-    #Update the access token in the query object
-    #query.builder$SetAccessToken(token.list$access_token)
+    # Clamp the Max Results parameter to 10000 for efficient query utilization 
+    # when paginating
+    # Implement SetMaxResults() as a method in QueryBuilder()
+    if (query.builder$max.results() < kMaxDefaultRows) {
+      cat("Setting Max Results to 10000 for efficient Query Utilization\n")
+    }
+    query.builder$max.results(kMaxDefaultRows)
     
     # Hit One Query
     ga.list <- GetDataFeed(query.builder$to.uri())
@@ -148,8 +152,8 @@ GetReportData <- function(query.builder,
       
       cat("The API returned", nrow(final.df), "results\n")
     } else {
-      stop("Pagination is not required in the query.Set Paginate_Query = F and re-run the query\n")
-    }
+      stop("Pagination is not required. Set paginate_Query = F and re-run the query\n")
+    } 
   }
   return(final.df)
 }
