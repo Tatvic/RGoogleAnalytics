@@ -1,13 +1,19 @@
 #' Authorizes the RGoogleAnalytics library to the user's Google Analytics Account 
 #' 
-#' This function expects a client_secrets.json file. In order to obtain this file
+#' @description
+#' This function expects a client_secrets.json file. In order to obtain this file, you will
+#' have to Register an app with the Google Analytics API
 #' 
-#' - Go to https://console.developers.google.com
+#' - Go to \url{https://console.developers.google.com} 
+#' 
 #' - Create a New Project and enable the Google Analytics API
-#' - Select the Application Type "OAuth 2.0 for Installed Applications"
+#' 
+#' - On the Credentials screen, create a new Client ID for Application Type "Installed Application". 
+#' 
 #' - Download the JSON file and rename it to client_secrets.json
-#' - Copy it to RGoogleAnalytics directory in your RGoogleAnalytics installation directory
-#' - The RGoogleAnalytics installation directory can be found by running the command file.path(path.package("RGoogleAnalytics"))
+#' 
+#' - Copy it to the RGoogleAnalytics installation directory.
+#' It can be found by running \code{file.path(path.package("RGoogleAnalytics"))}
 #' 
 #' 
 #' @details
@@ -30,7 +36,8 @@ Auth <- function() {
 
   if(!file.exists(internal.file.path)) {
     
-    stop(message("client_secrets.json file does not exist at ",internal.file.path,".Please specify a valid path"))
+    stop(message("client_secrets.json file does not exist at ",
+                 file.path(path.package("RGoogleAnalytics"))))
     
   } else {
     

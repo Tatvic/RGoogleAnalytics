@@ -6,16 +6,21 @@
 Auth()
 }
 \description{
-This function expects a client_secrets.json file. In order to obtain this file
+This function expects a client_secrets.json file. In order to obtain this file, you will
+have to Register an app with the Google Analytics API
+
+- Go to \url{https://console.developers.google.com}
+
+- Create a New Project and enable the Google Analytics API
+
+- On the Credentials screen, create a new Client ID for Application Type "Installed Application".
+
+- Download the JSON file and rename it to client_secrets.json
+
+- Copy it to the RGoogleAnalytics installation directory.
+It can be found by running \code{file.path(path.package("RGoogleAnalytics"))}
 }
 \details{
-- Go to https://console.developers.google.com
-- Create a New Project and enable the Google Analytics API
-- Select the Application Type "OAuth 2.0 for Installed Applications"
-- Download the JSON file and rename it to client_secrets.json
-- Copy it to RGoogleAnalytics directory in your RGoogleAnalytics installation directory
-- The RGoogleAnalytics installation directory can be found by running the command file.path(path.package("RGoogleAnalytics"))
-
 When evaluated for the first time this function asks for User Consent
 for the Google Analytics Account and retrieves the Access and Refresh Tokens
 for Authorization. These tokens are saved locally to a file on the user's system.
