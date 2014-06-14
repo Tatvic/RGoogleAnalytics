@@ -13,8 +13,9 @@
 #' @importFrom lubridate ymd
 #' 
 
-SplitQueryDaywise <- function(query.builder) {
+SplitQueryDaywise <- function(query.builder, kmaxdefaultrows) {
      
+  kMaxDefaultRows <- kmaxdefaultrows
   
   # Validate the token and regenerate it if expired
   ValidateToken()
@@ -60,7 +61,7 @@ SplitQueryDaywise <- function(query.builder) {
         if (number.of.pages > 100) {
           number.of.pages <- kMaxPages
       }
-      inter.df <- PaginateQuery(query.builder, number.of.pages)
+      inter.df <- PaginateQuery(query.builder, number.of.pages, kMaxDefaultRows)
       inter.df <- rbind(first.query.df, inter.df$data)
       master.df <- rbind(master.df, inter.df)
     } else {
