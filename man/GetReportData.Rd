@@ -9,11 +9,16 @@ GetReportData(query.builder, split_daywise = FALSE, paginate_query = FALSE)
 \item{query.builder}{Name of the object corresponding to the QueryBuilder class}
 
 \item{paginate_query}{Pages through chunks of results by requesting maximum
-number of allowed rows at a time. Default Value of this argument is FALSE}
+number of allowed rows at a time. Default Value of this argument is FALSE. Note that
+if this parameter is set to True, queries will take more longer to complete and use
+more Quota. For more on Google Analytics API quota check
+https://developers.google.com/analytics/devguides/reporting/core/v3/limits-quotas#core_reporting}
 
 \item{split_daywise}{Splits the query by date range into sub queries of
-single days. Default value of this argument is FALSE. Note that setting this
-argument to true automatically paginates through each daywise query}
+single days. Default value of this argument is FALSE. Setting this
+argument to true automatically paginates through each daywise query. Note that
+if this parameter is set to True, queries will take more longer to complete and use
+more Quota}
 }
 \value{
 api.response The respose is in the dataframe format as the output data returned from the Google Analytics Data feed API.
@@ -25,8 +30,8 @@ daywise partitions and paginate the query responses in order to decrease the eff
 }
 \examples{
 \dontrun{ga_df <- GetReportData(query)
-ga_df <- GetReportData(query,split_daywise=True)
-ga_df <- GetReportData(query,paginate_query=True)
+ga.df <- GetReportData(query,split_daywise=True)
+ga.sdf <- GetReportData(query,paginate_query=True)
 }
 }
 

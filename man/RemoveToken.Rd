@@ -6,14 +6,12 @@
 RemoveToken()
 }
 \description{
-In case if the user wants to query a new profile, then the Authorization flow
-has to repeated. This requires deleting the stored Access and Refresh Tokens
-from the system file
+The OAuth 2.0 credentials are account specific. If the user wants to query
+a different Google Analytics Account than the one previously authenticated
+the older credentials need to be deleted from the system. This function first
+searches for the credentials file in the system and deletes the file if found
 }
 \examples{
 \dontrun{RemoveToken()}
-}
-\author{
-Vignesh Prajapati
 }
 
