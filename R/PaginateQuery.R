@@ -13,9 +13,10 @@
 #' 
 #' @return list containing Column Headers and the data collated across all the pages of the query
 #' 
-#' @author Kushan Shah
-PaginateQuery <- function(query.builder, pages) {
+#' 
+PaginateQuery <- function(query.builder, pages, kmaxdefaultrows) {
   
+  kMaxDefaultRows <- kmaxdefaultrows
   
   # Validate the token and regenerate it if expired
   ValidateToken()

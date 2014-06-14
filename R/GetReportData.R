@@ -8,16 +8,21 @@
 #' @param query.builder  Name of the object corresponding to the QueryBuilder class 
 #' 
 #' @param paginate_query  Pages through chunks of results by requesting maximum 
-#' number of allowed rows at a time. Default Value of this argument is FALSE
+#' number of allowed rows at a time. Default Value of this argument is FALSE. Note that
+#' if this parameter is set to True, queries will take more longer to complete and use
+#' more Quota. For more on Google Analytics API quota check 
+#' https://developers.google.com/analytics/devguides/reporting/core/v3/limits-quotas#core_reporting
 #' 
 #' @param split_daywise  Splits the query by date range into sub queries of 
-#' single days. Default value of this argument is FALSE. Note that setting this 
-#' argument to true automatically paginates through each daywise query 
+#' single days. Default value of this argument is FALSE. Setting this 
+#' argument to true automatically paginates through each daywise query. Note that
+#' if this parameter is set to True, queries will take more longer to complete and use
+#' more Quota 
 #' 
 #' @examples
 #' \dontrun{ga_df <- GetReportData(query)
-#' ga_df <- GetReportData(query,split_daywise=True)
-#' ga_df <- GetReportData(query,paginate_query=True)
+#' ga.df <- GetReportData(query,split_daywise=True)
+#' ga.sdf <- GetReportData(query,paginate_query=True)
 #' }
 #' @return api.response The respose is in the dataframe format as the output data returned from the Google Analytics Data feed API.
 #' 
@@ -84,7 +89,7 @@ GetReportData <- function(query.builder,
       cat("The API returned", response.size, "results out of", total.results, "results\n")
       cat("In order to get all results, set paginate_query = T in the GetReportData function.\n")
       if (max.rows < kMaxDefaultRows) {
-        cat("Set max.rows = 10000 for efficient query utilization while Paginating\n")
+        cat("Set max.results = 10000 in the Init() for efficient query utilization while Paginating\n")
       }
     } else {
       cat("Status of Query:\n")
@@ -103,7 +108,7 @@ GetReportData <- function(query.builder,
     }
   } else if (split_daywise == T) {
     
-    GA.DF <- SplitQueryDaywise(query.builder)
+    GA.DF <- SplitQueryDaywise(query.builder, kMaxDefaultRows)
     final.df <- SetDataFrame(GA.DF$header,GA.DF$data)
     cat("The API returned", nrow(final.df), "results\n")
     
@@ -135,7 +140,7 @@ GetReportData <- function(query.builder,
       }
       
       # Call Pagination Function
-      paged.query.list <- PaginateQuery(query.builder, number.of.pages)
+      paged.query.list <- PaginateQuery(query.builder, number.of.pages, kMaxDefaultRows)
       
       # Collate Results and convert to Dataframe
       inter.df <- rbind(ga.list.df,paged.query.list$data)

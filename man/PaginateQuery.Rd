@@ -6,7 +6,7 @@ the rows at a time. This function loops across all such subsets (pages) in order
 to the entire query. The maximum number of rows corresponding to a single query that can be retrieved via Pagination
 is 1 M.}
 \usage{
-PaginateQuery(query.builder, pages)
+PaginateQuery(query.builder, pages, kmaxdefaultrows)
 }
 \arguments{
 \item{query.builder}{Name of the object corresponding to the query builder class}
@@ -21,9 +21,6 @@ In case if a single query returns more than 10k rows,the Core Reporting API retu
 the rows at a time. This function loops across all such subsets (pages) in order to retrieve data corresponding
 to the entire query. The maximum number of rows corresponding to a single query that can be retrieved via Pagination
 is 1 M.
-}
-\author{
-Kushan Shah
 }
 \seealso{
 https://developers.google.com/analytics/devguides/reporting/core/v2/gdataReferenceDataFeed#largeDataResults

@@ -5,7 +5,7 @@
 and hits a query for each day. The responses for each queries are collated into a single dataframe and
 returned. This procedure helps decrease the effect of sampling.}
 \usage{
-SplitQueryDaywise(query.builder)
+SplitQueryDaywise(query.builder, kmaxdefaultrows)
 }
 \arguments{
 \item{query.builder}{Name of the object corresponding to the QueryBuilder class}
