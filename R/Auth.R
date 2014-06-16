@@ -86,6 +86,8 @@ Auth <- function() {
       
       cat("Retrieving the Access and Refresh Tokens based on the Authorization Code\n")
       
+      options(RCurlOptions = list(verbose = FALSE, capath = system.file("CurlSSL", "cacert.pem", package = "RCurl"), ssl.verifypeer = FALSE))
+      
       # For retrieving the access token.
       token.list <- fromJSON(postForm('https://accounts.google.com/o/oauth2/token',
                                       code = code,
