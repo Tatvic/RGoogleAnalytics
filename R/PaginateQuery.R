@@ -14,19 +14,18 @@
 #' @return list containing Column Headers and the data collated across all the pages of the query
 #' 
 #' 
-PaginateQuery <- function(query.builder, pages, kmaxdefaultrows) {
+PaginateQuery <- function(query.builder, pages, kmaxdefaultrows,token) {
   
   kMaxDefaultRows <- kmaxdefaultrows
   
   # Validate the token and regenerate it if expired
-  ValidateToken()
-  
-  load(file.path(path.package("RGoogleAnalytics"),
-                 "accesstoken.rda"))
+  ValidateToken(token)
   
   #Update the access token in the query object
-  query.builder$SetAccessToken(token.list$access_token)  
+  # query.builder$SetAccessToken(token.list$access_token)  
   
+
+
   # Create an empty dataframe in order to store the data
   df.inner <- data.frame()
   
@@ -35,7 +34,8 @@ PaginateQuery <- function(query.builder, pages, kmaxdefaultrows) {
     start.index <- (i * kMaxDefaultRows) + 1
     cat("Getting data starting at row", start.index, "\n")
     query.builder$SetStartIndex(start.index)
-    ga.list <- GetDataFeed(query.builder$to.uri())
+    query.uri <- ToUri(query.builder,token)
+    ga.list <- GetDataFeed(query.uri)
     dataframe.param <- rbind(dataframe.param,
                              do.call(rbind, as.list(ga.list$rows)))
     df.inner <- rbind(df.inner, dataframe.param)

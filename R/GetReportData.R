@@ -29,7 +29,7 @@
 #' 
 #' @seealso Queries can be tested in the Google Analytics Query Feed Explorer \url{http://ga-dev-tools.appspot.com/explorer/}
 
-GetReportData <- function(query.builder, 
+GetReportData <- function(query.builder,token, 
                           split_daywise=FALSE,
                           paginate_query=FALSE) { 
                      
@@ -42,10 +42,10 @@ GetReportData <- function(query.builder,
   dataframe.param <- data.frame()
   
   # Set the CURL options for Windows    
-  options(RCurlOptions = list(capath = system.file("CurlSSL",
-                                                   "cacert.pem", 
-                                                   package = "RCurl"),
-                              ssl.verifypeer = FALSE))
+#   options(RCurlOptions = list(capath = system.file("CurlSSL",
+#                                                    "cacert.pem", 
+#                                                    package = "RCurl"),
+#                               ssl.verifypeer = FALSE))
   
   
   # Set all the Query Parameters
@@ -61,7 +61,8 @@ GetReportData <- function(query.builder,
   # If the user does not require pagination and query splitting 
   # fire the query and display the status messages
   if (split_daywise != T && paginate_query != T) {
-    ga.list <- GetDataFeed(query.builder$to.uri())
+    query.uri <- ToUri(query.builder,token)
+    ga.list <- GetDataFeed(query.uri)
     
     total.results <-  ga.list$totalResults
     items.per.page <- ga.list$itemsPerPage
@@ -113,7 +114,7 @@ GetReportData <- function(query.builder,
       cat("Setting Max Results to 10000 for efficient Query Utilization\n")
     }
     query.builder$max.results(kMaxDefaultRows)
-    GA.DF <- SplitQueryDaywise(query.builder, kMaxDefaultRows)
+    GA.DF <- SplitQueryDaywise(query.builder, kMaxDefaultRows,token)
     final.df <- SetDataFrame(GA.DF$header,GA.DF$data)
     cat("The API returned", nrow(final.df), "results\n")
     
@@ -128,7 +129,8 @@ GetReportData <- function(query.builder,
     query.builder$max.results(kMaxDefaultRows)
     
     # Hit One Query
-    ga.list <- GetDataFeed(query.builder$to.uri())
+    query.uri <- ToUri(query.builder,token)
+    ga.list <- GetDataFeed(query.uri)
     # Convert ga.list into a dataframe
     ga.list.df <- data.frame()
     ga.list.df <- rbind(ga.list.df, do.call(rbind,as.list(ga.list$rows)))
@@ -144,7 +146,7 @@ GetReportData <- function(query.builder,
       }
       
       # Call Pagination Function
-      paged.query.list <- PaginateQuery(query.builder, number.of.pages, kMaxDefaultRows)
+      paged.query.list <- PaginateQuery(query.builder, number.of.pages, kMaxDefaultRows,token)
       
       # Collate Results and convert to Dataframe
       inter.df <- rbind(ga.list.df,paged.query.list$data)

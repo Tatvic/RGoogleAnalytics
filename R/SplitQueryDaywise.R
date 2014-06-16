@@ -13,18 +13,15 @@
 #' @importFrom lubridate ymd
 #' 
 
-SplitQueryDaywise <- function(query.builder, kmaxdefaultrows) {
+SplitQueryDaywise <- function(query.builder, kmaxdefaultrows,token) {
      
   kMaxDefaultRows <- kmaxdefaultrows
   
   # Validate the token and regenerate it if expired
-  ValidateToken()
-  
-  load(file.path(path.package("RGoogleAnalytics"),
-                 "accesstoken.rda"))
+  ValidateToken(token)
   
   #Update the access token in the query object
-  query.builder$SetAccessToken(token.list$access_token)
+  #query.builder$SetAccessToken(token.list$access_token)
   
   # Updated to use Get Methods
   start.date <- ymd(query.builder$GetStartDate())
@@ -52,7 +49,8 @@ SplitQueryDaywise <- function(query.builder, kmaxdefaultrows) {
     # Hit the first query corresponding the particular date
     first.query.df <- data.frame()
     inter.df <- data.frame()
-    first.query <- GetDataFeed(query.builder$to.uri())
+    query.uri <- ToUri(query.builder,token)
+    first.query <- GetDataFeed(query.uri)
     first.query.df <- rbind(first.query.df, do.call(rbind, as.list(first.query$rows)))
     
     # Check if pagination is required in the query
@@ -62,7 +60,7 @@ SplitQueryDaywise <- function(query.builder, kmaxdefaultrows) {
         if (number.of.pages > 100) {
           number.of.pages <- kMaxPages
       }
-      inter.df <- PaginateQuery(query.builder, number.of.pages, kMaxDefaultRows)
+      inter.df <- PaginateQuery(query.builder, number.of.pages, kMaxDefaultRows,token)
       inter.df <- rbind(first.query.df, inter.df$data)
       master.df <- rbind(master.df, inter.df)
     } else {

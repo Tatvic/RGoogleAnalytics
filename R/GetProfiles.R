@@ -7,17 +7,15 @@
 #' 
 #' @return profiles R dataframe with profile id and profile name.
 
-GetProfiles <- function() {
+GetProfiles <- function(token) {
   
-  ValidateToken()
+  ValidateToken(token)
   
-  load(file.path(path.package("RGoogleAnalytics"),
-                 "accesstoken.rda"))
 
   query.uri <- paste0('https://www.googleapis.com/analytics/v3/',
                       'management/accounts/~all/webproperties/~all/',
                       'profiles?access_token=',
-                      token.list$access_token
+                      token$credentials$access_token
   )
   if (!is.character(query.uri)) {
     stop("The query.uri parameter must be a character string")
