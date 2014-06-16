@@ -11,14 +11,9 @@
 #' @return access token   New Access Token
 #'   
 #' 
-RefreshToAccessToken <- function(refresh.token, client.id, client.secret){
+RefreshToAccessToken <- function(token.object){
   
-  refresh.token.list = fromJSON(postForm('https://accounts.google.com/o/oauth2/token',
-                                         refresh_token = refresh.token,
-                                         client_id = client.id,
-                                         client_secret = client.secret,
-                                         grant_type = "refresh_token",
-                                         style = "POST" ))
+  token.object <- token.object$refresh()
   
-  return(refresh.token.list$access_token)
+  return(token.object)
 }
