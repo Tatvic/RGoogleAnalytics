@@ -8,7 +8,7 @@
 #'
 ParseApiErrorMessage <- function(api.response.json) {
       
-  api.response.list <- fromJSON(api.response.json, method = 'C')  
+  api.response.list <- content(api.response.json,as="parsed")  
   check.param <- regexpr("error", api.response.list)
   if (check.param[1] != -1) {
     return(list(code = api.response.list$error$code,

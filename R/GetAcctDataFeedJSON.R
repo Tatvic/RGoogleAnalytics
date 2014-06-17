@@ -6,6 +6,6 @@
 #' @return GA.Data The response as account data feed in the JSON format.
 GetAcctDataFeedJSON <- function(query.uri) {
   
-  GA.Data <- getURL(query.uri)
+  GA.Data <- GET(query.uri)
   return(GA.Data)
 }

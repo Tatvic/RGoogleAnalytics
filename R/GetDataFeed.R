@@ -8,7 +8,7 @@
 #' @return GA.list The Google Analytics API JSON response converted to a list object
 GetDataFeed <- function(query.uri) {
   
-  GA.Data <- getURL(query.uri)  
+  GA.Data <- GET(query.uri)  
   GA.list <- ParseDataFeedJSON(GA.Data)
   if (is.null(GA.list$rows)) {
     cat("Your query matched 0 results. Please verify your query using the Query Feed Explorer and re-run it.")
