@@ -1,3 +1,6 @@
+#' @title
+#' Paginate through pages of Google Analytics Query responses
+#' 
 #' In case if a single query returns more than 10k rows,the Core Reporting API returns a subset of
 #' the rows at a time. This function loops across all such subsets (pages) in order to retrieve data corresponding
 #' to the entire query. The maximum number of rows corresponding to a single query that can be retrieved via Pagination
@@ -11,10 +14,13 @@
 #' 
 #' @param pages Integer representing the number of pages across which the query has to be paginated
 #' 
+#' @param kmaxdefaultrows Maximum number of rows to be requested in one API call. Default value is 10000
+#' for efficient query utilization
+#' 
 #' @return list containing Column Headers and the data collated across all the pages of the query
 #' 
 #' 
-PaginateQuery <- function(query.builder, pages, kmaxdefaultrows,token) {
+PaginateQuery <- function(query.builder, pages, kmaxdefaultrows = 10000,token) {
   
   kMaxDefaultRows <- kmaxdefaultrows
   

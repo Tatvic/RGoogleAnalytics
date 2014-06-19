@@ -4,7 +4,8 @@
 #' 
 #' @param  api.response.json The json data as reposnse returned by the Google Data feed API or Google Management API   
 #' 
-#' @return None If there is error in JSON response then this function will return the related error code and message for that error. 
+#' @description
+#' If there is an error in JSON response then this function will return the related error code and message for that error. 
 #'
 ParseApiErrorMessage <- function(api.response.json) {
       

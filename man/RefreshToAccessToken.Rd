@@ -4,18 +4,14 @@
 \title{This function takes the Refresh Token as an argument and retrives a new
 Access Token based on it}
 \usage{
-RefreshToAccessToken(refresh.token, client.id, client.secret)
+RefreshToAccessToken(token.object)
 }
 \arguments{
-\item{refresh.token}{Refresh Token that was saved to the local file}
-
-\item{client.id}{Client ID of the Application. This is a OAuth2.0 Credential}
-
-\item{client.secret}{Client Secret of the Application. Again this too is an
-                  OAuth2.0 Credential}
+\item{token.object}{OAuth2.0 Token Object containing refresh token, client ID and client Secret}
 }
 \value{
-access token   New Access Token
+token.object Returns the same token object with the updated access token. Since the Token
+object is a Reference Class object it can be modified in place
 }
 \description{
 This function takes the Refresh Token as an argument and retrives a new

@@ -3,7 +3,8 @@
 #' This function checks whether the Access Token stored in the local file is 
 #' expired. If yes, it generates a new Access Token and updates the local file.
 #' 
-#'  
+#' @param token Token object containing the OAuth authentication parameters
+#'    
 #' @export
 #'  
 

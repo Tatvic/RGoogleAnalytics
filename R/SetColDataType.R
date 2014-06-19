@@ -5,7 +5,8 @@
 #' @param col.name The vector of the name of the all dimensions and metrics of the retrived data and it will be attached to the dataframe.param.               
 #'              
 #' @return dataframe.param The dataframe will be set with its column names with the appropriate class type.
-#'
+#' 
+#' 
 SetColDataType <- function(col.datatype, col.name, dataframe.param) {
         
   for(i in 1:length(col.datatype)) {

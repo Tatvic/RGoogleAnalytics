@@ -1,3 +1,4 @@
+#' @title
 #' Queries the Google Analytics API for the specified dimensions,metrics and other query parameters
 #' 
 #' This function will retrieve the data by firing the query to the Core Reporting API. It also displays 
@@ -5,13 +6,15 @@
 #' daywise partitions and paginate the query responses in order to decrease the effect the sampling
 #' @export
 #' 
-#' @param query.builder  Name of the object corresponding to the QueryBuilder class 
+#' @param query.builder  Name of the object created using \code{QueryBuilder()}
 #' 
+#' @param token Name of the token object created using \code{Auth()}
+#'   
 #' @param paginate_query  Pages through chunks of results by requesting maximum 
 #' number of allowed rows at a time. Default Value of this argument is FALSE. Note that
 #' if this parameter is set to True, queries will take more longer to complete and use
 #' more Quota. For more on Google Analytics API quota check 
-#' https://developers.google.com/analytics/devguides/reporting/core/v3/limits-quotas#core_reporting
+#' \url{https://developers.google.com/analytics/devguides/reporting/core/v3/limits-quotas#core_reporting}
 #' 
 #' @param split_daywise  Splits the query by date range into sub queries of 
 #' single days. Default value of this argument is FALSE. Setting this 
@@ -21,9 +24,20 @@
 #' 
 #' @examples
 #' \dontrun{
-#' ga.df <- GetReportData(query)
-#' ga.df <- GetReportData(query,split_daywise=True)
-#' ga.df <- GetReportData(query,paginate_query=True)
+#' # This example assumes that a token object is already created
+#' # Create a list of Query Parameters
+#' query.list <- Init(start.date = "2014-11-28",
+#'                    end.date = "2014-12-04",
+#'                    dimensions = "ga:date",
+#'                    metrics = "ga:sessions,ga:pageviews",
+#'                    max.results = 1000,
+#'                    table.id = "ga:33093633")
+#' # Create the query object
+#' ga.query <- QueryBuilder(query.list)
+#' # Fire the query to the Google Analytics API
+#' ga.df <- GetReportData(query,oauth_token)
+#' ga.df <- GetReportData(query,oauth_token,split_daywise=True)
+#' ga.df <- GetReportData(query,oauth_token,paginate_query=True)
 #' }
 #' @return api.response dataframe containing the response of the Google Analytics API 
 #' 
@@ -126,7 +140,7 @@ GetReportData <- function(query.builder,token,
     if (query.builder$max.results() < kMaxDefaultRows) {
       cat("Setting Max Results to 10000 for efficient Query Utilization\n")
     }
-    query.builder$max.results(kMaxDefaultRows)
+    #query.builder$max.results(kMaxDefaultRows)
     
     # Hit One Query
     query.uri <- ToUri(query.builder,token)
@@ -146,7 +160,7 @@ GetReportData <- function(query.builder,token,
       }
       
       # Call Pagination Function
-      paged.query.list <- PaginateQuery(query.builder, number.of.pages, kMaxDefaultRows,token)
+      paged.query.list <- PaginateQuery(query.builder, number.of.pages, token)
       
       # Collate Results and convert to Dataframe
       inter.df <- rbind(ga.list.df,paged.query.list$data)

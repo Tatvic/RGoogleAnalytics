@@ -3,7 +3,10 @@
 \alias{ValidateToken}
 \title{Check whether the Access Token has expired}
 \usage{
-ValidateToken()
+ValidateToken(token)
+}
+\arguments{
+\item{token}{Token object containing the OAuth authentication parameters}
 }
 \description{
 This function checks whether the Access Token stored in the local file is

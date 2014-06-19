@@ -3,12 +3,10 @@
 #' 
 #' @keywords internal
 #' Reference : https://developers.google.com/accounts/docs/OAuth2#installed
-#' @param refresh.token  Refresh Token that was saved to the local file
-#' @param client.id      Client ID of the Application. This is a OAuth2.0 Credential   
-#' @param client.secret  Client Secret of the Application. Again this too is an
-#'                   OAuth2.0 Credential   
+#' @param token.object OAuth2.0 Token Object containing refresh token, client ID and client Secret  
 #'   
-#' @return access token   New Access Token
+#' @return token.object Returns the same token object with the updated access token. Since the Token
+#' object is a Reference Class object it can be modified in place
 #'   
 #' 
 RefreshToAccessToken <- function(token.object){

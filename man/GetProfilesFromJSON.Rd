@@ -3,7 +3,7 @@
 \alias{GetProfilesFromJSON}
 \title{This function will do the parsing operation on the JSON reponse
 returned from the Google Management API and return the
-dataframe stored with the profile id and prfile name}
+dataframe stored with the profile id and profile name}
 \usage{
 GetProfilesFromJSON(api.response.json)
 }
@@ -16,7 +16,7 @@ Profileres.list The list stored with totalResults as value of the total availabl
 \description{
 This function will do the parsing operation on the JSON reponse
 returned from the Google Management API and return the
-dataframe stored with the profile id and prfile name
+dataframe stored with the profile id and profile name
 }
 \keyword{internal}
 

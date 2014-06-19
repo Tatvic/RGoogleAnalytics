@@ -1,11 +1,14 @@
 #' Returns the URI constructed from the parameter settings. This also
 #' URI-encodes all the values in each query parameter.
-#'
+#' 
+#' @param query Name of the Object of the Query Builder Class
+#' 
+#' @param token Token object containing the OAuth2.0 Authentication details
+#' 
+#' 
+#' 
 #' @return
-#'   A full URI that can be used with the Google Analytics API. Users
-#'   typically don't need to use this method as the
-#'   RGoogleAnalytics$GetReportData() function accepts an entire
-#'   QueryBuilder object.
+#'   A full URI that can be used with the Google Analytics API. 
 ToUri <- function(query.builder,token) {
   
   query <- c("start.date"  = query.builder$start.date(),
@@ -39,7 +42,7 @@ ToUri <- function(query.builder,token) {
       uri <- paste(uri,
                    uri.name,
                    "=",
-                   curlEscape(query[[name]]),
+                   query[[name]],
                    "&",
                    sep = "",
                    collapse = "")

@@ -6,7 +6,8 @@
 #' 
 #' @keywords internal 
 #' 
-#' @param query.builder Name of the object corresponding to the QueryBuilder class  
+#' @param query.builder Name of the object corresponding to the QueryBuilder class
+#' @param kmaxdefaultrows   
 #' 
 #' @return list containing the Column Headers and the Collated dataframe that represents the query response 
 #' 
