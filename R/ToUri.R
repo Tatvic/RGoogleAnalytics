@@ -1,7 +1,7 @@
 #' Returns the URI constructed from the parameter settings. This also
 #' URI-encodes all the values in each query parameter.
 #' 
-#' @param query Name of the Object of the Query Builder Class
+#' @param query.builder Name of the Object of the Query Builder Class
 #' 
 #' @param token Token object containing the OAuth2.0 Authentication details
 #' 

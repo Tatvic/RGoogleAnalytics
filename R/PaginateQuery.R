@@ -20,7 +20,7 @@
 #' @return list containing Column Headers and the data collated across all the pages of the query
 #' 
 #' 
-PaginateQuery <- function(query.builder, pages, kmaxdefaultrows = 10000,token) {
+PaginateQuery <- function(query.builder, pages, token, kmaxdefaultrows = 10000) {
   
   kMaxDefaultRows <- kmaxdefaultrows
   
