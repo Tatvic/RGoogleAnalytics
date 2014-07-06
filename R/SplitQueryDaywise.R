@@ -58,8 +58,8 @@ SplitQueryDaywise <- function(query.builder, kmaxdefaultrows,token) {
     
     if (length(first.query$rows) < first.query$totalResults) {
       number.of.pages <- ceiling((first.query$totalResults)/length(first.query$rows))
-        if (number.of.pages > 100) {
-          number.of.pages <- kMaxPages
+        if ((number.of.pages > 100) & exists("kMaxPages",envir = rga.environment))  {
+          number.of.pages <- get("kMaxPages",envir=rga.environment)
       }
       inter.df <- PaginateQuery(query.builder, number.of.pages, kMaxDefaultRows,token)
       inter.df <- rbind(first.query.df, inter.df$data)

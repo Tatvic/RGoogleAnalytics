@@ -26,7 +26,7 @@ QueryBuilder <- function(query.params.list) {
   start.index  <- query.params.list$start.index
   table.id   <- query.params.list$table.id
   
-  # Change this to access_token <- LoadAccessToken()
+  
   access_token <- NULL
   
   #' Sets the Query Parameters for the Query Builder Object and performs validation
@@ -35,8 +35,6 @@ QueryBuilder <- function(query.params.list) {
   
   SetQueryParams <- function() {   
     
-    #Load Access Token from Memory
-    #access_token <- LoadAccessToken()
     
     StartDate(start.date)
     EndDate(end.date)
@@ -55,8 +53,7 @@ QueryBuilder <- function(query.params.list) {
     return(invisible())
   }
   
-  
-  
+    
   #' Sets the start date.
   #' Optional.
   #' All Analytics feed requests must specify a beginning and ending date

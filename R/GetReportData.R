@@ -48,7 +48,9 @@ GetReportData <- function(query.builder,token,
                           paginate_query=FALSE) { 
                      
   kMaxDefaultRows <- 10000 
-  kMaxPages <- 100
+  #kMaxPages <- 100
+  
+  
   
   # We have used oauth 2.0 API to authorize the user account 
   # and to get the accesstoken to request to the Google Analytics Data API. 
@@ -107,7 +109,7 @@ GetReportData <- function(query.builder,token,
       cat("In order to get all results, set paginate_query = T in the GetReportData function.\n")
     } else {
       cat("Status of Query:\n")
-      cat("The API returned", response.size, "results")
+      cat("The API returned", response.size, "results\n")
     }
     
     # Calculate the Percentage of Visits based on which the query was sampled
@@ -140,7 +142,7 @@ GetReportData <- function(query.builder,token,
     if (query.builder$max.results() < kMaxDefaultRows) {
       cat("Setting Max Results to 10000 for efficient Query Utilization\n")
     }
-    #query.builder$max.results(kMaxDefaultRows)
+    query.builder$max.results(kMaxDefaultRows)
     
     # Hit One Query
     query.uri <- ToUri(query.builder,token)
@@ -156,7 +158,7 @@ GetReportData <- function(query.builder,token,
       
       # Clamp Number of Pages to 100 in order to enforce upper limit for pagination as 1M rows
       if (number.of.pages > 100) {
-        number.of.pages <- kMaxPages
+        number.of.pages <- get("kMaxPages",envir=rga.environment)
       }
       
       # Call Pagination Function

@@ -7,7 +7,7 @@ URI-encodes all the values in each query parameter.}
 ToUri(query.builder, token)
 }
 \arguments{
-\item{query}{Name of the Object of the Query Builder Class}
+\item{query.builder}{Name of the Object of the Query Builder Class}
 
 \item{token}{Token object containing the OAuth2.0 Authentication details}
 }
