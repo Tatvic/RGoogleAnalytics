@@ -21,9 +21,6 @@ SplitQueryDaywise <- function(query.builder, kmaxdefaultrows,token) {
   # Validate the token and regenerate it if expired
   ValidateToken(token)
   
-  #Update the access token in the query object
-  #query.builder$SetAccessToken(token.list$access_token)
-  
   # Updated to use Get Methods
   start.date <- ymd(query.builder$GetStartDate())
   end.date   <- ymd(query.builder$GetEndDate())

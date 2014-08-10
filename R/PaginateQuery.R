@@ -20,18 +20,13 @@
 #' @return list containing Column Headers and the data collated across all the pages of the query
 #' 
 #' 
-PaginateQuery <- function(query.builder, pages, token, kmaxdefaultrows = 10000) {
+PaginateQuery <- function(query.builder, pages, token) {
   
-  kMaxDefaultRows <- kmaxdefaultrows
+  kMaxDefaultRows <- get("kMaxDefaultRows",envir=rga.environment)
   
   # Validate the token and regenerate it if expired
   ValidateToken(token)
   
-  #Update the access token in the query object
-  # query.builder$SetAccessToken(token.list$access_token)  
-  
-
-
   # Create an empty dataframe in order to store the data
   df.inner <- data.frame()
   

@@ -8,7 +8,7 @@ the rows at a time. This function loops across all such subsets (pages) in order
 to the entire query. The maximum number of rows corresponding to a single query that can be retrieved via Pagination
 is 1 M.}
 \usage{
-PaginateQuery(query.builder, pages, token, kmaxdefaultrows = 10000)
+PaginateQuery(query.builder, pages, token)
 }
 \arguments{
 \item{query.builder}{Name of the object corresponding to the query builder class}

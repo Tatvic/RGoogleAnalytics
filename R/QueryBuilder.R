@@ -708,20 +708,6 @@ QueryBuilder <- function(query.params.list) {
   #   return(token.list$access_token)
   # }
   
-  
-  #' This function updates the access token in the query builder object 
-  #' @keywords internal 
-  #' @param Access Token  
-  #' 
-  #' @return None Sets the Access Token
-  SetAccessToken <- function(access.token) {
-    AccessToken(access.token)
-  }
-  
-  GetAccessToken <- function() {
-    return(access_token)
-  }
-  
   #' This function updates the start date in the query builder object 
   #' @keywords internal 
   #' @param Start Date 
@@ -794,8 +780,6 @@ QueryBuilder <- function(query.params.list) {
               "clear.data"   =   ClearData,
               "Validate"     =   Validate,
               "access_token" =   AccessToken,
-              "SetAccessToken" = SetAccessToken,
-              "GetAccessToken" = GetAccessToken,
               "GetStartDate"  = GetStartDate,
               "GetEndDate" = GetEndDate,
               "GetAccessToken" = GetAccessToken,
