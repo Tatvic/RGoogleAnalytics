@@ -741,10 +741,6 @@ QueryBuilder <- function(query.params.list) {
     StartIndex(start.index)
   }
   
-  GetStartIndex <- function() {
-    return(start.index)
-  }
-  
   #' A function setting initial values of a GA URI query.
   #'
   #' @export
