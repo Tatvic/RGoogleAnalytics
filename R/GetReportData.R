@@ -46,9 +46,10 @@
 GetReportData <- function(query.builder,token, 
                           split_daywise=FALSE,
                           paginate_query=FALSE) { 
-                     
-  kMaxDefaultRows <- 10000 
-  #kMaxPages <- 100
+  
+  # Add an if (exists) block here
+  kMaxDefaultRows <- get("kMaxDefaultRows",envir=rga.environment)
+  
   
   
   
