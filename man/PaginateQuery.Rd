@@ -15,8 +15,7 @@ PaginateQuery(query.builder, pages, token)
 
 \item{pages}{Integer representing the number of pages across which the query has to be paginated}
 
-\item{kmaxdefaultrows}{Maximum number of rows to be requested in one API call. Default value is 10000
-for efficient query utilization}
+\item{token}{Token Object created by the Auth() function}
 }
 \value{
 list containing Column Headers and the data collated across all the pages of the query

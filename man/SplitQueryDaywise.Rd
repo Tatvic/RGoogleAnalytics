@@ -5,12 +5,12 @@
 and hits a query for each day. The responses for each queries are collated into a single dataframe and
 returned. This procedure helps decrease the effect of sampling.}
 \usage{
-SplitQueryDaywise(query.builder, kmaxdefaultrows, token)
+SplitQueryDaywise(query.builder, token)
 }
 \arguments{
 \item{query.builder}{Name of the object corresponding to the QueryBuilder class}
 
-\item{kmaxdefaultrows}{}
+\item{token}{Token Object created by the Auth() function}
 }
 \value{
 list containing the Column Headers and the Collated dataframe that represents the query response

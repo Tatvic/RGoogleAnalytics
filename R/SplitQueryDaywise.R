@@ -7,16 +7,16 @@
 #' @keywords internal 
 #' 
 #' @param query.builder Name of the object corresponding to the QueryBuilder class
-#' @param kmaxdefaultrows   
+#' @param token Token Object created by the Auth() function   
 #' 
 #' @return list containing the Column Headers and the Collated dataframe that represents the query response 
 #' 
 #' @importFrom lubridate ymd
 #' 
 
-SplitQueryDaywise <- function(query.builder, kmaxdefaultrows,token) {
+SplitQueryDaywise <- function(query.builder, token) {
      
-  kMaxDefaultRows <- kmaxdefaultrows
+  kMaxDefaultRows <- get("kMaxDefaultRows",envir=rga.environment)
   
   # Validate the token and regenerate it if expired
   ValidateToken(token)
@@ -58,7 +58,7 @@ SplitQueryDaywise <- function(query.builder, kmaxdefaultrows,token) {
         if ((number.of.pages > 100) & exists("kMaxPages",envir = rga.environment))  {
           number.of.pages <- get("kMaxPages",envir=rga.environment)
       }
-      inter.df <- PaginateQuery(query.builder, number.of.pages, kMaxDefaultRows,token)
+      inter.df <- PaginateQuery(query.builder, number.of.pages, token)
       inter.df <- rbind(first.query.df, inter.df$data)
       master.df <- rbind(master.df, inter.df)
     } else {

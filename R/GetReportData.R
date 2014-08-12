@@ -131,7 +131,7 @@ GetReportData <- function(query.builder,token,
       cat("Setting Max Results to 10000 for efficient Query Utilization\n")
     }
     query.builder$max.results(kMaxDefaultRows)
-    GA.DF <- SplitQueryDaywise(query.builder, kMaxDefaultRows,token)
+    GA.DF <- SplitQueryDaywise(query.builder, token)
     final.df <- SetDataFrame(GA.DF$header,GA.DF$data)
     cat("The API returned", nrow(final.df), "results\n")
     

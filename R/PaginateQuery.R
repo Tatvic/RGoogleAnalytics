@@ -14,8 +14,7 @@
 #' 
 #' @param pages Integer representing the number of pages across which the query has to be paginated
 #' 
-#' @param kmaxdefaultrows Maximum number of rows to be requested in one API call. Default value is 10000
-#' for efficient query utilization
+#' @param token Token Object created by the Auth() function
 #' 
 #' @return list containing Column Headers and the data collated across all the pages of the query
 #' 
