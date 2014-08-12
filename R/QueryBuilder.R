@@ -778,8 +778,6 @@ QueryBuilder <- function(query.params.list) {
               "access_token" =   AccessToken,
               "GetStartDate"  = GetStartDate,
               "GetEndDate" = GetEndDate,
-              "GetAccessToken" = GetAccessToken,
-              "SetAccessToken" = SetAccessToken,
               "SetEndDate" = SetEndDate,
               "SetStartDate" = SetStartDate,
               "SetQueryParams" = SetQueryParams,
