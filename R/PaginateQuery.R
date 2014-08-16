@@ -14,14 +14,14 @@
 #' 
 #' @param pages Integer representing the number of pages across which the query has to be paginated
 #' 
-#' @param token Token Object created by the Auth() function
+#' @param token Token Object created by \code{Auth()} 
 #' 
 #' @return list containing Column Headers and the data collated across all the pages of the query
 #' 
 #' 
 PaginateQuery <- function(query.builder, pages, token) {
   
-  kMaxDefaultRows <- get("kMaxDefaultRows",envir=rga.environment)
+  kMaxDefaultRows <- get("kMaxDefaultRows", envir=rga.environment)
   
   # Validate the token and regenerate it if expired
   ValidateToken(token)
@@ -34,7 +34,7 @@ PaginateQuery <- function(query.builder, pages, token) {
     start.index <- (i * kMaxDefaultRows) + 1
     cat("Getting data starting at row", start.index, "\n")
     query.builder$SetStartIndex(start.index)
-    query.uri <- ToUri(query.builder,token)
+    query.uri <- ToUri(query.builder, token)
     ga.list <- GetDataFeed(query.uri)
     dataframe.param <- rbind(dataframe.param,
                              do.call(rbind, as.list(ga.list$rows)))

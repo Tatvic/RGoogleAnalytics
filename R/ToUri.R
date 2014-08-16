@@ -5,8 +5,7 @@
 #' 
 #' @param token Token object containing the OAuth2.0 Authentication details
 #' 
-#' 
-#' 
+#' @keywords internal
 #' @return
 #'   A full URI that can be used with the Google Analytics API. 
 ToUri <- function(query.builder,token) {

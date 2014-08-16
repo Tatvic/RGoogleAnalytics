@@ -18,4 +18,5 @@ A full URI that can be used with the Google Analytics API.
 Returns the URI constructed from the parameter settings. This also
 URI-encodes all the values in each query parameter.
 }
+\keyword{internal}
 

@@ -1,11 +1,11 @@
-#' Initializes a QueryBuilder object with the given parameters and performs validation
+#' Initialize a QueryBuilder object with the given parameters and perform validation
 #'
 #' @export
 #' 
-#' @param query.params.list List of all the Query Parameters. See \code{Init} for the
+#' @param query.params.list List of all the Query Parameters. See \code{\link{Init}} for the
 #' entire list
 #' 
-#' @return builder The builder method to process the query parameters.
+#' @return The builder object to process the query parameters.
 #'
 QueryBuilder <- function(query.params.list) {
   
@@ -24,7 +24,7 @@ QueryBuilder <- function(query.params.list) {
   filters      <- query.params.list$filters
   max.results  <- query.params.list$max.results
   start.index  <- query.params.list$start.index
-  table.id   <- query.params.list$table.id
+  table.id     <- query.params.list$table.id
   
   
   access_token <- NULL
@@ -740,26 +740,6 @@ QueryBuilder <- function(query.params.list) {
   SetStartIndex <- function(start.index) {
     StartIndex(start.index)
   }
-  
-  #' A function setting initial values of a GA URI query.
-  #'
-  #' @export
-  #' @param start.date See QueryBuilder()
-  #' @param end.date See QueryBuilder()
-  #' @param dimensions See QueryBuilder()  
-  #' @param metrics See QueryBuilder() 
-  #' @param segment See QueryBuilder()  
-  #' @param sort See QueryBuilder() 
-  #' @param filters See QueryBuilder()
-  #' @param max.results See QueryBuilder()
-  #' @param start.index: See QueryBuilder()  
-  #' @param table.id: See QueryBuilder() 
-  #' @param access_token: See AccessToken() 
-  #'  
-  #'
-  #' @return None Sets the initial query parameters.
-  #'
-  
   
   
   

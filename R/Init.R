@@ -1,8 +1,8 @@
 #' Initialize the Google Analytics query parameters
 #' 
 #' This function takes all the query parameters and combines them into a single list that 
-#' is to be passed as an argument to \code{QueryBuilder()}. Note that parameter validation is 
-#' performed when the \code{QueryBuilder()} object is initialized 
+#' is to be passed as an argument to \code{\link{QueryBuilder}}. Note that parameter validation is 
+#' performed when the \code{\link{QueryBuilder}} object is created
 #'
 #' @export
 #' @param start.date Start Date for fetching Analytics Data.
@@ -37,7 +37,7 @@
 #' Valid Combinations of Dimensions and Metrics can be found at  \url{http://code.google.com/apis/analytics/docs/gdata/gdataReferenceDimensionsMetrics.html#validCombinations}
 #' 
 #' 
-#' @return query.params.list List of all the Query Parameters initialized by the user
+#' @return List of all the Query Parameters initialized by the user
 
 Init <- function(
   start.date = NULL,

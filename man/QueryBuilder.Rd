@@ -6,11 +6,11 @@
 QueryBuilder(query.params.list)
 }
 \arguments{
-\item{query.params.list}{List of all the Query Parameters. See \code{Init} for the
+\item{query.params.list}{List of all the Query Parameters. See \code{\link{Init}} for the
 entire list}
 }
 \value{
-builder The builder method to process the query parameters.
+The builder object to process the query parameters.
 }
 \description{
 Initializes a QueryBuilder object with the given parameters and performs validation

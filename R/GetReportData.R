@@ -1,30 +1,30 @@
-#' @title
-#' Queries the Google Analytics API for the specified dimensions,metrics and other query parameters
+#' Query the Google Analytics API for the specified dimensions, metrics and other query parameters
 #' 
 #' This function will retrieve the data by firing the query to the Core Reporting API. It also displays 
 #' status messages after the completion of the query. The user also has the option split the query into 
 #' daywise partitions and paginate the query responses in order to decrease the effect the sampling
 #' @export
 #' 
-#' @param query.builder  Name of the object created using \code{QueryBuilder()}
+#' @param query.builder Name of the object created using \code{\link{QueryBuilder}}
 #' 
-#' @param token Name of the token object created using \code{Auth()}
+#' @param token Name of the token object created using \code{\link{Auth}}
 #'   
 #' @param paginate_query  Pages through chunks of results by requesting maximum 
-#' number of allowed rows at a time. Default Value of this argument is FALSE. Note that
-#' if this parameter is set to True, queries will take more longer to complete and use
-#' more Quota. For more on Google Analytics API quota check 
+#' number of allowed rows at a time. Note that
+#' if this argument is set to True, queries will take more longer to complete and use
+#' more Quota. For more on Google Analytics API Quota check 
 #' \url{https://developers.google.com/analytics/devguides/reporting/core/v3/limits-quotas#core_reporting}
 #' 
 #' @param split_daywise  Splits the query by date range into sub queries of 
-#' single days. Default value of this argument is FALSE. Setting this 
-#' argument to true automatically paginates through each daywise query. Note that
-#' if this parameter is set to True, queries will take more longer to complete and use
+#' single days. Setting this 
+#' argument to True automatically paginates through each daywise query. Note that
+#' if this argument is set to True, queries will take more longer to complete and use
 #' more Quota 
 #' 
 #' @examples
 #' \dontrun{
 #' # This example assumes that a token object is already created
+#' 
 #' # Create a list of Query Parameters
 #' query.list <- Init(start.date = "2014-11-28",
 #'                    end.date = "2014-12-04",
@@ -32,23 +32,27 @@
 #'                    metrics = "ga:sessions,ga:pageviews",
 #'                    max.results = 1000,
 #'                    table.id = "ga:33093633")
+#'
 #' # Create the query object
 #' ga.query <- QueryBuilder(query.list)
+#'
 #' # Fire the query to the Google Analytics API
-#' ga.df <- GetReportData(query,oauth_token)
-#' ga.df <- GetReportData(query,oauth_token,split_daywise=True)
-#' ga.df <- GetReportData(query,oauth_token,paginate_query=True)
+#' ga.df <- GetReportData(query, oauth_token)
+#' ga.df <- GetReportData(query, oauth_token, split_daywise=True)
+#' ga.df <- GetReportData(query, oauth_token, paginate_query=True)
 #' }
-#' @return api.response dataframe containing the response of the Google Analytics API 
+#'
+#' @return dataframe containing the response from the Google Analytics API 
 #' 
-#' @seealso Queries can be tested in the Google Analytics Query Feed Explorer \url{http://ga-dev-tools.appspot.com/explorer/}
+#' @seealso Prior to executing the query, as a good practice 
+#' queries can be tested in the Google Analytics Query Feed Explorer at \url{http://ga-dev-tools.appspot.com/explorer/}
 
-GetReportData <- function(query.builder,token, 
+GetReportData <- function(query.builder, token, 
                           split_daywise=FALSE,
                           paginate_query=FALSE) { 
   
   # Add an if (exists) block here
-  kMaxDefaultRows <- get("kMaxDefaultRows",envir=rga.environment)
+  kMaxDefaultRows <- get("kMaxDefaultRows", envir=rga.environment)
   
   
   
@@ -129,10 +133,10 @@ GetReportData <- function(query.builder,token,
     # Implement this via SetMaxResults() in future versions
     if (query.builder$max.results() < kMaxDefaultRows) {
       cat("Setting Max Results to 10000 for efficient Query Utilization\n")
+      query.builder$max.results(kMaxDefaultRows)
     }
-    query.builder$max.results(kMaxDefaultRows)
     GA.DF <- SplitQueryDaywise(query.builder, token)
-    final.df <- SetDataFrame(GA.DF$header,GA.DF$data)
+    final.df <- SetDataFrame(GA.DF$header, GA.DF$data)
     cat("The API returned", nrow(final.df), "results\n")
     
   } else if (paginate_query == T) {
@@ -142,31 +146,31 @@ GetReportData <- function(query.builder,token,
     # Implement SetMaxResults() as a method in QueryBuilder()
     if (query.builder$max.results() < kMaxDefaultRows) {
       cat("Setting Max Results to 10000 for efficient Query Utilization\n")
+      query.builder$max.results(kMaxDefaultRows)    
     }
-    query.builder$max.results(kMaxDefaultRows)
     
     # Hit One Query
-    query.uri <- ToUri(query.builder,token)
+    query.uri <- ToUri(query.builder, token)
     ga.list <- GetDataFeed(query.uri)
     # Convert ga.list into a dataframe
     ga.list.df <- data.frame()
-    ga.list.df <- rbind(ga.list.df, do.call(rbind,as.list(ga.list$rows)))
+    ga.list.df <- rbind(ga.list.df, do.call(rbind, as.list(ga.list$rows)))
     
     # Check if pagination is required
     
     if (length(ga.list$rows) < ga.list$totalResults) {
-      number.of.pages <- ceiling(ga.list$totalResults/length(ga.list$rows))
+      number.of.pages <- ceiling(ga.list$totalResults / length(ga.list$rows))
       
       # Clamp Number of Pages to 100 in order to enforce upper limit for pagination as 1M rows
       if (number.of.pages > 100) {
-        number.of.pages <- get("kMaxPages",envir=rga.environment)
+        number.of.pages <- get("kMaxPages", envir=rga.environment)
       }
       
       # Call Pagination Function
       paged.query.list <- PaginateQuery(query.builder, number.of.pages, token)
       
       # Collate Results and convert to Dataframe
-      inter.df <- rbind(ga.list.df,paged.query.list$data)
+      inter.df <- rbind(ga.list.df, paged.query.list$data)
       final.df <- SetDataFrame(paged.query.list$headers, inter.df)
       
       cat("The API returned", nrow(final.df), "results\n")
