@@ -54,19 +54,16 @@ GetReportData <- function(query.builder, token,
   # Add an if (exists) block here
   kMaxDefaultRows <- get("kMaxDefaultRows", envir=rga.environment)
   
-  
-  
-  
   # We have used oauth 2.0 API to authorize the user account 
   # and to get the accesstoken to request to the Google Analytics Data API. 
   query.uri <- NULL
   dataframe.param <- data.frame()
   
   # Set the CURL options for Windows    
-#   options(RCurlOptions = list(capath = system.file("CurlSSL",
-#                                                    "cacert.pem", 
-#                                                    package = "RCurl"),
-#                               ssl.verifypeer = FALSE))
+  options(RCurlOptions = list(capath = system.file("CurlSSL",
+                                                   "cacert.pem", 
+                                                   package = "RCurl"),
+                              ssl.verifypeer = FALSE))
   
   
   # Set all the Query Parameters

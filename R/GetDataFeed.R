@@ -7,6 +7,8 @@
 #' 
 #' @return GA.list The Google Analytics API JSON response converted to a 
 #' list object
+#' 
+#' @importFrom httr GET
 GetDataFeed <- function(query.uri) {
   
   GA.Data <- GET(query.uri)  

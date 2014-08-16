@@ -12,7 +12,7 @@
 #' @return list containing the Column Headers and the Collated dataframe that represents the query response 
 #' 
 #' @importFrom lubridate ymd
-#' 
+#' @importFrom lubridate days
 
 SplitQueryDaywise <- function(query.builder, token) {
      

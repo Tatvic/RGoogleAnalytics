@@ -17,6 +17,7 @@
 #' Examples section below
 #' 
 #' 
+#' 
 #' @param client.id Equivalent to a user name
 #' @param client.secret Equivalent to a password
 #' 
@@ -52,6 +53,7 @@
 #' 
 #' @importFrom httr oauth_app
 #' @importFrom httr oauth2.0_token
+#' @importFrom httr oauth_endpoints
 #' 
 Auth <- function(client.id,client.secret) {
   

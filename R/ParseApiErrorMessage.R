@@ -7,6 +7,7 @@
 #' @description
 #' If there is an error in JSON response then this function will return the related error code and message for that error. 
 #'
+#' @importFrom httr content
 ParseApiErrorMessage <- function(api.response.json) {
       
   api.response.list <- content(api.response.json,as="parsed")  
