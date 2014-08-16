@@ -37,12 +37,12 @@ to the Admin Tab under your Google Analytics Profile}
 \item{start.index}{Optional.The first row of data to retrieve. Default value is 1}
 }
 \value{
-query.params.list List of all the Query Parameters initialized by the user
+List of all the Query Parameters initialized by the user
 }
 \description{
 This function takes all the query parameters and combines them into a single list that
-is to be passed as an argument to \code{QueryBuilder()}. Note that parameter validation is
-performed when the \code{QueryBuilder()} object is initialized
+is to be passed as an argument to \code{\link{QueryBuilder}}. Note that parameter validation is
+performed when the \code{\link{QueryBuilder}} object is created
 }
 \seealso{
 Valid Combinations of Dimensions and Metrics can be found at  \url{http://code.google.com/apis/analytics/docs/gdata/gdataReferenceDimensionsMetrics.html#validCombinations}

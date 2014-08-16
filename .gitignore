@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 RGoogleAnalytics.Rproj
-/tests/testthat/test_r_google_analytics.R
 .httr-oauth
 .Rbuildignore
+.httr-oauth
+

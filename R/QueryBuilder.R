@@ -1,11 +1,11 @@
-#' Initializes a QueryBuilder object with the given parameters and performs validation
+#' Initialize a QueryBuilder object with the given parameters and perform validation
 #'
 #' @export
 #' 
-#' @param query.params.list List of all the Query Parameters. See \code{Init} for the
+#' @param query.params.list List of all the Query Parameters. See \code{\link{Init}} for the
 #' entire list
 #' 
-#' @return builder The builder method to process the query parameters.
+#' @return The builder object to process the query parameters.
 #'
 QueryBuilder <- function(query.params.list) {
   
@@ -24,9 +24,9 @@ QueryBuilder <- function(query.params.list) {
   filters      <- query.params.list$filters
   max.results  <- query.params.list$max.results
   start.index  <- query.params.list$start.index
-  table.id   <- query.params.list$table.id
+  table.id     <- query.params.list$table.id
   
-  # Change this to access_token <- LoadAccessToken()
+  
   access_token <- NULL
   
   #' Sets the Query Parameters for the Query Builder Object and performs validation
@@ -35,8 +35,6 @@ QueryBuilder <- function(query.params.list) {
   
   SetQueryParams <- function() {   
     
-    #Load Access Token from Memory
-    access_token <- LoadAccessToken()
     
     StartDate(start.date)
     EndDate(end.date)
@@ -55,8 +53,7 @@ QueryBuilder <- function(query.params.list) {
     return(invisible())
   }
   
-  
-  
+    
   #' Sets the start date.
   #' Optional.
   #' All Analytics feed requests must specify a beginning and ending date
@@ -630,9 +627,9 @@ QueryBuilder <- function(query.params.list) {
     if (is.null(table.id)) {
       missing.params <- append(missing.params, "table.id")
     }
-    if (is.null(access_token)) {
-      missing.params <- append(missing.params, "access_token")
-    }
+#     if (is.null(access_token)) {
+#       missing.params <- append(missing.params, "access_token")
+#     }
     
     if (length(missing.params) == 0) {
       return(TRUE)
@@ -648,59 +645,7 @@ QueryBuilder <- function(query.params.list) {
     
   }
   
-  #' Returns the URI constructed from the parameter settings. This also
-  #' URI-encodes all the values in each query parameter.
-  #'
-  #' @return
-  #'   A full URI that can be used with the Google Analytics API. Users
-  #'   typically don't need to use this method as the
-  #'   RGoogleAnalytics$GetReportData() function accepts an entire
-  #'   QueryBuilder object.
-  ToUri <- function() {
-    
-    query <- c("start.date"  = start.date,
-               "end.date"    = end.date,
-               "dimensions"  = dimensions,
-               "metrics"     = metrics,
-               "segment"     = segment,
-               "sort"        = sort,
-               "filters"     = filters,
-               "max.results" = max.results,
-               "start.index" = start.index,
-               "table.id"    = table.id,
-               "access_token" = access_token)
-    
-    uri <- "https://www.googleapis.com/analytics/v3/data/ga?"
-    for (name in names(query)) {
-      uri.name <- switch(name,
-                         start.date  = "start-date",
-                         end.date    = "end-date",
-                         dimensions  = "dimensions",
-                         metrics     = "metrics",
-                         segment     = "segment",
-                         sort        = "sort",
-                         filters     = "filters",
-                         max.results = "max-results",
-                         start.index = "start-index",
-                         table.id    = "ids",
-                         access_token = "access_token")
-      
-      if (!is.null(uri.name)) {
-        uri <- paste(uri,
-                     uri.name,
-                     "=",
-                     curlEscape(query[[name]]),
-                     "&",
-                     sep = "",
-                     collapse = "")
-      }
-    }
-    # remove the last '&' that joins the query parameters together.
-    uri <- sub("&$", "", uri)
-    # remove any spaces that got added in from bad input.
-    uri <- gsub("\\s", "", uri)
-    return(uri)
-  }
+  
   
   #' A function to reset all the data values to NULL, for a new query.f
   #' The ClearData() function allows a user to reset the query parameters,
@@ -756,58 +701,12 @@ QueryBuilder <- function(query.params.list) {
     return(invisible())
   }
   
-  #' Loads the access token from the system memory into R
+  # #' Loads the access token from the system memory into R
   
-  LoadAccessToken <- function() {
-    load(file.path(path.package("RGoogleAnalytics"),"accesstoken.rda"))
-    return(token.list$access_token)
-  }
-  
-  
-  #' @keywords internal 
-  #' This function will authorize the user account with the Oauth 2.0 API. 
-  #' This function redirect a user to a browser with Oauth 2.0 login prompt, 
-  #' A user needs to allow the access to use this service by Exchanging an
-  #' authorization code for a token.
-  #' One must then paste the generated access token from Oauth 2.0 console 
-  #' to the R console.
-  
-  Authorize <- function() {
-    
-    browseURL(paste("https://accounts.google.com/o/oauth2/auth?scope=",
-                    "https://www.googleapis.com/auth/analytics.readonly&",
-                    "response_type=code&access_type=offline&redirect_uri=",
-                    "https://developers.google.com/oauthplayground&approval",
-                    "_prompt=force&client_id=407408718192.apps.",
-                    "googleusercontent.com&hl=en&from_login=1&as=",
-                    "7886e0e26859b9a5&pli=1&authuser=0",
-                    sep=""))
-    
-    cat("The GA data extraction process required access token.",
-        "To accept the accesstoken from Oauth 2.0 Playground, you need",
-        "to follow certain steps in your browser. This access token will be",
-        "valid untill an hour only.\n\nSteps to be followed : \n1. Authorize your",
-        "Google Analytics account by providing email and password. \n2. On left",
-        "side of the scrren click on the button","'Exchange authorization code for",
-        "tokens' to generate the access token. \n3. Copy the generated access",
-        "token and paste it here.")
-    access_token <- readline(as.character(cat("\n\nPaste the access token here",
-                                              ":=>")))
-    return(access_token)
-  }
-  
-  #' This function updates the access token in the query builder object 
-  #' @keywords internal 
-  #' @param Access Token  
-  #' 
-  #' @return None Sets the Access Token
-  SetAccessToken <- function(access.token) {
-    AccessToken(access.token)
-  }
-  
-  GetAccessToken <- function() {
-    return(access_token)
-  }
+  # LoadAccessToken <- function() {
+  #   load(file.path(path.package("RGoogleAnalytics"),"accesstoken.rda"))
+  #   return(token.list$access_token)
+  # }
   
   #' This function updates the start date in the query builder object 
   #' @keywords internal 
@@ -842,30 +741,6 @@ QueryBuilder <- function(query.params.list) {
     StartIndex(start.index)
   }
   
-  GetStartIndex <- function() {
-    return(start.index)
-  }
-  
-  #' A function setting initial values of a GA URI query.
-  #'
-  #' @export
-  #' @param start.date See QueryBuilder()
-  #' @param end.date See QueryBuilder()
-  #' @param dimensions See QueryBuilder()  
-  #' @param metrics See QueryBuilder() 
-  #' @param segment See QueryBuilder()  
-  #' @param sort See QueryBuilder() 
-  #' @param filters See QueryBuilder()
-  #' @param max.results See QueryBuilder()
-  #' @param start.index: See QueryBuilder()  
-  #' @param table.id: See QueryBuilder() 
-  #' @param access_token: See AccessToken() 
-  #'  
-  #'
-  #' @return None Sets the initial query parameters.
-  #'
-  
-  
   
   
   return(list("dimensions"   =   Dimensions,
@@ -874,17 +749,15 @@ QueryBuilder <- function(query.params.list) {
               "segments"     =   Segment,
               "filters"      =   Filters,
               "max.results"  =   MaxResults,
+              "start.index"  =   StartIndex,
               "table.id"     =   TableID,
-              "to.uri"       =   ToUri,   
+              "start.date"   =   StartDate,
+              "end.date"     =   EndDate,
               "clear.data"   =   ClearData,
               "Validate"     =   Validate,
               "access_token" =   AccessToken,
-              "SetAccessToken" = SetAccessToken,
-              "GetAccessToken" = GetAccessToken,
               "GetStartDate"  = GetStartDate,
               "GetEndDate" = GetEndDate,
-              "GetAccessToken" = GetAccessToken,
-              "SetAccessToken" = SetAccessToken,
               "SetEndDate" = SetEndDate,
               "SetStartDate" = SetStartDate,
               "SetQueryParams" = SetQueryParams,

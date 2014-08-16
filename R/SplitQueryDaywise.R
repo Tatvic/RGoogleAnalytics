@@ -6,31 +6,26 @@
 #' 
 #' @keywords internal 
 #' 
-#' @param query.builder Name of the object corresponding to the QueryBuilder class  
+#' @param query.builder Name of the object corresponding to the QueryBuilder class
+#' @param token Token Object created by the Auth() function   
 #' 
 #' @return list containing the Column Headers and the Collated dataframe that represents the query response 
 #' 
 #' @importFrom lubridate ymd
 #' 
 
-SplitQueryDaywise <- function(query.builder, kmaxdefaultrows) {
+SplitQueryDaywise <- function(query.builder, token) {
      
-  kMaxDefaultRows <- kmaxdefaultrows
+  kMaxDefaultRows <- get("kMaxDefaultRows",envir = rga.environment)
   
   # Validate the token and regenerate it if expired
-  ValidateToken()
-  
-  load(file.path(path.package("RGoogleAnalytics"),
-                 "accesstoken.rda"))
-  
-  #Update the access token in the query object
-  query.builder$SetAccessToken(token.list$access_token)
+  ValidateToken(token)
   
   # Updated to use Get Methods
   start.date <- ymd(query.builder$GetStartDate())
   end.date   <- ymd(query.builder$GetEndDate())
   
-  date.difference <- as.numeric(difftime(end.date, start.date, units='days'))
+  date.difference <- as.numeric(difftime(end.date, start.date, units = 'days'))
   
   if (date.difference == 0) {
     stop("Please verify start date and end date. They cannot be the same")
@@ -42,7 +37,7 @@ SplitQueryDaywise <- function(query.builder, kmaxdefaultrows) {
   for (i in (0:date.difference)) {
     # Update the start and end dates in the query
     date <- format(as.POSIXct(start.date) + days(i), '%Y-%m-%d')
-    cat("Run", i, "of", date.difference, "Getting data for", date, "\n")
+    cat("[ Run", i, "of", date.difference, "] Getting data for", date, "\n")
     query.builder$SetStartDate(date)
     query.builder$SetEndDate(date)
     
@@ -52,17 +47,18 @@ SplitQueryDaywise <- function(query.builder, kmaxdefaultrows) {
     # Hit the first query corresponding the particular date
     first.query.df <- data.frame()
     inter.df <- data.frame()
-    first.query <- GetDataFeed(query.builder$to.uri())
+    query.uri <- ToUri(query.builder, token)
+    first.query <- GetDataFeed(query.uri)
     first.query.df <- rbind(first.query.df, do.call(rbind, as.list(first.query$rows)))
     
     # Check if pagination is required in the query
     
     if (length(first.query$rows) < first.query$totalResults) {
-      number.of.pages <- ceiling((first.query$totalResults)/length(first.query$rows))
-        if (number.of.pages > 100) {
-          number.of.pages <- kMaxPages
+      number.of.pages <- ceiling((first.query$totalResults) / length(first.query$rows))
+        if ((number.of.pages > 100) & exists("kMaxPages", envir = rga.environment))  {
+          number.of.pages <- get("kMaxPages", envir = rga.environment)
       }
-      inter.df <- PaginateQuery(query.builder, number.of.pages, kMaxDefaultRows)
+      inter.df <- PaginateQuery(query.builder, number.of.pages, token)
       inter.df <- rbind(first.query.df, inter.df$data)
       master.df <- rbind(master.df, inter.df)
     } else {
@@ -71,5 +67,5 @@ SplitQueryDaywise <- function(query.builder, kmaxdefaultrows) {
     }
   }
   
-  return(list(header=first.query$columnHeaders, data=master.df))
+  return(list(header = first.query$columnHeaders, data=master.df))
 }

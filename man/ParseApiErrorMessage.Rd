@@ -9,12 +9,8 @@ ParseApiErrorMessage(api.response.json)
 \arguments{
 \item{api.response.json}{The json data as reposnse returned by the Google Data feed API or Google Management API}
 }
-\value{
-None If there is error in JSON response then this function will return the related error code and message for that error.
-}
 \description{
-To check whether the returned JSON response is error or not.
-If it is error then it will
+If there is an error in JSON response then this function will return the related error code and message for that error.
 }
 \keyword{internal}
 

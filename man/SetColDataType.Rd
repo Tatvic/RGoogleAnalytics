@@ -10,6 +10,8 @@ SetColDataType(col.datatype, col.name, dataframe.param)
 \item{col.datatype}{The vector of the datatype of all the dimensions and metrics from the parsed list data.}
 
 \item{col.name}{The vector of the name of the all dimensions and metrics of the retrived data and it will be attached to the dataframe.param.}
+
+\item{dataframe.param}{}
 }
 \value{
 dataframe.param The dataframe will be set with its column names with the appropriate class type.

@@ -4,11 +4,12 @@
 #' 
 #' @param  api.response.json The json data as reposnse returned by the Google Data feed API or Google Management API   
 #' 
-#' @return None If there is error in JSON response then this function will return the related error code and message for that error. 
+#' @description
+#' If there is an error in JSON response then this function will return the related error code and message for that error. 
 #'
 ParseApiErrorMessage <- function(api.response.json) {
       
-  api.response.list <- fromJSON(api.response.json, method = 'C')  
+  api.response.list <- content(api.response.json,as="parsed")  
   check.param <- regexpr("error", api.response.list)
   if (check.param[1] != -1) {
     return(list(code = api.response.list$error$code,
