@@ -48,8 +48,8 @@
 #' queries can be tested in the Google Analytics Query Feed Explorer at \url{http://ga-dev-tools.appspot.com/explorer/}
 
 GetReportData <- function(query.builder, token, 
-                          split_daywise=FALSE,
-                          paginate_query=FALSE) { 
+                          split_daywise = FALSE,
+                          paginate_query = FALSE) { 
   
   # Add an if (exists) block here
   kMaxDefaultRows <- get("kMaxDefaultRows", envir=rga.environment)
@@ -120,7 +120,7 @@ GetReportData <- function(query.builder, token,
     # Calculate the Percentage of Visits based on which the query was sampled
     # Reference : https://developers.google.com/analytics/devguides/reporting/core/v3/reference#sampling
     if (contains.sampled.data == T) {
-      visits.for.sampled.query <- round(100 * (as.integer(ga.list$sampleSize)/
+      visits.for.sampled.query <- round(100 * (as.integer(ga.list$sampleSize) /
                                                  as.integer(ga.list$sampleSpace)),2)
       cat("The query response contains sampled data. It is based on ", visits.for.sampled.query, "% of your visits.\n")
       cat("You can split the query day-wise in order to reduce the effect of sampling.\n")

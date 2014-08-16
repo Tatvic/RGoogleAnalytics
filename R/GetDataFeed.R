@@ -5,7 +5,8 @@
 #' 
 #' @param query.uri The URI prepared by the QueryBuilder class.   
 #' 
-#' @return GA.list The Google Analytics API JSON response converted to a list object
+#' @return GA.list The Google Analytics API JSON response converted to a 
+#' list object
 GetDataFeed <- function(query.uri) {
   
   GA.Data <- GET(query.uri)  

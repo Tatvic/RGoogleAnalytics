@@ -29,7 +29,7 @@ PaginateQuery <- function(query.builder, pages, token) {
   # Create an empty dataframe in order to store the data
   df.inner <- data.frame()
   
-  for (i in (1:(pages-1))) {
+  for (i in (1:(pages - 1))) {
     dataframe.param <- data.frame()
     start.index <- (i * kMaxDefaultRows) + 1
     cat("Getting data starting at row", start.index, "\n")

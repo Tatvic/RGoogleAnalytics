@@ -54,7 +54,7 @@ SplitQueryDaywise <- function(query.builder, token) {
     # Check if pagination is required in the query
     
     if (length(first.query$rows) < first.query$totalResults) {
-      number.of.pages <- ceiling((first.query$totalResults)/length(first.query$rows))
+      number.of.pages <- ceiling((first.query$totalResults) / length(first.query$rows))
         if ((number.of.pages > 100) & exists("kMaxPages",envir = rga.environment))  {
           number.of.pages <- get("kMaxPages",envir=rga.environment)
       }
