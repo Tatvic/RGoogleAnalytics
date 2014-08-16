@@ -10,7 +10,8 @@ GetDataFeed(query.uri)
 \item{query.uri}{The URI prepared by the QueryBuilder class.}
 }
 \value{
-GA.list The Google Analytics API JSON response converted to a list object
+GA.list The Google Analytics API JSON response converted to a
+list object
 }
 \description{
 This will request with the prepared Query to the Google Analytics
