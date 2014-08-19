@@ -9,14 +9,12 @@ RGoogleAnalytics is a R Wrapper around the [Google Analytics](http://www.google.
 
 * Provides Access to v3 of the [Google Analytics Core Reporting API](https://developers.google.com/analytics/devguides/reporting/core/v3/)
 
+* Ability to **pull more than 10,000 rows of data** in batches via **pagination** of queries
+
+* Ability to **mitigate the effect of Query Sampling** by splitting the date-range of queries and hence extract (nearly) unsampled data
+
 * Supports authorization via OAuth 2.0
-
-* QueryBuilder Class to simplify creation of API Queries
- 
-* Ability to pull more than 10,000 rows of data in batches via pagination of queries
-
-* Ability to mitigate the effect of Query Sampling by decreasing the date-range of queries and hence extract (nearly) unsampled data
- 
+  
 * In cases where queries are sampled, the output also returns the percentage of sessions that were used for the query
 
 ## Installation
@@ -30,23 +28,23 @@ install.packages("RGoogleAnalytics")
 To get the current development version from github:
 
 ```R
-# install.packages("devtools")
+# require(devtools)
 devtools::install_github("Tatvic/RGoogleAnalytics")
 ```
 
 ## Dependencies
 
-* [RCurl](http://cran.r-project.org/web/packages/RCurl/index.html) handles all the API Requests and Responses
-
-* [rjson](http://cran.r-project.org/web/packages/rjson/index.html) is used to convert the JSON Responses delivered by the Google Analytics API into R Objects
+* [httr](http://cran.r-project.org/web/packages/httr/index.html) handles the underlying OAuth2.0 Authorization flow and the API requests
 
 * [lubridate](http://cran.r-project.org/web/packages/lubridate/index.html) handles the date manipulation logic underlying Query Partitioning
 
- 
-
 ## Background
 
-Work on RGoogleAnalytics was started by Michael Pearmain at Google. He was supported by Nick Mihailowski (Google) and Vignesh Prajapati(Tatvic). 
+Work on RGoogleAnalytics was started by Michael Pearmain at Google. He was supported by Nick Mihailowski (Google) and Vignesh Prajapati (Tatvic). 
+
+## Tutorials and Use-cases
+
+Under development
 
 ## Important Links
 
