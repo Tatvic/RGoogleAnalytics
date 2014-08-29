@@ -8,13 +8,14 @@
 #' 
 #' @param query.builder Name of the object corresponding to the QueryBuilder class
 #' @param token Token Object created by the Auth() function   
+#' @param delay Time delay in seconds between successive queries in order to avoid Rate Limit Error
 #' 
 #' @return list containing the Column Headers and the Collated dataframe that represents the query response 
 #' 
 #' @importFrom lubridate ymd
 #' @importFrom lubridate days
 
-SplitQueryDaywise <- function(query.builder, token) {
+SplitQueryDaywise <- function(query.builder, token, delay) {
      
   kMaxDefaultRows <- get("kMaxDefaultRows",envir = rga.environment)
   
@@ -48,6 +49,7 @@ SplitQueryDaywise <- function(query.builder, token) {
     first.query.df <- data.frame()
     inter.df <- data.frame()
     query.uri <- ToUri(query.builder, token)
+    Sys.sleep(delay)
     first.query <- GetDataFeed(query.uri)
     first.query.df <- rbind(first.query.df, do.call(rbind, as.list(first.query$rows)))
     
@@ -58,7 +60,7 @@ SplitQueryDaywise <- function(query.builder, token) {
         if ((number.of.pages > 100) & exists("kMaxPages", envir = rga.environment))  {
           number.of.pages <- get("kMaxPages", envir = rga.environment)
       }
-      inter.df <- PaginateQuery(query.builder, number.of.pages, token)
+      inter.df <- PaginateQuery(query.builder, number.of.pages, token, delay)
       inter.df <- rbind(first.query.df, inter.df$data)
       master.df <- rbind(master.df, inter.df)
     } else {

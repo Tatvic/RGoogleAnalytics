@@ -19,7 +19,12 @@
 #' single days. Setting this 
 #' argument to True automatically paginates through each daywise query. Note that
 #' if this argument is set to True, queries will take more longer to complete and use
-#' more Quota 
+#' more Quota
+#' 
+#' @param delay Since Pagination and Query splitting fire sucessive queries, there is a 
+#' possibility of getting Quota Eror: Rate Limit Exceeded from the Google Analytics API. 
+#' This parameter can be used to specify a Time delay (in seconds) between successive 
+#' queries in order to stay within the Google Analytics API Rate Limits
 #' 
 #' @examples
 #' \dontrun{
@@ -49,7 +54,7 @@
 
 GetReportData <- function(query.builder, token, 
                           split_daywise = FALSE,
-                          paginate_query = FALSE) { 
+                          paginate_query = FALSE, delay=0) { 
   
   # Add an if (exists) block here
   kMaxDefaultRows <- get("kMaxDefaultRows", envir=rga.environment)
@@ -132,7 +137,7 @@ GetReportData <- function(query.builder, token,
       cat("Setting Max Results to 10000 for efficient Query Utilization\n")
       query.builder$max.results(kMaxDefaultRows)
     }
-    GA.DF <- SplitQueryDaywise(query.builder, token)
+    GA.DF <- SplitQueryDaywise(query.builder, token, delay)
     final.df <- SetDataFrame(GA.DF$header, GA.DF$data)
     cat("The API returned", nrow(final.df), "results\n")
     
@@ -164,7 +169,7 @@ GetReportData <- function(query.builder, token,
       }
       
       # Call Pagination Function
-      paged.query.list <- PaginateQuery(query.builder, number.of.pages, token)
+      paged.query.list <- PaginateQuery(query.builder, number.of.pages, token, delay)
       
       # Collate Results and convert to Dataframe
       inter.df <- rbind(ga.list.df, paged.query.list$data)

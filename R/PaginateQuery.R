@@ -16,10 +16,12 @@
 #' 
 #' @param token Token Object created by \code{Auth()} 
 #' 
+#' @param delay Time delay in seconds between successive queries in order to avoid Rate Limit Error 
+#' 
 #' @return list containing Column Headers and the data collated across all the pages of the query
 #' 
 #' 
-PaginateQuery <- function(query.builder, pages, token) {
+PaginateQuery <- function(query.builder, pages, token, delay) {
   
   kMaxDefaultRows <- get("kMaxDefaultRows", envir=rga.environment)
   
@@ -35,6 +37,7 @@ PaginateQuery <- function(query.builder, pages, token) {
     cat("Getting data starting at row", start.index, "\n")
     query.builder$SetStartIndex(start.index)
     query.uri <- ToUri(query.builder, token)
+    Sys.sleep(delay)
     ga.list <- GetDataFeed(query.uri)
     dataframe.param <- rbind(dataframe.param,
                              do.call(rbind, as.list(ga.list$rows)))

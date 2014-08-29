@@ -19,11 +19,10 @@ query.list <- Init(start.date = "2013-11-28",
                    metrics = "ga:sessions,ga:pageviews",
                    max.results = 10000,
                    sort = "-ga:date",
-                   filters = "ga:medium==referral",
                    table.id = "ga:33093633")
 
 # Create the Query Builder object so that the query parameters are validated
 ga.query <- QueryBuilder(query.list)
 
 # Extract the data and store it in a data-frame
-ga.data <- GetReportData(ga.query, token)
+ga.data <- GetReportData(ga.query, token, split_daywise = T, delay = 5)
