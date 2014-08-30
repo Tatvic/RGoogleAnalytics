@@ -4,7 +4,7 @@
 \title{Query the Google Analytics API for the specified dimensions, metrics and other query parameters}
 \usage{
 GetReportData(query.builder, token, split_daywise = FALSE,
-  paginate_query = FALSE)
+  paginate_query = FALSE, delay = 0)
 }
 \arguments{
 \item{query.builder}{Name of the object created using \code{\link{QueryBuilder}}}
@@ -22,6 +22,11 @@ single days. Setting this
 argument to True automatically paginates through each daywise query. Note that
 if this argument is set to True, queries will take more longer to complete and use
 more Quota}
+
+\item{delay}{Since Pagination and Query splitting fire sucessive queries, there is a
+possibility of getting Quota Eror: Rate Limit Exceeded from the Google Analytics API.
+This parameter can be used to specify a Time delay (in seconds) between successive
+queries in order to stay within the Google Analytics API Rate Limits}
 }
 \value{
 dataframe containing the response from the Google Analytics API

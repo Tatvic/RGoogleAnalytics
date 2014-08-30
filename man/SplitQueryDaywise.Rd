@@ -5,12 +5,14 @@
 and hits a query for each day. The responses for each queries are collated into a single dataframe and
 returned. This procedure helps decrease the effect of sampling.}
 \usage{
-SplitQueryDaywise(query.builder, token)
+SplitQueryDaywise(query.builder, token, delay)
 }
 \arguments{
 \item{query.builder}{Name of the object corresponding to the QueryBuilder class}
 
 \item{token}{Token Object created by the Auth() function}
+
+\item{delay}{Time delay in seconds between successive queries in order to avoid Rate Limit Error}
 }
 \value{
 list containing the Column Headers and the Collated dataframe that represents the query response

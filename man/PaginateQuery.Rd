@@ -8,7 +8,7 @@ the rows at a time. This function loops across all such subsets (pages) in order
 to the entire query. The maximum number of rows corresponding to a single query that can be retrieved via Pagination
 is 1 M.}
 \usage{
-PaginateQuery(query.builder, pages, token)
+PaginateQuery(query.builder, pages, token, delay)
 }
 \arguments{
 \item{query.builder}{Name of the object corresponding to the query builder class}
@@ -16,6 +16,8 @@ PaginateQuery(query.builder, pages, token)
 \item{pages}{Integer representing the number of pages across which the query has to be paginated}
 
 \item{token}{Token Object created by \code{Auth()}}
+
+\item{delay}{Time delay in seconds between successive queries in order to avoid Rate Limit Error}
 }
 \value{
 list containing Column Headers and the data collated across all the pages of the query
