@@ -42,9 +42,9 @@
 #' ga.query <- QueryBuilder(query.list)
 #'
 #' # Fire the query to the Google Analytics API
-#' ga.df <- GetReportData(query, oauth_token)
-#' ga.df <- GetReportData(query, oauth_token, split_daywise=True)
-#' ga.df <- GetReportData(query, oauth_token, paginate_query=True)
+#' ga.df <- GetReportData(ga.query, oauth_token)
+#' ga.df <- GetReportData(ga.query, oauth_token, split_daywise=T)
+#' ga.df <- GetReportData(ga.query, oauth_token, paginate_query=T)
 #' }
 #'
 #' @return dataframe containing the response from the Google Analytics API 
