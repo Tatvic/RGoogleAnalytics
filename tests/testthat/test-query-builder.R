@@ -236,37 +236,37 @@ test_that("Passing numeric values raises an error", {
 context("To URI")
 
 
-# # This test requires the RCurl package to be loaded in the namespace
-# # How to handle this
-# # This test assumes that the parameters pass the parameters test
-# test_that("To URI function is working appropriately", {
-#   expected.uri <- paste("https://www.googleapis.com/analytics/v3/data/ga",
-#                         "?start-date=2010-05-01",
-#                         "&end-date=2010-05-31",
-#                         "&dimensions=ga%3Adate",
-#                         "&metrics=ga%3Asessions",
-#                         "&segment=dynamic%3A%3Aga%3Amedium%3D%3Dorganic",
-#                         "&sort=ga%3Adate",
-#                         "&filters=ga%3Asource%3D%3Dgoogle",
-#                         "&max-results=10000",
-#                         "&start-index=25",
-#                         "&ids=ga%3A30661272",
-#                         sep = "")
-#   
-#   # Build the query
-#   query$SetStartDate("2010-05-01")
-#   query$SetEndDate("2010-05-31")
-#   query$dimensions("ga:date")
-#   query$metrics("ga:sessions")
-#   query$segment("dynamic::ga:medium==organic")
-#   query$filters("ga:source==google")
-#   query$sort("ga:date")
-#   query$max.results(10000)
-#   query$SetStartIndex(25)
-#   query$table.id("ga:30661272")
-#   
-#   expect_that(expected.uri,equals(query$to.uri()))
-# })
+# This test requires the RCurl package to be loaded in the namespace
+# How to handle this
+# This test assumes that the parameters pass the parameters test
+test_that("To URI function is working appropriately", {
+  expected.uri <- paste("https://www.googleapis.com/analytics/v3/data/ga",
+                        "?start-date=2010-05-01",
+                        "&end-date=2010-05-31",
+                        "&dimensions=ga%3adate",
+                        "&metrics=ga%3asessions",
+                        "&segment=dynamic%3a%3aga%3amedium%3d%3dorganic",
+                        "&sort=ga%3adate",
+                        "&filters=ga%3asource%3d%3dgoogle",
+                        "&max-results=10000",
+                        "&start-index=25",
+                        "&ids=ga%3a30661272",
+                        sep = "")
+  query.params.list = list("start.date" = "2010-05-01",
+                           "end.date" = "2010-05-31",
+                           "dimensions" = "ga:date",
+                           "metrics" = "ga:sessions",
+                           "filters" = "ga:source==google",
+                           "sort" = "ga:date",
+                           "segments" = "dynamic::ga:medium==organic",
+                           "max.results" = 10000,
+                           "start.index" = 25,
+                           "table.id" = "ga:30661272")
+  query.builder = QueryBuilder(query.params.list)
+  token <- list(credentials=list(access_token=NULL))
+
+  expect_that(expected.uri,equals(ToUri(query.builder, token)))
+})
 
 # test_that("Setting all query parameters as NULL works", {
 # 
