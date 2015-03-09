@@ -235,7 +235,6 @@ test_that("Passing numeric values raises an error", {
 
 context("To URI")
 
-
 # This test requires the RCurl package to be loaded in the namespace
 # How to handle this
 # This test assumes that the parameters pass the parameters test
@@ -245,9 +244,8 @@ test_that("To URI function is working appropriately", {
                         "&end-date=2010-05-31",
                         "&dimensions=ga%3adate",
                         "&metrics=ga%3asessions",
-                        "&segment=dynamic%3a%3aga%3amedium%3d%3dorganic",
                         "&sort=ga%3adate",
-                        "&filters=ga%3asource%3d%3dgoogle",
+                        "&filters=ga%3asourceMedium%3d~%5egoogle%20%2f%20organic%24%7c%5egoogle%20%2f%20cpc%24",
                         "&max-results=10000",
                         "&start-index=25",
                         "&ids=ga%3a30661272",
@@ -256,9 +254,8 @@ test_that("To URI function is working appropriately", {
                            "end.date" = "2010-05-31",
                            "dimensions" = "ga:date",
                            "metrics" = "ga:sessions",
-                           "filters" = "ga:source==google",
                            "sort" = "ga:date",
-                           "segments" = "dynamic::ga:medium==organic",
+                           "filters"="ga:sourceMedium=~^google / organic$|^google / cpc$",
                            "max.results" = 10000,
                            "start.index" = 25,
                            "table.id" = "ga:30661272")
