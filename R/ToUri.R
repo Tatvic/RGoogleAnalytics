@@ -36,12 +36,12 @@ ToUri <- function(query.builder,token) {
                        start.index = "start-index",
                        table.id    = "ids",
                        access_token = "access_token")
-    
+
     if (!is.null(uri.name)) {
       uri <- paste(uri,
-                   uri.name,
+                   URLencode(uri.name, reserved = TRUE),
                    "=",
-                   query[[name]],
+                   URLencode(query[[name]], reserved = TRUE),
                    "&",
                    sep = "",
                    collapse = "")
