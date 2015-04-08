@@ -49,7 +49,9 @@ Init <- function(
   segments = NULL,
   max.results = NULL,
   start.index = NULL,
-  table.id = NULL){
+  table.id = NULL,
+  caching.dir = NULL,
+  caching = FALSE){
   
   query.params.list = list("start.date" = start.date,
                  "end.date" = end.date,
@@ -60,7 +62,8 @@ Init <- function(
                  "segments" = segments,
                  "max.results" = max.results,
                  "start.index" = start.index,
-                 "table.id" = table.id)
-  
+                 "table.id" = table.id,
+                 "caching.dir" = caching.dir,
+                 "caching" = caching)
   return(query.params.list)
 }

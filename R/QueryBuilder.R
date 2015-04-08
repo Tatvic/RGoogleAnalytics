@@ -25,6 +25,8 @@ QueryBuilder <- function(query.params.list) {
   max.results  <- query.params.list$max.results
   start.index  <- query.params.list$start.index
   table.id     <- query.params.list$table.id
+  caching.dir  <- query.params.list$caching.dir
+  caching      <- query.params.list$caching
   
   
   access_token <- NULL
@@ -47,6 +49,7 @@ QueryBuilder <- function(query.params.list) {
     StartIndex(start.index)
     TableID(table.id)
     AccessToken(access_token)
+    Caching(caching.dir, caching)
     
     #Perform Validation
     Validate()
@@ -666,6 +669,8 @@ QueryBuilder <- function(query.params.list) {
     max.results <<- NULL
     start.index <<- NULL
     table.id    <<- NULL
+    caching.dir <<- NULL
+    caching     <<- NULL
     return(invisible())
   }
   
@@ -741,7 +746,26 @@ QueryBuilder <- function(query.params.list) {
     StartIndex(start.index)
   }
   
-  
+  #' Sets and creates caching directory.
+  #' If caching is required the caching directory is set up. Default directory ist "cache" in 
+  #' the current working directory.
+  #' @keywords internal   
+  #' @param
+  #'    caching.dir String Direcotry where caching files are stored
+  #' @param 
+  #'    caching Boolean Caching required?    
+  #'
+  #'  @return None 
+  #'  
+  Caching <- function(caching.dir = NULL, caching = FALSE){
+    if(caching){
+      caching.dir <- ifelse(is.null(caching.dir), "cache", caching.dir)
+      dir.create(caching.dir, showWarnings = FALSE)
+    }
+    caching.dir <<- caching.dir
+    caching     <<- caching
+    return(invisible())
+  }
   
   return(list("dimensions"   =   Dimensions,
               "metrics"      =   Metrics,
@@ -761,5 +785,7 @@ QueryBuilder <- function(query.params.list) {
               "SetEndDate" = SetEndDate,
               "SetStartDate" = SetStartDate,
               "SetQueryParams" = SetQueryParams,
-              "SetStartIndex" = SetStartIndex))
+              "SetStartIndex" = SetStartIndex,
+              "caching.dir"   = caching.dir,
+              "caching"       = caching))
 }
