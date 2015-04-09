@@ -33,6 +33,10 @@
 #'  
 #' @param start.index Optional.The first row of data to retrieve. Default value is 1
 #' 
+#' @param caching.dir String Directory to save cached data
+#' 
+#' @param caching Boolean caching required?
+#' 
 #' @seealso
 #' Valid Combinations of Dimensions and Metrics can be found at  \url{http://code.google.com/apis/analytics/docs/gdata/gdataReferenceDimensionsMetrics.html#validCombinations}
 #' 
