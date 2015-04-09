@@ -38,7 +38,7 @@ PaginateQuery <- function(query.builder, pages, token, delay) {
     query.builder$SetStartIndex(start.index)
     query.uri <- ToUri(query.builder, token)
     Sys.sleep(delay)
-    ga.list <- GetDataFeed(query.uri)
+    ga.list <- GetDataFeed(query.uri, caching.dir = query.builder$caching.dir, caching = query.builder$caching)
     dataframe.param <- rbind(dataframe.param,
                              do.call(rbind, as.list(ga.list$rows)))
     df.inner <- rbind(df.inner, dataframe.param)

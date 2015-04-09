@@ -85,7 +85,7 @@ GetReportData <- function(query.builder, token,
   # fire the query and display the status messages
   if (split_daywise != T && paginate_query != T) {
     query.uri <- ToUri(query.builder,token)
-    ga.list <- GetDataFeed(query.uri)
+    ga.list <- GetDataFeed(query.uri, caching.dir = query.builder$caching.dir, caching = query.builder$caching)
     
     total.results <-  ga.list$totalResults
     items.per.page <- ga.list$itemsPerPage
@@ -153,7 +153,7 @@ GetReportData <- function(query.builder, token,
     
     # Hit One Query
     query.uri <- ToUri(query.builder, token)
-    ga.list <- GetDataFeed(query.uri)
+    ga.list <- GetDataFeed(query.uri, caching.dir = query.builder$caching.dir, caching = query.builder$caching)
     # Convert ga.list into a dataframe
     ga.list.df <- data.frame()
     ga.list.df <- rbind(ga.list.df, do.call(rbind, as.list(ga.list$rows)))

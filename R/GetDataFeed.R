@@ -4,14 +4,28 @@
 #' @keywords internal 
 #' 
 #' @param query.uri The URI prepared by the QueryBuilder class.   
+#' @param caching.dir String Directory to save cached data
+#' @param caching Boolean caching required?
 #' 
 #' @return GA.list The Google Analytics API JSON response converted to a 
 #' list object
 #' 
 #' @importFrom httr GET
-GetDataFeed <- function(query.uri) {
+GetDataFeed <- function(query.uri, caching.dir = NULL, caching = FALSE) {
+  if (caching == TRUE) {
+    hash <- digest::digest(query.uri)
+    filename <- paste0(caching.dir,"/cache", "-", hash, ".Rda")
+    if (file.exists(filename)){
+      load(filename)
+    }else{
+      GA.Data <- GET(query.uri)  
+      save(GA.Data, file=filename)
+    }
+  } else {
+    GA.Data <- GET(query.uri)  
+  }
   
-  GA.Data <- GET(query.uri)  
+  
   GA.list <- ParseDataFeedJSON(GA.Data)
   if (is.null(GA.list$rows)) {
     cat("Your query matched 0 results. Please verify your query using the Query Feed Explorer and re-run it.")
