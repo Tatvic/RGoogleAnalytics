@@ -11,6 +11,7 @@
 #' list object
 #' 
 #' @importFrom httr GET
+#' @importFrom digest digest
 GetDataFeed <- function(query.uri, caching.dir = NULL, caching = FALSE) {
   if (caching == TRUE) {
     uri_without_token <- gsub("access_token=[^\\&]*", "", query.uri)
