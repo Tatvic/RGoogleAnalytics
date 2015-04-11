@@ -111,12 +111,12 @@ GetReportData <- function(query.builder, token,
     
     # Print the status messages if query is not in batch mode
     if (length(ga.list$rows) < total.results) {
-      cat("Status of Query:\n")
-      cat("The API returned", response.size, "results out of", total.results, "results\n")
-      cat("In order to get all results, set paginate_query = T in the GetReportData function.\n")
+      warning("Status of Query:")
+      warning("The API returned ", response.size, " results out of ", total.results, " results")
+      warning("In order to get all results, set paginate_query = T in the GetReportData function.")
     } else {
-      cat("Status of Query:\n")
-      cat("The API returned", response.size, "results\n")
+      message("Status of Query:")
+      message("The API returned ", response.size, " results")
     }
     
     # Calculate the Percentage of Visits based on which the query was sampled
@@ -124,22 +124,22 @@ GetReportData <- function(query.builder, token,
     if (contains.sampled.data == T) {
       visits.for.sampled.query <- round(100 * (as.integer(ga.list$sampleSize) /
                                                  as.integer(ga.list$sampleSpace)),2)
-      cat("The query response contains sampled data. It is based on ", visits.for.sampled.query, "% of your visits.\n")
-      cat("You can split the query day-wise in order to reduce the effect of sampling.\n")
-      cat("Set split_daywise = T in the GetReportData function\n")
-      cat("Note that split_daywise = T will automatically invoke Pagination in each sub-query\n")
+      warning("The query response contains sampled data. It is based on ", visits.for.sampled.query, "% of your visits.\n")
+      warning("You can split the query day-wise in order to reduce the effect of sampling.\n")
+      warning("Set split_daywise = T in the GetReportData function\n")
+      warning("Note that split_daywise = T will automatically invoke Pagination in each sub-query\n")
     }
   } else if ((split_daywise == T) || (split_daywise == T && paginate_query == T)) {
     
     # Clamp Max Results to kMaxDefaultRows while Query Splitting
     # Implement this via SetMaxResults() in future versions
     if (query.builder$max.results() < kMaxDefaultRows) {
-      cat("Setting Max Results to 10000 for efficient Query Utilization\n")
+      warning("Setting Max Results to 10000 for efficient Query Utilization\n")
       query.builder$max.results(kMaxDefaultRows)
     }
     GA.DF <- SplitQueryDaywise(query.builder, token, delay)
     final.df <- SetDataFrame(GA.DF$header, GA.DF$data)
-    cat("The API returned", nrow(final.df), "results\n")
+    message("The API returned ", nrow(final.df), " results.")
     
   } else if (paginate_query == T) {
     
@@ -147,7 +147,7 @@ GetReportData <- function(query.builder, token,
     # when paginating
     # Implement SetMaxResults() as a method in QueryBuilder()
     if (query.builder$max.results() < kMaxDefaultRows) {
-      cat("Setting Max Results to 10000 for efficient Query Utilization\n")
+      warning("Setting Max Results to 10000 for efficient Query Utilization\n")
       query.builder$max.results(kMaxDefaultRows)    
     }
     
@@ -175,7 +175,7 @@ GetReportData <- function(query.builder, token,
       inter.df <- rbind(ga.list.df, paged.query.list$data)
       final.df <- SetDataFrame(paged.query.list$headers, inter.df)
       
-      cat("The API returned", nrow(final.df), "results\n")
+      message("The API returned ", nrow(final.df), " results.")
     } else {
       stop("Pagination is not required. Set paginate_Query = F and re-run the query\n")
     } 

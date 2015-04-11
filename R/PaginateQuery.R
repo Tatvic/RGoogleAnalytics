@@ -34,7 +34,7 @@ PaginateQuery <- function(query.builder, pages, token, delay) {
   for (i in (1:(pages - 1))) {
     dataframe.param <- data.frame()
     start.index <- (i * kMaxDefaultRows) + 1
-    cat("Getting data starting at row", start.index, "\n")
+    message("Getting data starting at row ", start.index)
     query.builder$SetStartIndex(start.index)
     query.uri <- ToUri(query.builder, token)
     Sys.sleep(delay)

@@ -38,7 +38,7 @@ SplitQueryDaywise <- function(query.builder, token, delay) {
   for (i in (0:date.difference)) {
     # Update the start and end dates in the query
     date <- format(as.POSIXct(start.date) + days(i), '%Y-%m-%d')
-    cat("[ Run", i, "of", date.difference, "] Getting data for", date, "\n")
+    message("[ Run ", i, " of ", date.difference, "] Getting data for ", date)
     query.builder$SetStartDate(date)
     query.builder$SetEndDate(date)
     
