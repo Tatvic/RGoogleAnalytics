@@ -13,7 +13,8 @@
 #' @importFrom httr GET
 GetDataFeed <- function(query.uri, caching.dir = NULL, caching = FALSE) {
   if (caching == TRUE) {
-    hash <- digest::digest(query.uri)
+    uri_without_token <- gsub("access_token=[^\\&]*", "", query.uri)
+    hash <- digest::digest(uri_without_token)
     filename <- paste0(caching.dir,"/cache", "-", hash, ".Rda")
     if (file.exists(filename)){
       load(filename)
