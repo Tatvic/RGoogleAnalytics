@@ -6,3 +6,4 @@ RGoogleAnalytics.Rproj
 .Rbuildignore
 .httr-oauth
 cache/**
+token_file
