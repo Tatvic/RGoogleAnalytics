@@ -56,6 +56,8 @@ GetReportData <- function(query.builder, token,
                           split_daywise = FALSE,
                           paginate_query = FALSE, delay=0) { 
   
+  query.builder.original <- query.builder
+  
   # Add an if (exists) block here
   kMaxDefaultRows <- get("kMaxDefaultRows", envir=rga.environment)
   
@@ -113,7 +115,12 @@ GetReportData <- function(query.builder, token,
     if (length(ga.list$rows) < total.results) {
       warning("Status of Query:")
       warning("The API returned ", response.size, " results out of ", total.results, " results")
-      warning("In order to get all results, set paginate_query = T in the GetReportData function.")
+      warning("Restarting with pagination ...")
+      
+      findal.df <- GetReportData(query.builder.original, token, split_daywise, paginate_query = TRUE, delay)
+      
+      warning("...done")
+      
     } else {
       message("Status of Query:")
       message("The API returned ", response.size, " results")
@@ -177,7 +184,10 @@ GetReportData <- function(query.builder, token,
       
       message("The API returned ", nrow(final.df), " results.")
     } else {
-      stop("Pagination is not required. Set paginate_Query = F and re-run the query\n")
+      warning("Pagination is not required. Set paginate_Query = F and re-run the query\n")
+      warning("Restarting without pagination ...")
+      final.df <- GetReportData(query.builder.original, token, split_daywise, paginate_query = FALSE, delay)
+      warning("...done")
     } 
   }
   return(final.df)
