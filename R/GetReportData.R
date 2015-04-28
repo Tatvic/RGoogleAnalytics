@@ -55,7 +55,7 @@
 GetReportData <- function(query.builder, token, 
                           split_daywise = FALSE,
                           paginate_query = FALSE, delay=0) { 
-  
+
   query.builder.original <- query.builder
   
   # Add an if (exists) block here
@@ -117,9 +117,11 @@ GetReportData <- function(query.builder, token,
       warning("The API returned ", response.size, " results out of ", total.results, " results")
       warning("Restarting with pagination ...")
       
-      findal.df <- GetReportData(query.builder.original, token, split_daywise, paginate_query = TRUE, delay)
+      final.df <- GetReportData(query.builder.original, token, split_daywise, paginate_query = TRUE, delay)
       
       warning("...done")
+      
+      return(final.df)
       
     } else {
       message("Status of Query:")
