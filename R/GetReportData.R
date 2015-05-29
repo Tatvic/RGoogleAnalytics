@@ -146,8 +146,20 @@ GetReportData <- function(query.builder, token,
       warning("Setting Max Results to 10000 for efficient Query Utilization\n")
       query.builder$max.results(kMaxDefaultRows)
     }
+
+    # When splitting daywise add another dimension ga:date unless it is already used.
+    # So you can aggregate by dimensions if usefull (such as sum(pageviews)) or do something other useful
+    # in the case summing isn't okay (such as avgSessionLength)
+    dimensions <- query.builder$dimensions()
+    
+    if(!grepl("ga:date", dimensions)){
+      dimensions <- paste0("ga:date, ", dimensions)
+      query.builder$dimensions(dimensions)
+    }
+    
     GA.DF <- SplitQueryDaywise(query.builder, token, delay)
     final.df <- SetDataFrame(GA.DF$header, GA.DF$data)
+
     message("The API returned ", nrow(final.df), " results.")
     
   } else if (paginate_query == T) {

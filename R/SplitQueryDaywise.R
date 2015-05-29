@@ -51,21 +51,24 @@ SplitQueryDaywise <- function(query.builder, token, delay) {
     query.uri <- ToUri(query.builder, token)
     Sys.sleep(delay)
     first.query <- GetDataFeed(query.uri, caching.dir = query.builder$caching.dir, caching = query.builder$caching)
-    first.query.df <- rbind(first.query.df, do.call(rbind, as.list(first.query$rows)))
     
-    # Check if pagination is required in the query
+    if (!is.null(first.query)){
+      first.query.df <- rbind(first.query.df, do.call(rbind, as.list(first.query$rows)))
     
-    if (length(first.query$rows) < first.query$totalResults) {
-      number.of.pages <- ceiling((first.query$totalResults) / length(first.query$rows))
-        if ((number.of.pages > 100) & exists("kMaxPages", envir = rga.environment))  {
-          number.of.pages <- get("kMaxPages", envir = rga.environment)
+      # Check if pagination is required in the query
+    
+      if (length(first.query$rows) < first.query$totalResults) {
+        number.of.pages <- ceiling((first.query$totalResults) / length(first.query$rows))
+          if ((number.of.pages > 100) & exists("kMaxPages", envir = rga.environment))  {
+            number.of.pages <- get("kMaxPages", envir = rga.environment)
+        }
+        inter.df <- PaginateQuery(query.builder, number.of.pages, token, delay)
+        inter.df <- rbind(first.query.df, inter.df$data)
+        master.df <- rbind(master.df, inter.df)
+      } else {
+        # No Pagination is required. Just append the rows to the dataframe
+        master.df <- rbind(first.query.df, master.df)
       }
-      inter.df <- PaginateQuery(query.builder, number.of.pages, token, delay)
-      inter.df <- rbind(first.query.df, inter.df$data)
-      master.df <- rbind(master.df, inter.df)
-    } else {
-      # No Pagination is required. Just append the rows to the dataframe
-      master.df <- rbind(first.query.df, master.df)
     }
   }
   
