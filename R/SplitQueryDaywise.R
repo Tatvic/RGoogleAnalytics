@@ -35,6 +35,9 @@ SplitQueryDaywise <- function(query.builder, token, delay) {
   # Create an empty dataframe in order to store the results
   master.df <- data.frame()
   
+  # Create an empty data.frame in order to store the headers
+  return.df.header <- data.frame()
+  
   for (i in (0:date.difference)) {
     # Update the start and end dates in the query
     date <- format(as.POSIXct(start.date) + days(i), '%Y-%m-%d')
@@ -51,7 +54,12 @@ SplitQueryDaywise <- function(query.builder, token, delay) {
     query.uri <- ToUri(query.builder, token)
     Sys.sleep(delay)
     first.query <- GetDataFeed(query.uri, caching.dir = query.builder$caching.dir, caching = query.builder$caching)
-    
+  
+    # Save old header in case there is one
+    if(!is.null(first.query$columnHeaders)){
+      return.df.header <- first.query$columnHeaders
+    }    
+      
     if (!is.null(first.query)){
       first.query.df <- rbind(first.query.df, do.call(rbind, as.list(first.query$rows)))
     
