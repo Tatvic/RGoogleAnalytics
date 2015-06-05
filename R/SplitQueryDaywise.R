@@ -80,5 +80,10 @@ SplitQueryDaywise <- function(query.builder, token, delay) {
     }
   }
   
-  return(list(header = first.query$columnHeaders, data=master.df))
+  if(is.null(return.df.header)){
+    warning("The API returned 0 rows.")
+    return(NULL)
+  }
+  
+  return(list(header = return.df.header, data=master.df))
 }
