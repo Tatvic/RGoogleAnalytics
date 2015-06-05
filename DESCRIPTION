@@ -1,6 +1,6 @@
 Package: RGoogleAnalytics
-Version: 0.1.4
-Date: 2015-05-29
+Version: 0.1.5
+Date: 2015-06-05
 Title: R Wrapper for the Google Analytics API
 Author: Michael Pearmain. Contributions from Nick Mihailowski,
     Vignesh Prajapati, Kushan Shah and Nicolas Remy,
