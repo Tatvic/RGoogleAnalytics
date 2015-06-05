@@ -94,6 +94,11 @@ GetReportData <- function(query.builder, token,
     contains.sampled.data <- ga.list$containsSampledData
     response.size <- length(ga.list$rows)
     
+    if (is.null(total.results)){
+      warning("The API returned 0 rows.")
+      return(NULL)
+    }
+    
     if (total.results < kMaxDefaultRows) {
       max.rows <- kMaxDefaultRows
     }
