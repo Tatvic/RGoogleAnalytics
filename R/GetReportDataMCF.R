@@ -1,8 +1,8 @@
-#' Query the Google Analytics API for the specified dimensions, metrics and other query parameters
+#' Query the Multi Channel Funnel Reporting API
 #' 
-#' This function will retrieve the data by firing the query to the Core Reporting API. It also displays 
-#' status messages after the completion of the query. The user also has the option split the query into 
-#' daywise partitions and paginate the query responses in order to decrease the effect the sampling
+#' To DOs:
+#' Parse Data into dataframe, eliminate list  
+#' split_daywise and paginate_query throw error if set to TRUE
 #' @export
 #' 
 #' @param query.builder Name of the object created using \code{\link{QueryBuilder}}
@@ -31,28 +31,27 @@
 #' # This example assumes that a token object is already created
 #' 
 #' # Create a list of Query Parameters
-#' query.list <- Init(start.date = "2014-11-28",
-#'                    end.date = "2014-12-04",
-#'                    dimensions = "ga:date",
-#'                    metrics = "ga:sessions,ga:pageviews",
-#'                    max.results = 1000,
-#'                    table.id = "ga:33093633")
+#' query.list <- Init(start.date = "2014-11-01",
+#'                   end.date = "2014-11-02",
+#'                   dimensions = "mcf:sourcePath",
+#'                   metrics = "mcf:totalConversions,mcf:totalConversionValue",
+#'                   sort = "-mcf:totalConversions",
+#'                   max.results = 1000,
+#'                   table.id = "ga:*********")
 #'
 #' # Create the query object
 #' ga.query <- QueryBuilder(query.list)
 #'
 #' # Fire the query to the Google Analytics API
-#' ga.df <- GetReportData(ga.query, oauth_token)
-#' ga.df <- GetReportData(ga.query, oauth_token, split_daywise=T)
-#' ga.df <- GetReportData(ga.query, oauth_token, paginate_query=T)
+#' ga.df <- GetReportDataMCF(ga.query, oauth_token)
 #' }
 #'
-#' @return dataframe containing the response from the Google Analytics API 
+#' @return dataframe containing the response from the MCF API 
 #' 
 #' @seealso Prior to executing the query, as a good practice 
 #' queries can be tested in the Google Analytics Query Feed Explorer at \url{http://ga-dev-tools.appspot.com/explorer/}
 
-GetReportData <- function(query.builder, token, 
+GetReportDataMCF <- function(query.builder, token, 
                           split_daywise = FALSE,
                           paginate_query = FALSE, delay=0) { 
   
@@ -84,7 +83,7 @@ GetReportData <- function(query.builder, token,
   # If the user does not require pagination and query splitting 
   # fire the query and display the status messages
   if (split_daywise != T && paginate_query != T) {
-    query.uri <- ToUri(query.builder,token)
+    query.uri <- ToUriMCF(query.builder,token)
     ga.list <- GetDataFeed(query.uri)
     
     total.results <-  ga.list$totalResults
@@ -107,7 +106,7 @@ GetReportData <- function(query.builder, token,
                                do.call(rbind, as.list(ga.list$rows)))
     }
     
-    final.df <- SetDataFrame(ga.list$columnHeaders, dataframe.param)
+    final.df <- SetDataFrameMCF(ga.list$columnHeaders, dataframe.param)
     
     # Print the status messages if query is not in batch mode
     if (length(ga.list$rows) < total.results) {
@@ -138,7 +137,7 @@ GetReportData <- function(query.builder, token,
       query.builder$max.results(kMaxDefaultRows)
     }
     GA.DF <- SplitQueryDaywise(query.builder, token, delay)
-    final.df <- SetDataFrame(GA.DF$header, GA.DF$data)
+    final.df <- SetDataFrameMCF(GA.DF$header, GA.DF$data)
     cat("The API returned", nrow(final.df), "results\n")
     
   } else if (paginate_query == T) {
@@ -152,7 +151,7 @@ GetReportData <- function(query.builder, token,
     }
     
     # Hit One Query
-    query.uri <- ToUri(query.builder, token)
+    query.uri <- ToUriMCF(query.builder, token)
     ga.list <- GetDataFeed(query.uri)
     # Convert ga.list into a dataframe
     ga.list.df <- data.frame()
@@ -173,7 +172,7 @@ GetReportData <- function(query.builder, token,
       
       # Collate Results and convert to Dataframe
       inter.df <- rbind(ga.list.df, paged.query.list$data)
-      final.df <- SetDataFrame(paged.query.list$headers, inter.df)
+      final.df <- SetDataFrameMCF(paged.query.list$headers, inter.df)
       
       cat("The API returned", nrow(final.df), "results\n")
     } else {
