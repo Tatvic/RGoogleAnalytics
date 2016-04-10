@@ -14,9 +14,9 @@ ValidateToken <- function(token) {
   
   if (!token$validate()) {
     RefreshToAccessToken(token)
-    cat("Access Token successfully updated\n")
+    message("Access Token successfully updated.")
   } else {
-    cat("Access Token is valid\n")
+    message("Access Token is valid.")
   }
   
   return(invisible())   

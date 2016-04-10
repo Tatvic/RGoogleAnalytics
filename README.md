@@ -13,17 +13,14 @@ RGoogleAnalytics is a R Wrapper around the [Google Analytics](http://www.google.
 
 * Ability to **mitigate the effect of Query Sampling** by splitting the date-range of queries and hence extract (nearly) unsampled data
 
+* Ability to **cache data** fetched from Google
+
 * Supports authorization via OAuth 2.0
   
 * In cases where queries are sampled, the output also returns the percentage of sessions that were used for the query
 
 ## Installation
 
-To get the current released version from CRAN:
-
-```R
-install.packages("RGoogleAnalytics")
-```
 
 To get the current development version from github:
 
