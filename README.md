@@ -26,7 +26,7 @@ To get the current development version from github:
 
 ```R
 # require(devtools)
-devtools::install_github("JerryWho/RGoogleAnalytics")
+devtools::install_github("Tatvic/RGoogleAnalytics")
 ```
 
 ## Dependencies
