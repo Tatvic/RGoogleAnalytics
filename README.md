@@ -48,3 +48,5 @@ Under development
 * [List](https://developers.google.com/analytics/devguides/reporting/core/dimsmets) of Valid Dimension/Metric Combinations from the Google Analytics API Reference Guide
 
 * [Query Feed Explorer](http://ga-dev-tools.appspot.com/explorer/) allows you to test your queries for syntatical correctness. Once verified, the query parameters can then be copied to your R Script
+
+* [Demo](http://www.tatvic.com/blog/google-analytics-data-extraction-in-r/) link on how to use this package to extract data from Google Analytics.
