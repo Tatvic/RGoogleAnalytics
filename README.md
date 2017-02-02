@@ -41,7 +41,8 @@ Work on RGoogleAnalytics was started by Michael Pearmain at Google. He was suppo
 
 ## Tutorials and Use-cases
 
-Under development
+* [Basic](https://github.com/LucyMcGowan/Tutorials/blob/master/googleanalytics.Rmd) tutorial to get started linking Google Analytics to an API pull
+* Under development
 
 ## Important Links
 
